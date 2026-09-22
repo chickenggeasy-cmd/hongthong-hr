@@ -3,6 +3,7 @@ import {
   deriveLoginPassword,
   employeeEmail,
   hashNationalId,
+  isValidEmployeeCode,
   isValidThaiNationalId,
   normalizeNationalId,
 } from "../src/lib/auth/national-id";
@@ -80,6 +81,19 @@ describe("hashNationalId / deriveLoginPassword", () => {
     expect(() => hashNationalId(VALID_ID)).toThrow(/NATIONAL_ID_PEPPER/);
     vi.stubEnv("NATIONAL_ID_PEPPER", "short");
     expect(() => deriveLoginPassword("69200001", VALID_ID)).toThrow(/NATIONAL_ID_PEPPER/);
+  });
+});
+
+describe("isValidEmployeeCode", () => {
+  it("รับรหัส 8 หลัก", () => {
+    expect(isValidEmployeeCode("69200001")).toBe(true);
+  });
+
+  it("ปฏิเสธรหัสที่จำนวนหลักไม่ครบ หรือมีตัวอักษร", () => {
+    expect(isValidEmployeeCode("6920001")).toBe(false);
+    expect(isValidEmployeeCode("692000011")).toBe(false);
+    expect(isValidEmployeeCode("6920000a")).toBe(false);
+    expect(isValidEmployeeCode("")).toBe(false);
   });
 });
 

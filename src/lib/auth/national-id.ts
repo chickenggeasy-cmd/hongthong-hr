@@ -15,6 +15,11 @@ export function normalizeNationalId(input: string): string {
     .replace(/[\s-]/g, "");
 }
 
+/** ตรวจรูปแบบรหัสพนักงาน 8 หลัก (ไม่ได้เช็คว่ามีอยู่จริงในฐานข้อมูล) */
+export function isValidEmployeeCode(code: string): boolean {
+  return /^\d{8}$/.test(code);
+}
+
 /** ตรวจเลขบัตรประชาชนไทย 13 หลัก รวมหลักตรวจสอบ (checksum) ช่วยจับการพิมพ์ผิด */
 export function isValidThaiNationalId(id: string): boolean {
   if (!/^\d{13}$/.test(id)) return false;
