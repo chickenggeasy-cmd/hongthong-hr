@@ -35,6 +35,53 @@ export type Database = {
         }
         Relationships: []
       }
+      attendance_logs: {
+        Row: {
+          created_at: string
+          distance_meters: number
+          employee_id: string
+          id: string
+          latitude: number
+          longitude: number
+          photo_path: string
+          recorded_at: string
+          type: string
+          within_radius: boolean
+        }
+        Insert: {
+          created_at?: string
+          distance_meters: number
+          employee_id: string
+          id?: string
+          latitude: number
+          longitude: number
+          photo_path: string
+          recorded_at?: string
+          type: string
+          within_radius: boolean
+        }
+        Update: {
+          created_at?: string
+          distance_meters?: number
+          employee_id?: string
+          id?: string
+          latitude?: number
+          longitude?: number
+          photo_path?: string
+          recorded_at?: string
+          type?: string
+          within_radius?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "attendance_logs_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       departments: {
         Row: {
           code: string
@@ -161,7 +208,12 @@ export type Database = {
     }
     Functions: {
       auth_dept_code: { Args: never; Returns: string }
+      auth_employee_id: { Args: never; Returns: string }
       auth_role: { Args: never; Returns: string }
+      distance_meters: {
+        Args: { lat1: number; lat2: number; lng1: number; lng2: number }
+        Returns: number
+      }
       generate_employee_code: {
         Args: { p_be_year?: number; p_dept_code: string }
         Returns: string
