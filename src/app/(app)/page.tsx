@@ -1,4 +1,5 @@
-﻿import { getCurrentEmployee } from "@/lib/auth/current-user";
+﻿import Link from "next/link";
+import { getCurrentEmployee } from "@/lib/auth/current-user";
 import { roleLabel } from "@/lib/permissions";
 
 export default async function HomePage() {
@@ -28,8 +29,15 @@ export default async function HomePage() {
         </dl>
       </div>
 
+      <Link
+        href="/attendance"
+        className="block rounded-2xl bg-[#1E5FA8] p-6 text-center font-medium text-white shadow-sm transition-colors hover:bg-[#1E5FA8]/90"
+      >
+        เช็คอิน / เช็คเอาท์
+      </Link>
+
       <div className="rounded-2xl border border-dashed border-[#5B6B7B]/30 bg-white/60 p-6 text-center text-sm text-[#5B6B7B]">
-        ตารางเข้างาน วันหยุด วันลาคงเหลือ จะแสดงที่นี่ (ยังไม่ได้ทำ)
+        วันหยุด วันลาคงเหลือ จะแสดงที่นี่ (ยังไม่ได้ทำ)
       </div>
     </div>
   );
