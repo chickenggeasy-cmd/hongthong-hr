@@ -85,7 +85,7 @@ export async function checkInOrOut(_prevState: CheckInState, formData: FormData)
   if (!withinRadius) {
     const action = type === "check_in" ? "เช็คอิน" : "เช็คเอาท์";
     return {
-      error: `คุณอยู่ห่างจากมหาวิทยาลัย ${Math.round(distanceMeters)} เมตร เกินระยะที่กำหนด (${radiusMeters} เมตร) ${action}ไม่สำเร็จ`,
+      error: `คุณอยู่ห่างจากบริษัท ${Math.round(distanceMeters)} เมตร เกินระยะที่กำหนด (${radiusMeters} เมตร) ${action}ไม่สำเร็จ`,
       success: false,
     };
   }

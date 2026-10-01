@@ -79,7 +79,7 @@ function PayslipDocument({ data }: { data: PayslipPdfData }) {
         <View style={styles.row}>
           <View style={{ flex: 1 }}>
             <Text style={styles.title}>สลิปเงินเดือน</Text>
-            <Text style={styles.muted}>บริษัท หงส์ทอง จำกัด (บริษัทสมมติ เพื่อการศึกษา)</Text>
+            <Text style={styles.muted}>บริษัท หงส์ทอง จำกัด</Text>
           </View>
           <View>
             <Text style={{ fontWeight: "bold", textAlign: "right" }}>งวด {periodLabel(data.period)}</Text>

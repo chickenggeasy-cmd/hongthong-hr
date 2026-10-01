@@ -83,7 +83,7 @@ export function CheckInForm({ nextType }: { nextType: AttendanceType }) {
       ) : null}
       {state.success ? (
         <p role="status" className="rounded-lg bg-[#2E9E5B]/10 px-3 py-2 text-sm text-[#2E9E5B]">
-          {state.resultType === "check_in" ? "เช็คอิน" : "เช็คเอาท์"}สำเร็จ ห่างจากมหาวิทยาลัย{" "}
+          {state.resultType === "check_in" ? "เช็คอิน" : "เช็คเอาท์"}สำเร็จ ห่างจากบริษัท{" "}
           {state.distanceMeters !== undefined ? Math.round(state.distanceMeters) : "-"} เมตร
         </p>
       ) : null}
