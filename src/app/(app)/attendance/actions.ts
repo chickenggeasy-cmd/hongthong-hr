@@ -33,13 +33,12 @@ export async function checkInOrOut(_prevState: CheckInState, formData: FormData)
   if (!Number.isFinite(longitude) || longitude < -180 || longitude > 180) {
     return { error: "ไม่พบพิกัดตำแหน่งที่ถูกต้อง กรุณาอนุญาตการเข้าถึงตำแหน่งแล้วลองใหม่", success: false };
   }
-  if (!(photo instanceof File) || photo.size === 0) {
-    return { error: "กรุณาถ่ายรูปก่อนเช็คอิน/เช็คเอาท์", success: false };
-  }
-  if (photo.size > MAX_PHOTO_BYTES) {
+  // รูปไม่บังคับ (เจ้าของโปรเจกต์ตัดสินใจ 2 ต.ค. 2569) แต่ถ้าส่งมาต้องเป็นรูปที่ถูกต้อง
+  const hasPhoto = photo instanceof File && photo.size > 0;
+  if (hasPhoto && photo.size > MAX_PHOTO_BYTES) {
     return { error: "ไฟล์รูปใหญ่เกินไป (ไม่เกิน 5MB)", success: false };
   }
-  if (!ALLOWED_MIME_TYPES.has(photo.type)) {
+  if (hasPhoto && !ALLOWED_MIME_TYPES.has(photo.type)) {
     return { error: "รองรับเฉพาะไฟล์รูปภาพ JPG, PNG หรือ WEBP", success: false };
   }
 
@@ -90,14 +89,16 @@ export async function checkInOrOut(_prevState: CheckInState, formData: FormData)
     };
   }
 
-  const extension = photo.type === "image/png" ? "png" : photo.type === "image/webp" ? "webp" : "jpg";
-  const photoPath = `${employee.id}/${Date.now()}-${type}.${extension}`;
-
-  const { error: uploadError } = await supabase.storage
-    .from("attendance-photos")
-    .upload(photoPath, photo, { contentType: photo.type });
-  if (uploadError) {
-    return { error: "อัปโหลดรูปไม่สำเร็จ กรุณาลองใหม่", success: false };
+  let photoPath: string | null = null;
+  if (hasPhoto) {
+    const extension = photo.type === "image/png" ? "png" : photo.type === "image/webp" ? "webp" : "jpg";
+    photoPath = `${employee.id}/${Date.now()}-${type}.${extension}`;
+    const { error: uploadError } = await supabase.storage
+      .from("attendance-photos")
+      .upload(photoPath, photo, { contentType: photo.type });
+    if (uploadError) {
+      return { error: "อัปโหลดรูปไม่สำเร็จ กรุณาลองใหม่", success: false };
+    }
   }
 
   const { error: insertError } = await supabase.from("attendance_logs").insert({
@@ -110,7 +111,7 @@ export async function checkInOrOut(_prevState: CheckInState, formData: FormData)
     photo_path: photoPath,
   });
   if (insertError) {
-    await supabase.storage.from("attendance-photos").remove([photoPath]); // กันไฟล์ค้างถ้าบันทึกแถวไม่สำเร็จ
+    if (photoPath) await supabase.storage.from("attendance-photos").remove([photoPath]); // กันไฟล์ค้างถ้าบันทึกแถวไม่สำเร็จ
     return { error: "บันทึกไม่สำเร็จ กรุณาลองใหม่", success: false };
   }
 

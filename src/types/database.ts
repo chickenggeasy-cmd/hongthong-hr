@@ -43,7 +43,7 @@ export type Database = {
           id: string
           latitude: number
           longitude: number
-          photo_path: string
+          photo_path: string | null
           recorded_at: string
           type: string
           within_radius: boolean
@@ -55,7 +55,7 @@ export type Database = {
           id?: string
           latitude: number
           longitude: number
-          photo_path: string
+          photo_path?: string | null
           recorded_at?: string
           type: string
           within_radius: boolean
@@ -67,7 +67,7 @@ export type Database = {
           id?: string
           latitude?: number
           longitude?: number
-          photo_path?: string
+          photo_path?: string | null
           recorded_at?: string
           type?: string
           within_radius?: boolean

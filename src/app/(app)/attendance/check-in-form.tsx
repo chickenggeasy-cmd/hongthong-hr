@@ -7,15 +7,18 @@ import type { AttendanceType } from "@/lib/attendance/logic";
 const initialState: CheckInState = { error: null, success: false };
 
 export function CheckInForm({ nextType }: { nextType: AttendanceType }) {
-  const [state, formAction, pending] = useActionState(checkInOrOut, initialState);
+  const [state, dispatch, pending] = useActionState(checkInOrOut, initialState);
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
   const [locationError, setLocationError] = useState<string | null>(null);
-  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
-  const formRef = useRef<HTMLFormElement>(null);
+  // เก็บไฟล์รูปไว้ใน state เอง เพราะ React ล้างช่องเลือกไฟล์ทุกครั้งหลังส่งฟอร์ม
+  // ถ้าพึ่งช่อง input อย่างเดียว ส่งไม่ผ่านแล้วกดใหม่ รูปจะหายไปโดยที่ยังเห็นรูปตัวอย่างอยู่
+  const [photo, setPhoto] = useState<{ file: File; previewUrl: string } | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!("geolocation" in navigator)) {
-      setLocationError("อุปกรณ์นี้ไม่รองรับการระบุตำแหน่ง");
+      // เรียกผ่าน callback (ไม่ setState ตรงๆ ใน effect) เหมือนกรณีขอตำแหน่งไม่สำเร็จ
+      queueMicrotask(() => setLocationError("อุปกรณ์นี้ไม่รองรับการระบุตำแหน่ง"));
       return;
     }
     navigator.geolocation.getCurrentPosition(
@@ -25,18 +28,37 @@ export function CheckInForm({ nextType }: { nextType: AttendanceType }) {
     );
   }, []);
 
+  // คืนหน่วยความจำของรูปตัวอย่างเมื่อเปลี่ยนรูป/ออกจากหน้า
   useEffect(() => {
-    if (state.success) {
-      formRef.current?.reset();
-      setPhotoPreview(null);
-    }
-  }, [state.success]);
+    return () => {
+      if (photo) URL.revokeObjectURL(photo.previewUrl);
+    };
+  }, [photo]);
+
+  function clearPhoto() {
+    setPhoto(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  }
+
+  // ล้างรูปเมื่อบันทึกสำเร็จ (ปรับ state ระหว่าง render ตามที่ React แนะนำ แทนการ setState ใน useEffect)
+  const [handledState, setHandledState] = useState(state);
+  if (state !== handledState) {
+    setHandledState(state);
+    if (state.success) setPhoto(null);
+  }
+
+  function submit(formData: FormData) {
+    // แนบรูปจาก state (ถ้ามี) แทนค่าจากช่อง input
+    if (photo) formData.set("photo", photo.file);
+    else formData.delete("photo");
+    dispatch(formData);
+  }
 
   const label = nextType === "check_in" ? "เช็คอิน" : "เช็คเอาท์";
-  const canSubmit = coords !== null && photoPreview !== null && !pending;
+  const canSubmit = coords !== null && !pending;
 
   return (
-    <form ref={formRef} action={formAction} className="space-y-4 rounded-2xl bg-white p-6 shadow-sm">
+    <form action={submit} className="space-y-4 rounded-2xl bg-white p-6 shadow-sm">
       <div>
         <p className="text-sm text-[#5B6B7B]">การดำเนินการถัดไป</p>
         <p className="text-lg font-semibold text-[#1A1A1A]">{label}</p>
@@ -54,25 +76,41 @@ export function CheckInForm({ nextType }: { nextType: AttendanceType }) {
       )}
 
       <div>
-        <label htmlFor="photo" className="mb-1.5 block text-sm font-medium text-[#1A1A1A]">
-          ถ่ายรูปยืนยันตัวตน
-        </label>
+        <p className="mb-1.5 text-sm font-medium text-[#1A1A1A]">
+          ถ่ายรูปยืนยันตัวตน <span className="font-normal text-[#5B6B7B]">(ไม่บังคับ)</span>
+        </p>
+        {/* ซ่อนช่องเลือกไฟล์ของเบราว์เซอร์ (ข้อความ "No file chosen" ไม่ตรงกับรูปที่เก็บไว้ใน state) ใช้ปุ่มของเราแทน */}
         <input
+          ref={fileInputRef}
           id="photo"
-          name="photo"
           type="file"
-          accept="image/*"
+          accept="image/jpeg,image/png,image/webp"
           capture="user"
-          required
           onChange={(event) => {
             const file = event.target.files?.[0];
-            setPhotoPreview(file ? URL.createObjectURL(file) : null);
+            if (file) setPhoto({ file, previewUrl: URL.createObjectURL(file) });
           }}
-          className="block w-full text-sm text-[#5B6B7B] file:mr-3 file:rounded-lg file:border-0 file:bg-[#EAF3FC] file:px-3 file:py-2 file:text-[#1E5FA8]"
+          className="sr-only"
         />
-        {photoPreview ? (
-          // eslint-disable-next-line @next/next/no-img-element -- ใช้ตัวอย่างรูปที่ยังไม่ได้อัปโหลด ไม่ใช่รูปจากเว็บ
-          <img src={photoPreview} alt="ตัวอย่างรูปที่ถ่าย" className="mt-3 h-40 w-40 rounded-lg object-cover" />
+        <label
+          htmlFor="photo"
+          className="inline-block cursor-pointer rounded-lg bg-[#EAF3FC] px-3 py-2 text-sm text-[#1E5FA8] transition-colors hover:bg-[#1E5FA8]/10"
+        >
+          {photo ? "เปลี่ยนรูป" : "เลือก / ถ่ายรูป"}
+        </label>
+        {photo ? (
+          <div className="mt-3 flex items-end gap-3">
+            {/* eslint-disable-next-line @next/next/no-img-element -- ตัวอย่างรูปที่ยังไม่ได้อัปโหลด ไม่ใช่รูปจากเว็บ */}
+            <img src={photo.previewUrl} alt="ตัวอย่างรูปที่เลือก" className="h-40 w-40 rounded-lg object-cover" />
+            <button
+              type="button"
+              onClick={clearPhoto}
+              disabled={pending}
+              className="rounded-lg border border-[#D64545]/40 px-3 py-1.5 text-sm text-[#D64545] transition-colors hover:bg-[#D64545]/10 disabled:opacity-50"
+            >
+              ลบรูป
+            </button>
+          </div>
         ) : null}
       </div>
 
