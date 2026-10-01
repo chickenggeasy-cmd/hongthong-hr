@@ -1,6 +1,6 @@
 import { getCurrentEmployee } from "@/lib/auth/current-user";
 import { createClient } from "@/lib/supabase/server";
-import { bangkokToday, endOfMonth, formatThaiDate, startOfMonth } from "@/lib/date";
+import { addDays, addMonths, bangkokToday, endOfMonth, formatThaiDate, startOfMonth } from "@/lib/date";
 import { leaveTypeLabel, usedLeaveDaysInMonth } from "@/lib/leave/logic";
 import { ExceedsQuotaBadge, LeaveStatusBadge } from "@/components/features/leave-status-badge";
 import { LeaveRequestForm } from "./leave-request-form";
@@ -14,7 +14,7 @@ export default async function LeavePage() {
   const supabase = await createClient();
   const today = bangkokToday();
 
-  const [{ data: settingsRows }, { data: requests }, { data: thisMonthRequests }] = await Promise.all([
+  const [{ data: settingsRows }, { data: requests }, { data: thisMonthRequests }, { data: holidayRows }] = await Promise.all([
     supabase.rpc("leave_settings"),
     supabase
       .from("leave_requests")
@@ -29,7 +29,15 @@ export default async function LeavePage() {
       .eq("employee_id", employee.id)
       .lte("start_date", endOfMonth(today))
       .gte("end_date", startOfMonth(today)),
+    // วันหยุดนักขัตฤกษ์ช่วงที่ยื่นลาได้ (ใช้คำนวณจำนวนวันในฟอร์ม + โควตาเดือนนี้)
+    supabase
+      .from("holidays")
+      .select("holiday_date, name")
+      .gte("holiday_date", startOfMonth(addDays(today, -31)))
+      .lte("holiday_date", addMonths(today, 14))
+      .order("holiday_date"),
   ]);
+  const holidays = (holidayRows ?? []).map((row) => row.holiday_date);
 
   const settings = settingsRows?.[0];
   if (!settings) {
@@ -40,7 +48,7 @@ export default async function LeavePage() {
     );
   }
 
-  const usedThisMonth = usedLeaveDaysInMonth(thisMonthRequests ?? [], today);
+  const usedThisMonth = usedLeaveDaysInMonth(thisMonthRequests ?? [], today, new Set(holidays));
   const remaining = Math.max(settings.monthly_quota_days - usedThisMonth, 0);
 
   return (
@@ -60,6 +68,7 @@ export default async function LeavePage() {
 
       <LeaveRequestForm
         today={today}
+        holidays={holidays}
         settings={{
           monthlyQuotaDays: settings.monthly_quota_days,
           advanceNoticeMonths: settings.advance_notice_months,

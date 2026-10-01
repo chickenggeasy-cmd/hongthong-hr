@@ -25,7 +25,8 @@ export type Permission =
   | "team.view" // ดูข้อมูลลูกทีม
   | "employees.manage" // ลงทะเบียน/แก้ไขข้อมูลพนักงาน, ออกใบเตือน (เอกสาร SA ข้อ 3)
   | "approvals.view" // อนุมัติลา/OT
-  | "payroll.view" // เงินเดือน + รายงาน
+  | "payroll.view" // ดูเงินเดือน + รายงาน
+  | "payroll.manage" // คำนวณ/ปิดงวดเงินเดือน (ผู้บริหารดูได้อย่างเดียว ตามตารางสิทธิ์เอกสาร SA)
   | "admin.view"; // ตั้งค่าระบบ (แผนก/วันหยุด/อัตรา/พิกัด) — สมมติให้ HR ไปก่อน เพราะเอกสาร SA ไม่ได้ระบุ
 
 const PERMISSION_ROLES: Record<Permission, readonly Role[]> = {
@@ -33,6 +34,7 @@ const PERMISSION_ROLES: Record<Permission, readonly Role[]> = {
   "employees.manage": ["finance", "hr"],
   "approvals.view": ["executive", "finance", "hr"],
   "payroll.view": ["executive", "finance", "hr"],
+  "payroll.manage": ["finance", "hr"],
   "admin.view": ["hr"],
 };
 
@@ -47,6 +49,8 @@ export const NAV_ITEMS: readonly NavItem[] = [
   { href: "/", label: "หน้าแรก" },
   { href: "/attendance", label: "เช็คอิน" },
   { href: "/leave", label: "ลา" },
+  { href: "/ot", label: "OT" },
+  { href: "/payslip", label: "สลิปเงินเดือน" },
   { href: "/team", label: "ทีมของฉัน", permission: "team.view" },
   { href: "/approvals", label: "อนุมัติ", permission: "approvals.view" },
   { href: "/employees", label: "พนักงาน", permission: "employees.manage" },

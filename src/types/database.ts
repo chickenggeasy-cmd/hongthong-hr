@@ -202,6 +202,25 @@ export type Database = {
           },
         ]
       }
+      holidays: {
+        Row: {
+          created_at: string
+          holiday_date: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          holiday_date: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          holiday_date?: string
+          name?: string
+        }
+        Relationships: [
+        ]
+      }
       leave_requests: {
         Row: {
           approver_id: string | null
@@ -268,11 +287,268 @@ export type Database = {
           },
         ]
       }
+      ot_requests: {
+        Row: {
+          approver_id: string | null
+          created_at: string
+          decided_at: string | null
+          decision_note: string | null
+          employee_id: string
+          hours: number
+          id: string
+          reason: string | null
+          status: string
+          updated_at: string
+          work_date: string
+        }
+        Insert: {
+          approver_id?: string | null
+          created_at?: string
+          decided_at?: string | null
+          decision_note?: string | null
+          employee_id: string
+          hours: number
+          id?: string
+          reason?: string | null
+          status?: string
+          updated_at?: string
+          work_date: string
+        }
+        Update: {
+          approver_id?: string | null
+          created_at?: string
+          decided_at?: string | null
+          decision_note?: string | null
+          employee_id?: string
+          hours?: number
+          id?: string
+          reason?: string | null
+          status?: string
+          updated_at?: string
+          work_date?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ot_requests_approver_id_fkey"
+            columns: ["approver_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ot_requests_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payroll_runs: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          cycle_end: string
+          cycle_start: string
+          finalized_at: string | null
+          finalized_by: string | null
+          id: string
+          period: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          cycle_end: string
+          cycle_start: string
+          finalized_at?: string | null
+          finalized_by?: string | null
+          id?: string
+          period: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          cycle_end?: string
+          cycle_start?: string
+          finalized_at?: string | null
+          finalized_by?: string | null
+          id?: string
+          period?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payroll_runs_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payroll_runs_finalized_by_fkey"
+            columns: ["finalized_by"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payslips: {
+        Row: {
+          absent_days: number
+          base_pay: number
+          created_at: string
+          daily_rate: number
+          dept_name: string
+          details: Json
+          employee_code: string
+          employee_id: string
+          full_name: string
+          id: string
+          late_days: number
+          late_deduction: number
+          late_minutes: number
+          leave_days: number
+          leave_penalty: number
+          net_pay: number
+          ot_hours: number
+          ot_pay: number
+          over_quota_days: number
+          paid_holiday_days: number
+          run_id: string
+          social_security: number
+          worked_days: number
+          working_days: number
+        }
+        Insert: {
+          absent_days?: number
+          base_pay?: number
+          created_at?: string
+          daily_rate: number
+          dept_name: string
+          details?: Json
+          employee_code: string
+          employee_id: string
+          full_name: string
+          id?: string
+          late_days?: number
+          late_deduction?: number
+          late_minutes?: number
+          leave_days?: number
+          leave_penalty?: number
+          net_pay?: number
+          ot_hours?: number
+          ot_pay?: number
+          over_quota_days?: number
+          paid_holiday_days?: number
+          run_id: string
+          social_security?: number
+          worked_days?: number
+          working_days?: number
+        }
+        Update: {
+          absent_days?: number
+          base_pay?: number
+          created_at?: string
+          daily_rate?: number
+          dept_name?: string
+          details?: Json
+          employee_code?: string
+          employee_id?: string
+          full_name?: string
+          id?: string
+          late_days?: number
+          late_deduction?: number
+          late_minutes?: number
+          leave_days?: number
+          leave_penalty?: number
+          net_pay?: number
+          ot_hours?: number
+          ot_pay?: number
+          over_quota_days?: number
+          paid_holiday_days?: number
+          run_id?: string
+          social_security?: number
+          worked_days?: number
+          working_days?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payslips_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payslips_run_id_fkey"
+            columns: ["run_id"]
+            isOneToOne: false
+            referencedRelation: "payroll_runs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      warnings: {
+        Row: {
+          acknowledged_at: string | null
+          employee_id: string
+          id: string
+          issued_at: string
+          issued_by: string | null
+          kind: string
+          period: string | null
+          reason: string
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          employee_id: string
+          id?: string
+          issued_at?: string
+          issued_by?: string | null
+          kind: string
+          period?: string | null
+          reason: string
+        }
+        Update: {
+          acknowledged_at?: string | null
+          employee_id?: string
+          id?: string
+          issued_at?: string
+          issued_by?: string | null
+          kind?: string
+          period?: string | null
+          reason?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "warnings_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "warnings_issued_by_fkey"
+            columns: ["issued_by"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      acknowledge_warning: { Args: { p_warning_id: string }; Returns: undefined }
+      approval_block_reason: { Args: { p_requester_id: string }; Returns: string }
       auth_dept_code: { Args: never; Returns: string }
       auth_employee_id: { Args: never; Returns: string }
       auth_role: { Args: never; Returns: string }
@@ -280,9 +556,17 @@ export type Database = {
         Args: { p_approve: boolean; p_note?: string; p_request_id: string }
         Returns: undefined
       }
+      decide_ot_request: {
+        Args: { p_approve: boolean; p_note?: string; p_request_id: string }
+        Returns: undefined
+      }
       distance_meters: {
         Args: { lat1: number; lat2: number; lng1: number; lng2: number }
         Returns: number
+      }
+      finalize_payroll_run: {
+        Args: { p_finalized_by: string; p_run_id: string }
+        Returns: undefined
       }
       generate_employee_code: {
         Args: { p_be_year?: number; p_dept_code: string }
@@ -299,6 +583,13 @@ export type Database = {
       leave_working_days: {
         Args: { p_end: string; p_start: string }
         Returns: number
+      }
+      public_settings: {
+        Args: never
+        Returns: {
+          key: string
+          value: string
+        }[]
       }
       register_employee: {
         Args: {
@@ -324,6 +615,20 @@ export type Database = {
           over_quota: boolean
           total_days: number
         }[]
+      }
+      request_ot: {
+        Args: { p_hours: number; p_reason?: string; p_work_date: string }
+        Returns: string
+      }
+      save_payroll_run: {
+        Args: {
+          p_created_by: string
+          p_cycle_end: string
+          p_cycle_start: string
+          p_payslips: Json
+          p_period: string
+        }
+        Returns: string
       }
     }
     Enums: {

@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { addMonths, bangkokToday, endOfMonth, isValidDateOnly } from "../src/lib/date";
 import {
-  canDecideLeave,
   countLeaveDays,
   earliestStartDate,
   leaveDaysInMonth,
@@ -50,6 +49,17 @@ describe("countLeaveDays", () => {
     expect(countLeaveDays("2027-03-06", "2027-03-08")).toBe(2); // ส อา จ
     expect(countLeaveDays("2027-03-07", "2027-03-07")).toBe(0);
     expect(countLeaveDays("2027-03-01", "2027-03-31")).toBe(27);
+  });
+
+  it("ไม่นับวันหยุดนักขัตฤกษ์", () => {
+    const holidays = new Set(["2027-03-02"]);
+    expect(countLeaveDays("2027-03-01", "2027-03-03", holidays)).toBe(2);
+    expect(validateLeaveInput(
+      { type: "sick", startDate: "2027-03-02", endDate: "2027-03-02", reason: "" },
+      "2027-03-02",
+      settings,
+      holidays,
+    )).toContain("ไม่มีวันทำงาน");
   });
 });
 
@@ -121,44 +131,13 @@ describe("validateLeaveInput", () => {
   });
 });
 
-describe("canDecideLeave", () => {
-  const decide = (approverRole: string, requesterRole: string, samePerson = false) =>
-    canDecideLeave({ approverId: "a", approverRole, requesterId: samePerson ? "a" : "b", requesterRole }).allowed;
-
-  it("HR/การเงิน/ผู้บริหาร อนุมัติคำขอของพนักงานและหัวหน้าได้", () => {
-    for (const approver of ["hr", "finance", "executive"]) {
-      expect(decide(approver, "employee")).toBe(true);
-      expect(decide(approver, "head")).toBe(true);
-    }
-  });
-
-  it("หัวหน้าและพนักงานอนุมัติไม่ได้", () => {
-    expect(decide("head", "employee")).toBe(false);
-    expect(decide("employee", "employee")).toBe(false);
-  });
-
-  it("คำขอของ HR/การเงิน/ผู้บริหาร ต้องให้ผู้บริหารอนุมัติ", () => {
-    expect(decide("hr", "hr")).toBe(false);
-    expect(decide("finance", "hr")).toBe(false);
-    expect(decide("hr", "finance")).toBe(false);
-    expect(decide("hr", "executive")).toBe(false);
-    expect(decide("executive", "hr")).toBe(true);
-    expect(decide("executive", "finance")).toBe(true);
-    expect(decide("executive", "executive")).toBe(true);
-  });
-
-  it("อนุมัติคำขอของตัวเองไม่ได้", () => {
-    expect(decide("executive", "executive", true)).toBe(false);
-  });
-});
-
 describe("leaveErrorMessage", () => {
   it("แปลงรหัสจากฐานข้อมูลเป็นภาษาไทย", () => {
     expect(leaveErrorMessage("leave.overlap")).toContain("ซ้อน");
   });
 
-  it("ไม่มีสิทธิ์ กับ ไม่พบคำขอ ใช้ข้อความเดียวกัน", () => {
-    expect(leaveErrorMessage("leave.forbidden")).toBe(leaveErrorMessage("leave.not_found"));
+  it("error ของการอนุมัติ ใช้ข้อความกลางจาก approvals", () => {
+    expect(leaveErrorMessage("approval.self_approval")).toBe("อนุมัติคำขอของตัวเองไม่ได้");
   });
 
   it("error ที่ไม่รู้จัก ไม่โชว์รายละเอียดภายใน", () => {

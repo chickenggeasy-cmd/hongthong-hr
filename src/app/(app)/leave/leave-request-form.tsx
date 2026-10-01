@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useMemo, useState } from "react";
 import { requestLeave, type LeaveRequestState } from "./actions";
 import {
   countLeaveDays,
@@ -18,7 +18,15 @@ const initialState: LeaveRequestState = { error: null, success: false };
 const inputClass =
   "w-full rounded-lg border border-[#5B6B7B]/30 px-3 py-2 text-[#1A1A1A] outline-none focus:border-[#1E5FA8] focus:ring-2 focus:ring-[#1E5FA8]/20";
 
-export function LeaveRequestForm({ today, settings }: { today: DateOnly; settings: LeaveSettings }) {
+export function LeaveRequestForm({
+  today,
+  holidays,
+  settings,
+}: {
+  today: DateOnly;
+  holidays: readonly DateOnly[];
+  settings: LeaveSettings;
+}) {
   const [state, formAction, pending] = useActionState(requestLeave, initialState);
   const [leaveType, setLeaveType] = useState<LeaveType>("personal");
   const [startDate, setStartDate] = useState("");
@@ -37,10 +45,11 @@ export function LeaveRequestForm({ today, settings }: { today: DateOnly; setting
     }
   }
 
+  const holidaySet = useMemo(() => new Set(holidays), [holidays]);
   const minStart = earliestStartDate(leaveType, today, settings);
   const daysPreview =
     isValidDateOnly(startDate) && isValidDateOnly(endDate) && endDate >= startDate
-      ? countLeaveDays(startDate, endDate)
+      ? countLeaveDays(startDate, endDate, holidaySet)
       : null;
 
   return (
@@ -105,7 +114,7 @@ export function LeaveRequestForm({ today, settings }: { today: DateOnly; setting
       </div>
       {daysPreview !== null ? (
         <p className="text-sm text-[#5B6B7B]">
-          รวม <span className="font-medium text-[#1A1A1A]">{daysPreview} วันทำงาน</span> (ไม่นับวันอาทิตย์)
+          รวม <span className="font-medium text-[#1A1A1A]">{daysPreview} วันทำงาน</span> (ไม่นับวันอาทิตย์และวันหยุดนักขัตฤกษ์)
         </p>
       ) : null}
 

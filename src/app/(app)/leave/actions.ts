@@ -36,12 +36,23 @@ export async function requestLeave(_prevState: LeaveRequestState, formData: Form
     return { error: "ระบบยังไม่ได้ตั้งค่ากติกาการลา กรุณาติดต่อ HR", success: false };
   }
 
+  const { data: holidayRows } = await supabase
+    .from("holidays")
+    .select("holiday_date")
+    .gte("holiday_date", input.startDate || "1900-01-01")
+    .lte("holiday_date", input.endDate || "1900-01-01");
+
   // ตรวจล่วงหน้าเพื่อให้ได้ข้อความที่ละเอียดกว่า ฐานข้อมูลจะตรวจซ้ำอีกครั้งเสมอ
-  const validationError = validateLeaveInput(input, bangkokToday(), {
-    monthlyQuotaDays: settings.monthly_quota_days,
-    advanceNoticeMonths: settings.advance_notice_months,
-    sickBackdateDays: settings.sick_backdate_days,
-  });
+  const validationError = validateLeaveInput(
+    input,
+    bangkokToday(),
+    {
+      monthlyQuotaDays: settings.monthly_quota_days,
+      advanceNoticeMonths: settings.advance_notice_months,
+      sickBackdateDays: settings.sick_backdate_days,
+    },
+    new Set((holidayRows ?? []).map((row) => row.holiday_date)),
+  );
   if (validationError) {
     return { error: validationError, success: false };
   }

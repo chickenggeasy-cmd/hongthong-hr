@@ -1,13 +1,13 @@
 "use client";
 
 import { useActionState } from "react";
-import { decideLeave, type DecideLeaveState } from "./actions";
-import { MAX_REASON_LENGTH } from "@/lib/leave/logic";
+import { decideRequest, type DecideRequestState } from "./actions";
+import { MAX_NOTE_LENGTH } from "@/lib/approvals/logic";
 
-const initialState: DecideLeaveState = { error: null, success: false };
+const initialState: DecideRequestState = { error: null, success: false };
 
-export function DecideLeaveForm({ requestId }: { requestId: string }) {
-  const [state, formAction, pending] = useActionState(decideLeave, initialState);
+export function DecideRequestForm({ kind, requestId }: { kind: "leave" | "ot"; requestId: string }) {
+  const [state, formAction, pending] = useActionState(decideRequest, initialState);
 
   if (state.success) {
     return (
@@ -19,11 +19,12 @@ export function DecideLeaveForm({ requestId }: { requestId: string }) {
 
   return (
     <form action={formAction} className="space-y-2">
+      <input type="hidden" name="kind" value={kind} />
       <input type="hidden" name="requestId" value={requestId} />
       <input
         name="note"
         type="text"
-        maxLength={MAX_REASON_LENGTH}
+        maxLength={MAX_NOTE_LENGTH}
         placeholder="หมายเหตุ (ไม่บังคับ)"
         aria-label="หมายเหตุ"
         className="w-full rounded-lg border border-[#5B6B7B]/30 px-3 py-1.5 text-sm text-[#1A1A1A] outline-none focus:border-[#1E5FA8] focus:ring-2 focus:ring-[#1E5FA8]/20"

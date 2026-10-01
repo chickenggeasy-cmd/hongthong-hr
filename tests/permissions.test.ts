@@ -1,7 +1,14 @@
 import { describe, expect, it } from "vitest";
 import { NAV_ITEMS, can, isApproverRole, navForRole, type Permission } from "../src/lib/permissions";
 
-const ALL: Permission[] = ["team.view", "employees.manage", "approvals.view", "payroll.view", "admin.view"];
+const ALL: Permission[] = [
+  "team.view",
+  "employees.manage",
+  "approvals.view",
+  "payroll.view",
+  "payroll.manage",
+  "admin.view",
+];
 const allowed = (role: string) => ALL.filter((p) => can(role, p));
 
 describe("can", () => {
@@ -13,12 +20,12 @@ describe("can", () => {
     expect(allowed("head")).toEqual(["team.view"]);
   });
 
-  it("ผู้บริหาร ดูทีม/อนุมัติ/เงินเดือนได้ แต่ไม่ลงทะเบียนพนักงานและไม่ใช่แอดมิน", () => {
+  it("ผู้บริหาร ดูทีม/อนุมัติ/ดูเงินเดือนได้ แต่คำนวณเงินเดือนไม่ได้ ไม่ลงทะเบียนพนักงานและไม่ใช่แอดมิน", () => {
     expect(allowed("executive")).toEqual(["team.view", "approvals.view", "payroll.view"]);
   });
 
   it("การเงิน จัดการพนักงานได้ แต่ไม่ใช่แอดมิน", () => {
-    expect(allowed("finance")).toEqual(["team.view", "employees.manage", "approvals.view", "payroll.view"]);
+    expect(allowed("finance")).toEqual(["team.view", "employees.manage", "approvals.view", "payroll.view", "payroll.manage"]);
   });
 
   it("HR ทำได้ทุกอย่าง", () => {
@@ -34,8 +41,8 @@ describe("can", () => {
 describe("navForRole", () => {
   const hrefs = (role: string) => navForRole(role).map((i) => i.href);
 
-  it("พนักงานทั่วไปเห็นแค่หน้าแรก เช็คอิน และขอลา", () => {
-    expect(hrefs("employee")).toEqual(["/", "/attendance", "/leave"]);
+  it("พนักงานทั่วไปเห็นแค่หน้าแรก เช็คอิน ขอลา ขอ OT และสลิปของตัวเอง", () => {
+    expect(hrefs("employee")).toEqual(["/", "/attendance", "/leave", "/ot", "/payslip"]);
   });
 
   it("HR เห็นทุกเมนู", () => {
