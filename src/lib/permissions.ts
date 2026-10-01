@@ -46,6 +46,7 @@ export type NavItem = { href: string; label: string; permission?: Permission };
 export const NAV_ITEMS: readonly NavItem[] = [
   { href: "/", label: "หน้าแรก" },
   { href: "/attendance", label: "เช็คอิน" },
+  { href: "/leave", label: "ลา" },
   { href: "/team", label: "ทีมของฉัน", permission: "team.view" },
   { href: "/approvals", label: "อนุมัติ", permission: "approvals.view" },
   { href: "/employees", label: "พนักงาน", permission: "employees.manage" },

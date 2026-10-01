@@ -34,8 +34,8 @@ describe("can", () => {
 describe("navForRole", () => {
   const hrefs = (role: string) => navForRole(role).map((i) => i.href);
 
-  it("พนักงานทั่วไปเห็นแค่หน้าแรกกับเช็คอิน", () => {
-    expect(hrefs("employee")).toEqual(["/", "/attendance"]);
+  it("พนักงานทั่วไปเห็นแค่หน้าแรก เช็คอิน และขอลา", () => {
+    expect(hrefs("employee")).toEqual(["/", "/attendance", "/leave"]);
   });
 
   it("HR เห็นทุกเมนู", () => {

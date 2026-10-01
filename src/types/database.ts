@@ -202,6 +202,72 @@ export type Database = {
           },
         ]
       }
+      leave_requests: {
+        Row: {
+          approver_id: string | null
+          created_at: string
+          days_count: number
+          decided_at: string | null
+          decision_note: string | null
+          employee_id: string
+          end_date: string
+          exceeds_quota: boolean
+          id: string
+          leave_type: string
+          reason: string | null
+          start_date: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          approver_id?: string | null
+          created_at?: string
+          days_count: number
+          decided_at?: string | null
+          decision_note?: string | null
+          employee_id: string
+          end_date: string
+          exceeds_quota?: boolean
+          id?: string
+          leave_type: string
+          reason?: string | null
+          start_date: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          approver_id?: string | null
+          created_at?: string
+          days_count?: number
+          decided_at?: string | null
+          decision_note?: string | null
+          employee_id?: string
+          end_date?: string
+          exceeds_quota?: boolean
+          id?: string
+          leave_type?: string
+          reason?: string | null
+          start_date?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "leave_requests_approver_id_fkey"
+            columns: ["approver_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "leave_requests_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -210,6 +276,10 @@ export type Database = {
       auth_dept_code: { Args: never; Returns: string }
       auth_employee_id: { Args: never; Returns: string }
       auth_role: { Args: never; Returns: string }
+      decide_leave_request: {
+        Args: { p_approve: boolean; p_note?: string; p_request_id: string }
+        Returns: undefined
+      }
       distance_meters: {
         Args: { lat1: number; lat2: number; lng1: number; lng2: number }
         Returns: number
@@ -217,6 +287,18 @@ export type Database = {
       generate_employee_code: {
         Args: { p_be_year?: number; p_dept_code: string }
         Returns: string
+      }
+      leave_settings: {
+        Args: never
+        Returns: {
+          advance_notice_months: number
+          monthly_quota_days: number
+          sick_backdate_days: number
+        }[]
+      }
+      leave_working_days: {
+        Args: { p_end: string; p_start: string }
+        Returns: number
       }
       register_employee: {
         Args: {
@@ -228,6 +310,19 @@ export type Database = {
         Returns: {
           new_employee_code: string
           new_id: string
+        }[]
+      }
+      request_leave: {
+        Args: {
+          p_end_date: string
+          p_leave_type: string
+          p_reason?: string
+          p_start_date: string
+        }
+        Returns: {
+          new_request_id: string
+          over_quota: boolean
+          total_days: number
         }[]
       }
     }
