@@ -218,8 +218,7 @@ export type Database = {
           holiday_date?: string
           name?: string
         }
-        Relationships: [
-        ]
+        Relationships: []
       }
       leave_requests: {
         Row: {
@@ -547,8 +546,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      acknowledge_warning: { Args: { p_warning_id: string }; Returns: undefined }
-      approval_block_reason: { Args: { p_requester_id: string }; Returns: string }
+      acknowledge_warning: {
+        Args: { p_warning_id: string }
+        Returns: undefined
+      }
+      approval_block_reason: {
+        Args: { p_requester_id: string }
+        Returns: string
+      }
       auth_dept_code: { Args: never; Returns: string }
       auth_employee_id: { Args: never; Returns: string }
       auth_role: { Args: never; Returns: string }
