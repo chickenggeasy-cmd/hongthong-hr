@@ -4,7 +4,13 @@ import { revalidatePath } from "next/cache";
 import { getCurrentEmployee } from "@/lib/auth/current-user";
 import { can } from "@/lib/permissions";
 import { createServiceClient } from "@/lib/supabase/service";
-import { hashNationalId, isValidThaiNationalId, normalizeNationalId } from "@/lib/auth/national-id";
+import {
+  deriveLoginPassword,
+  employeeEmail,
+  hashNationalId,
+  isValidThaiNationalId,
+  normalizeNationalId,
+} from "@/lib/auth/national-id";
 
 export type RegisterEmployeeState = {
   error: string | null;
@@ -53,10 +59,33 @@ export async function registerEmployee(
   }
 
   const row = Array.isArray(data) ? data[0] : data;
-  if (!row?.new_employee_code) {
+  if (!row?.new_id || !row?.new_employee_code) {
+    return { error: "ลงทะเบียนไม่สำเร็จ กรุณาลองใหม่", success: false };
+  }
+  const employeeId = row.new_id;
+  const employeeCode = row.new_employee_code;
+
+  // สร้างบัญชีล็อกอินใน Supabase Auth แล้วผูกกับพนักงาน (ขั้นตอนเดียวกับ scripts/create-first-user.ts)
+  // ไม่มีขั้นนี้ พนักงานจะได้รหัสพนักงานแต่ล็อกอินไม่ได้
+  // ถ้าพลาด ล้างแถวพนักงานที่เพิ่งสร้าง เลขบัตรจะได้ไม่ค้างเป็น "ลงทะเบียนแล้ว"
+  const created = await supabase.auth.admin.createUser({
+    email: employeeEmail(employeeCode),
+    password: deriveLoginPassword(employeeCode, nationalId),
+    email_confirm: true,
+    user_metadata: { employee_code: employeeCode },
+  });
+  if (created.error || !created.data.user) {
+    await supabase.from("employees").delete().eq("id", employeeId);
+    return { error: "สร้างบัญชีล็อกอินไม่สำเร็จ กรุณาลองใหม่", success: false };
+  }
+
+  const link = await supabase.from("employees").update({ auth_user_id: created.data.user.id }).eq("id", employeeId);
+  if (link.error) {
+    await supabase.auth.admin.deleteUser(created.data.user.id);
+    await supabase.from("employees").delete().eq("id", employeeId);
     return { error: "ลงทะเบียนไม่สำเร็จ กรุณาลองใหม่", success: false };
   }
 
   revalidatePath("/employees");
-  return { error: null, success: true, employeeCode: row.new_employee_code };
+  return { error: null, success: true, employeeCode };
 }
