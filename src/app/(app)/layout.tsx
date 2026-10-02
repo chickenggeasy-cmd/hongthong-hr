@@ -31,7 +31,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-dvh bg-[#EAF3FC]">
       <AppHeader employee={employee} />
-      <main className="mx-auto max-w-3xl px-4 py-6">{children}</main>
+      <main className="mx-auto w-full max-w-5xl px-4 py-6">{children}</main>
     </div>
   );
 }
