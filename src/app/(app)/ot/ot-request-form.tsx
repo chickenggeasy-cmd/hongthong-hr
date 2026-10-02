@@ -4,6 +4,7 @@ import { useActionState, useState } from "react";
 import { requestOt, type OtRequestState } from "./actions";
 import { MAX_OT_REASON_LENGTH } from "@/lib/ot/logic";
 import type { DateOnly } from "@/lib/date";
+import { CardHeading } from "@/components/features/card-heading";
 
 const initialState: OtRequestState = { error: null, success: false };
 
@@ -39,12 +40,13 @@ export function OtRequestForm({
 
   return (
     <form action={formAction} className="space-y-4 ht-card p-6">
-      <div>
-        <h2 className="text-lg font-semibold text-[#1A1A1A]">ยื่นคำขอ OT</h2>
-        <p className="mt-1 text-sm text-[#5B6B7B]">
-          นับหลัง {workEndTime} น.{hourlyRate !== null ? ` · ชั่วโมงละ ${hourlyRate.toLocaleString("th-TH")} บาท` : ""}
-        </p>
-      </div>
+      <CardHeading
+        sticker="night"
+        className=""
+        description={`นับหลัง ${workEndTime} น.${hourlyRate !== null ? ` · ชั่วโมงละ ${hourlyRate.toLocaleString("th-TH")} บาท` : ""}`}
+      >
+        ยื่นคำขอ OT
+      </CardHeading>
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <div>

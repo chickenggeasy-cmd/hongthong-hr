@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { periodLabel } from "@/lib/payroll/logic";
 import { warningKindLabel } from "@/lib/warnings/logic";
 import { GenerateWarningsForm, IssueWarningForm } from "./warning-forms";
+import { CardHeading } from "@/components/features/card-heading";
 
 const KIND_CLASS: Record<string, string> = {
   late: "bg-[#E8890C]/10 text-[#E8890C]",
@@ -38,14 +39,14 @@ export default async function WarningsPage() {
       <PageHeader icon={TriangleAlert} sticker="warning" title="ใบเตือน" description="ออกอัตโนมัติจากผลคำนวณเงินเดือน หรือออกเองตามดุลยพินิจ พนักงานกดรับทราบที่หน้าแรก" />
       <div className="grid gap-4 sm:grid-cols-2">
         <section className="ht-card p-6">
-          <h2 className="mb-1 font-semibold text-[#1A1A1A]">ใบเตือนอัตโนมัติ</h2>
+          <CardHeading sticker="bell" className="mb-2">ใบเตือนอัตโนมัติ</CardHeading>
           <p className="mb-4 text-sm text-[#5B6B7B]">
             ตรวจจากผลคำนวณเงินเดือนของงวด (มาสาย/ขาดงานถึงเกณฑ์ในหน้าตั้งค่า) กดซ้ำได้ ไม่ออกซ้ำ
           </p>
           <GenerateWarningsForm periods={(runs ?? []).map((r) => ({ value: r.period, label: periodLabel(r.period) }))} />
         </section>
         <section className="ht-card p-6">
-          <h2 className="mb-4 font-semibold text-[#1A1A1A]">ออกใบเตือนเอง</h2>
+          <CardHeading sticker="warning">ออกใบเตือนเอง</CardHeading>
           <IssueWarningForm
             employees={(employees ?? [])
               .filter((e) => e.id !== employee.id)
@@ -55,7 +56,7 @@ export default async function WarningsPage() {
       </div>
 
       <section className="ht-card p-6">
-        <h2 className="mb-3 font-semibold text-[#1A1A1A]">ใบเตือนล่าสุด</h2>
+        <CardHeading sticker="clipboard">ใบเตือนล่าสุด</CardHeading>
         {!warnings || warnings.length === 0 ? (
           <p className="text-sm text-[#5B6B7B]">ยังไม่มีใบเตือน</p>
         ) : (

@@ -7,6 +7,7 @@ import { LeaveStatusBadge } from "@/components/features/leave-status-badge";
 import { PageHeader } from "@/components/features/page-header";
 import { EmptyState } from "@/components/features/empty-state";
 import { OtRequestForm } from "./ot-request-form";
+import { CardHeading } from "@/components/features/card-heading";
 
 export default async function OtPage() {
   // ทุกคนที่ล็อกอินขอ OT ได้ จึงไม่ต้อง requirePermission()
@@ -59,7 +60,7 @@ export default async function OtPage() {
         />
 
         <section className="ht-card p-6">
-          <h2 className="mb-3 font-bold text-[#1A1A1A]">คำขอ OT ของฉัน</h2>
+          <CardHeading sticker="stopwatch">คำขอ OT ของฉัน</CardHeading>
           {!requests || requests.length === 0 ? (
             <EmptyState sticker="stopwatch">ยังไม่มีคำขอ OT</EmptyState>
           ) : (

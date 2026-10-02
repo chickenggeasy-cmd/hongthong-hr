@@ -6,6 +6,7 @@ import { createServiceClient } from "@/lib/supabase/service";
 import { bangkokToday, formatThaiDate } from "@/lib/date";
 import { SETTING_DEFINITIONS, SETTING_GROUPS } from "@/lib/admin/settings";
 import { AddHolidayForm, DeleteHolidayButton, SettingsForm } from "./admin-forms";
+import { CardHeading } from "@/components/features/card-heading";
 
 export default async function AdminPage() {
   await requirePermission("admin.view");
@@ -42,7 +43,7 @@ export default async function AdminPage() {
       <SettingsForm groups={groups} values={values} />
 
       <section className="ht-card p-6">
-        <h2 className="mb-1 font-semibold text-[#1A1A1A]">วันหยุดนักขัตฤกษ์</h2>
+        <CardHeading sticker="sun" className="mb-2">วันหยุดนักขัตฤกษ์</CardHeading>
         <p className="mb-4 text-sm text-[#5B6B7B]">
           ไม่นับเป็นวันลา ขอ OT ไม่ได้ และได้รับค่าจ้างตามปกติแม้ไม่ได้มาทำงาน
         </p>

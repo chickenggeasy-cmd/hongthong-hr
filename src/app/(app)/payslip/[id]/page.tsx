@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { formatThaiDate } from "@/lib/date";
 import { formatBaht, periodLabel } from "@/lib/payroll/logic";
 import { dayStatusLabel, payslipDays, payslipLines, payslipStats } from "@/lib/payroll/payslip-view";
+import { CardHeading } from "@/components/features/card-heading";
 
 const STATUS_COLOR: Record<string, string> = {
   worked: "text-[#2E9E5B]",
@@ -71,11 +72,11 @@ export default async function PayslipDetailPage({ params }: PageProps<"/payslip/
 
       <div className="grid gap-4 sm:grid-cols-2">
         {[
-          { title: "รายได้", lines: earnings, color: "text-[#2E9E5B]" },
-          { title: "รายการหัก", lines: deductions, color: "text-[#D64545]" },
+          { title: "รายได้", lines: earnings, color: "text-[#2E9E5B]", sticker: "money-wings" as const },
+          { title: "รายการหัก", lines: deductions, color: "text-[#D64545]", sticker: "receipt" as const },
         ].map((section) => (
           <section key={section.title} className="ht-card p-6">
-            <h2 className="mb-3 font-semibold text-[#1A1A1A]">{section.title}</h2>
+            <CardHeading sticker={section.sticker}>{section.title}</CardHeading>
             <dl className="space-y-2 text-sm">
               {section.lines.map((line) => (
                 <div key={line.label} className="flex justify-between gap-3">

@@ -12,6 +12,7 @@ import {
   type LeaveType,
 } from "@/lib/leave/logic";
 import { formatThaiDate, isValidDateOnly, type DateOnly } from "@/lib/date";
+import { CardHeading } from "@/components/features/card-heading";
 
 const initialState: LeaveRequestState = { error: null, success: false };
 
@@ -54,7 +55,7 @@ export function LeaveRequestForm({
 
   return (
     <form action={formAction} className="space-y-4 ht-card p-6">
-      <h2 className="text-lg font-semibold text-[#1A1A1A]">ยื่นคำขอลา</h2>
+      <CardHeading sticker="calendar" className="">ยื่นคำขอลา</CardHeading>
 
       <div>
         <label htmlFor="leaveType" className="mb-1.5 block text-sm font-medium text-[#1A1A1A]">

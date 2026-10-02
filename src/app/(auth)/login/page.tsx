@@ -3,7 +3,8 @@
 import Image from "next/image";
 import { useActionState } from "react";
 import { ShieldCheck } from "lucide-react";
-import { DotPattern, WarehouseScene } from "@/components/brand/illustrations";
+import { DotPattern } from "@/components/brand/illustrations";
+import { LoginScene } from "@/components/brand/scenes";
 import { Sticker, type StickerName } from "@/components/brand/sticker";
 import { login, type LoginState } from "./actions";
 
@@ -58,20 +59,8 @@ export default function LoginPage() {
               </li>
             ))}
           </ul>
-          {/* ภาพโกดังของแบรนด์ + ภาพ 3D ลอยรอบๆ */}
-          <div className="relative mt-10 w-full max-w-md" aria-hidden>
-            <WarehouseScene className="w-full drop-shadow-2xl" />
-            <Sticker name="cart" size={92} priority className="ht-pop absolute -left-8 bottom-0" style={{ animationDelay: "500ms" }} />
-            <span className="ht-float absolute -top-8 right-4 block">
-              <Sticker name="package" size={76} className="ht-pop" style={{ animationDelay: "650ms" }} />
-            </span>
-            <span className="ht-float-slow absolute left-16 -top-6 block" style={{ animationDelay: "-2s" }}>
-              <Sticker name="coin" size={46} className="ht-pop" style={{ animationDelay: "800ms" }} />
-            </span>
-            <span className="ht-float absolute -right-6 bottom-12 block" style={{ animationDelay: "-3s" }}>
-              <Sticker name="star" size={44} className="ht-pop" style={{ animationDelay: "950ms" }} />
-            </span>
-          </div>
+          {/* ฉาก 3D: ห้าง + พนักงานหลายฝ่าย + สินค้าของทุกแผนก */}
+          <LoginScene className="mt-10 origin-left scale-[0.85] xl:scale-100" />
         </div>
 
         <p className="relative text-sm text-white/60">ของดี ราคาส่ง เพื่อธุรกิจของคุณ</p>

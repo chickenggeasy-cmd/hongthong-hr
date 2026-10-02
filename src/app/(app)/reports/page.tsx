@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { addDays, bangkokToday, startOfMonth } from "@/lib/date";
 import { periodLabel } from "@/lib/payroll/logic";
 import { MAX_REPORT_DAYS } from "@/lib/reports/logic";
+import { CardHeading } from "@/components/features/card-heading";
 
 const inputClass =
   "ht-input";
@@ -25,7 +26,7 @@ export default async function ReportsPage() {
       <PageHeader icon={FileSpreadsheet} sticker="chart" title="รายงาน" description="ดาวน์โหลดเป็นไฟล์ Excel (.xlsx) เปิดได้ด้วย Excel หรือ Google Sheets" />
 
       <section className="ht-card p-6">
-        <h2 className="font-semibold text-[#1A1A1A]">เงินเดือนรายงวด</h2>
+        <CardHeading sticker="money-bag" className="mb-1">เงินเดือนรายงวด</CardHeading>
         <p className="mb-3 text-sm text-[#5B6B7B]">สรุปเงินเดือนทุกคนในงวด (รายได้ รายการหัก รับสุทธิ)</p>
         {!runs || runs.length === 0 ? (
           <p className="text-sm text-[#5B6B7B]">ยังไม่มีงวดที่คำนวณแล้ว</p>
@@ -47,11 +48,11 @@ export default async function ReportsPage() {
       </section>
 
       {[
-        { action: "/reports/attendance", title: "การเข้างานรายวัน", help: "เวลาเข้า-ออก และนาทีที่มาสาย ของทุกคนทุกวัน" },
-        { action: "/reports/requests", title: "คำขอลาและ OT", help: "คำขอทุกสถานะในช่วงวันที่ (2 ชีต: ลา / OT)" },
+        { action: "/reports/attendance", sticker: "alarm-clock" as const, title: "การเข้างานรายวัน", help: "เวลาเข้า-ออก และนาทีที่มาสาย ของทุกคนทุกวัน" },
+        { action: "/reports/requests", sticker: "chart-up" as const, title: "คำขอลาและ OT", help: "คำขอทุกสถานะในช่วงวันที่ (2 ชีต: ลา / OT)" },
       ].map((report) => (
         <section key={report.action} className="ht-card p-6">
-          <h2 className="font-semibold text-[#1A1A1A]">{report.title}</h2>
+          <CardHeading sticker={report.sticker} className="mb-1">{report.title}</CardHeading>
           <p className="mb-3 text-sm text-[#5B6B7B]">
             {report.help} · เลือกได้ไม่เกิน {MAX_REPORT_DAYS} วัน
           </p>

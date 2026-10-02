@@ -6,6 +6,7 @@ import { formatThaiDate } from "@/lib/date";
 import { leaveStatusLabel, leaveTypeLabel } from "@/lib/leave/logic";
 import { bangkokClock, TODAY_STATUS_CLASS, TODAY_STATUS_LABEL_TH, type TodayStatus } from "@/lib/team/logic";
 import { loadTodayOverview, type TeamMember } from "@/lib/team/overview";
+import { CardHeading } from "@/components/features/card-heading";
 
 const SUMMARY: { status: TodayStatus[]; label: string; className: string }[] = [
   { status: ["working", "checked_out"], label: "มาแล้ว", className: "text-[#2E9E5B]" },
@@ -56,7 +57,7 @@ export default async function TeamPage() {
       ) : (
         [...byDepartment.entries()].map(([department, members]) => (
           <section key={department} className="ht-card p-6">
-            <h2 className="mb-2 font-semibold text-[#1A1A1A]">{department}</h2>
+            <CardHeading sticker="people" className="mb-3">{department}</CardHeading>
             <ul className="divide-y divide-[#5B6B7B]/10 text-sm">
               {members.map((m) => (
                 <li key={m.id} className="flex flex-wrap items-center justify-between gap-2 py-3">

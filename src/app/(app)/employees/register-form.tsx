@@ -2,6 +2,7 @@
 
 import { useActionState, useRef } from "react";
 import { registerEmployee, type RegisterEmployeeState } from "./actions";
+import { CardHeading } from "@/components/features/card-heading";
 
 const initialState: RegisterEmployeeState = { error: null, success: false };
 
@@ -18,7 +19,7 @@ export function RegisterForm({ departments }: { departments: { code: string; nam
       }}
       className="space-y-4 ht-card p-6"
     >
-      <h2 className="font-semibold text-[#1A1A1A]">ลงทะเบียนพนักงานใหม่</h2>
+      <CardHeading sticker="cards" className="">ลงทะเบียนพนักงานใหม่</CardHeading>
 
       <div>
         <label htmlFor="fullName" className="mb-1.5 block text-sm font-medium text-[#1A1A1A]">

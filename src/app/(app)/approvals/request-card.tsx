@@ -4,6 +4,7 @@ import { roleLabel } from "@/lib/permissions";
 import { decisionFor, type PendingRequest } from "@/lib/approvals/view";
 import { ExceedsQuotaBadge } from "@/components/features/leave-status-badge";
 import { DecideRequestForm, DisabledDecision } from "./decide-request-form";
+import { EmptyState } from "@/components/features/empty-state";
 
 // การ์ดคำขอและกลุ่มคำขอของหน้าอนุมัติ (แยกจาก page.tsx ให้เปิดดูหน้าตาด้วยข้อมูลตัวอย่างได้)
 
@@ -90,7 +91,7 @@ export function Group({ title, description, count, gold, children }: { title: st
         <span className={`rounded-full px-2 py-0.5 text-sm ${gold ? "bg-[#D4A017] text-[#1A1A1A]" : "bg-[#E8890C]/10 text-[#9A5A00]"}`}>{count}</span>
       </h2>
       {description ? <p className="mt-1 text-sm text-[#5B6B7B]">{description}</p> : null}
-      {count === 0 ? <p className="py-6 text-center text-sm text-[#5B6B7B]">ไม่มีคำขอที่รออนุมัติ</p> : <ul className="mt-3 space-y-3">{children}</ul>}
+      {count === 0 ? <EmptyState sticker="party">ไม่มีคำขอที่รออนุมัติ</EmptyState> : <ul className="mt-3 space-y-3">{children}</ul>}
     </section>
   );
 }

@@ -1,4 +1,5 @@
-import { Briefcase, CalendarClock, History, Thermometer, TreePalm, UsersRound, type LucideIcon } from "lucide-react";
+import { CalendarClock, History, UsersRound } from "lucide-react";
+import { Sticker, type StickerName } from "@/components/brand/sticker";
 import { formatThaiDate } from "@/lib/date";
 import { EmptyState } from "@/components/features/empty-state";
 import { leaveTypeLabel } from "@/lib/leave/logic";
@@ -7,10 +8,11 @@ import { ExceedsQuotaBadge, LeaveStatusBadge } from "@/components/features/leave
 
 // ชิ้นส่วนหน้าตาของหน้าลา (รับข้อมูลที่โหลดแล้ว ไม่ยิงฐานข้อมูลเอง)
 
-const TYPE_ICON: Record<string, { icon: LucideIcon; className: string }> = {
-  sick: { icon: Thermometer, className: "bg-[#D64545]/10 text-[#D64545]" },
-  personal: { icon: Briefcase, className: "bg-[#1E5FA8]/10 text-[#1E5FA8]" },
-  vacation: { icon: TreePalm, className: "bg-[#2E9E5B]/10 text-[#2E9E5B]" },
+// ภาพ 3D ประจำประเภทการลา + สีพื้นอ่อนๆ ด้านหลัง
+const TYPE_ICON: Record<string, { sticker: StickerName; className: string }> = {
+  sick: { sticker: "sick", className: "bg-[#D64545]/[0.08]" },
+  personal: { sticker: "briefcase", className: "bg-[#1E5FA8]/[0.08]" },
+  vacation: { sticker: "beach", className: "bg-[#2E9E5B]/[0.08]" },
 };
 
 function dateRange(start: string, end: string) {
@@ -23,7 +25,10 @@ export function QuotaCard({ quota, used, monthLabel }: { quota: number; used: nu
   const over = Math.max(used - quota, 0);
   return (
     <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1E5FA8] to-[#0F3B6E] p-6 text-white shadow-lg shadow-[#1E5FA8]/20">
-      <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#D4A017] via-[#F0C75E] to-[#D4A017]" aria-hidden />
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#F0C75E]/80 to-transparent" aria-hidden />
+      <span className="ht-float-slow absolute right-4 top-4 block" aria-hidden>
+        <Sticker name="beach" size={64} className="ht-pop" />
+      </span>
       <p className="text-sm text-white/75">วันลาคงเหลือ {monthLabel}</p>
       <p className="mt-1 text-5xl font-bold">
         {remaining}
@@ -69,11 +74,10 @@ export function MyLeaveList({ requests }: { requests: MyLeave[] }) {
         <ul className="space-y-2">
           {requests.map((r) => {
             const type = TYPE_ICON[r.leave_type] ?? TYPE_ICON.personal;
-            const Icon = type.icon;
             return (
               <li key={r.id} className="flex gap-3 rounded-2xl p-3 transition-colors hover:bg-[#F7FAFD]">
-                <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${type.className}`}>
-                  <Icon className="h-5 w-5" aria-hidden />
+                <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl ${type.className}`}>
+                  <Sticker name={type.sticker} size={34} />
                 </span>
                 <div className="min-w-0 flex-1 text-sm">
                   <div className="flex flex-wrap items-center justify-between gap-2">
@@ -103,7 +107,8 @@ type TeamLeaveRow = TeamLeave & { leaveType: string; daysCount: number };
 function TeamRow({ leave }: { leave: TeamLeaveRow }) {
   return (
     <li className="flex items-center justify-between gap-2 rounded-2xl bg-[#F7FAFD] px-3 py-2 text-sm">
-      <span className="min-w-0">
+      <Sticker name={(TYPE_ICON[leave.leaveType] ?? TYPE_ICON.personal).sticker} size={28} className="shrink-0" />
+      <span className="min-w-0 flex-1">
         <span className="block truncate font-semibold text-[#1A1A1A]">{leave.employeeName}</span>
         <span className="text-[#5B6B7B]">
           {leaveTypeLabel(leave.leaveType)} · {dateRange(leave.startDate, leave.endDate)} · {leave.daysCount} วัน

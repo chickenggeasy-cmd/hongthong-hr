@@ -1,7 +1,8 @@
 import Link from "next/link";
 import type { CSSProperties, ReactNode } from "react";
 import { ArrowRight, CheckCheck } from "lucide-react";
-import { DotPattern, WarehouseScene } from "@/components/brand/illustrations";
+import { DotPattern } from "@/components/brand/illustrations";
+import { StoreScene } from "@/components/brand/scenes";
 import { Sticker, type StickerName } from "@/components/brand/sticker";
 import { LiveClock } from "@/components/features/live-clock";
 import { roleLabel } from "@/lib/permissions";
@@ -257,20 +258,8 @@ export function DashboardView({ data }: { data: DashboardData }) {
               <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" aria-hidden />
             </Link>
           </div>
-          {/* ภาพโกดังของแบรนด์ + ภาพ 3D ลอยรอบๆ */}
-          <div className="relative hidden w-[360px] max-w-full md:block" aria-hidden>
-            <WarehouseScene className="w-full drop-shadow-xl" />
-            <Sticker name="cart" size={76} priority className="ht-pop absolute -left-6 bottom-2" style={{ animationDelay: "300ms" }} />
-            <span className="ht-float absolute -top-4 right-2 block" style={{ ["--ht-tilt" as string]: "8deg" }}>
-              <Sticker name="package" size={64} className="ht-pop" style={{ animationDelay: "450ms" }} />
-            </span>
-            <span className="ht-float-slow absolute left-10 top-0 block" style={{ animationDelay: "-2s" }}>
-              <Sticker name="coin" size={40} className="ht-pop" style={{ animationDelay: "600ms" }} />
-            </span>
-            <span className="ht-float absolute -right-3 bottom-10 block" style={{ animationDelay: "-3s" }}>
-              <Sticker name="star" size={36} className="ht-pop" style={{ animationDelay: "750ms" }} />
-            </span>
-          </div>
+          {/* ฉาก 3D: ห้างหงส์ทอง + ตัวละครตามบทบาทของคนที่ล็อกอิน */}
+          <StoreScene role={employee.role} className="hidden md:block" />
         </div>
       </section>
 

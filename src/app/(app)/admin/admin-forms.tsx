@@ -3,6 +3,18 @@
 import { useActionState, useState } from "react";
 import { addHoliday, deleteHoliday, updateSettings, type AdminFormState } from "./actions";
 import type { SettingDefinition } from "@/lib/admin/settings";
+import { CardHeading } from "@/components/features/card-heading";
+import type { StickerName } from "@/components/brand/sticker";
+
+// ภาพประจำหัวข้อการตั้งค่าแต่ละกลุ่ม
+const GROUP_STICKER: Record<string, StickerName> = {
+  เวลาทำงานและค่าจ้าง: "alarm-clock",
+  การลา: "beach",
+  เงินเดือน: "money-bag",
+  ใบเตือน: "bell",
+  ตำแหน่งบริษัท: "pin",
+  ความปลอดภัย: "lock-key",
+};
 
 const initialState: AdminFormState = { error: null, success: false };
 
@@ -43,7 +55,7 @@ export function SettingsForm({
       {groups.map((group) => (
         <fieldset key={group.name} className="ht-card p-6">
           <legend className="sr-only">{group.name}</legend>
-          <h2 className="mb-4 font-semibold text-[#1A1A1A]">{group.name}</h2>
+          <CardHeading sticker={GROUP_STICKER[group.name] ?? "gear"}>{group.name}</CardHeading>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {group.items.map((item) => (
               <div key={item.key}>
