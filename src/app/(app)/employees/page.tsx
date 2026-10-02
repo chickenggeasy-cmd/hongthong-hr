@@ -36,7 +36,7 @@ export default async function EmployeesPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader icon={Users} title="จัดการพนักงาน" description="ลงทะเบียน แก้ไขข้อมูล ย้ายแผนก และบันทึกลาออก">
+      <PageHeader photo="desk" icon={Users} title="จัดการพนักงาน" description="ลงทะเบียน แก้ไขข้อมูล ย้ายแผนก และบันทึกลาออก">
         <div className="flex gap-2">
           <span className="ht-stat text-center">
             <span className="block text-2xl font-bold text-[#1E5FA8]">{activeCount}</span>

@@ -27,7 +27,7 @@ export default async function PayslipListPage() {
 
   return (
     <div className="space-y-4">
-      <PageHeader
+      <PageHeader photo="cashier"
         icon={ReceiptText}
         title="สลิปเงินเดือนของฉัน"
         description="สลิปจะแสดงหลังฝ่ายการเงิน/HR ปิดงวดแล้ว ดาวน์โหลดเป็น PDF ได้"

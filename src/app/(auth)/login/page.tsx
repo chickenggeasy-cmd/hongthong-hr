@@ -3,7 +3,8 @@
 import Image from "next/image";
 import { useActionState } from "react";
 import { ShieldCheck } from "lucide-react";
-import { DotPattern, WarehouseScene } from "@/components/brand/illustrations";
+import { DotPattern } from "@/components/brand/illustrations";
+import { BrandPhoto } from "@/components/brand/photo";
 
 import { Sticker, type StickerName } from "@/components/brand/sticker";
 import { login, type LoginState } from "./actions";
@@ -54,6 +55,7 @@ export default function LoginPage() {
     <main className="grid min-h-dvh bg-[#EAF3FC] lg:grid-cols-[1.1fr_1fr]">
       {/* ฝั่งแบรนด์ (จอใหญ่) */}
       <section className="relative hidden overflow-hidden bg-gradient-to-br from-[#1E5FA8] via-[#0F3B6E] to-[#2A73C2] p-12 text-white lg:flex lg:flex-col lg:justify-between">
+        <BrandPhoto name="warehouse" priority fade="none" className="inset-0" strength={0.45} sizes="55vw" />
         <DotPattern className="absolute inset-0 h-full w-full text-white/[0.07]" />
         <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-[#D4A017] via-[#FFF1BF] to-[#D4A017]" aria-hidden />
         <div className="ht-blob absolute -bottom-32 -left-24 h-96 w-96 rounded-full bg-[#5BA4E6]/25 blur-3xl" aria-hidden />
@@ -85,11 +87,10 @@ export default function LoginPage() {
               </li>
             ))}
           </ul>
-          {/* ภาพโกดังของแบรนด์ + การ์ดตัวอย่างการใช้งานลอยข้างภาพ */}
-          <div className="relative mt-12 w-full max-w-md" aria-hidden>
-            <WarehouseScene className="w-full drop-shadow-2xl" />
-            <PreviewChip className="-left-4 -top-6" sticker="check" label="เช็คอินสำเร็จ" value="08:52 น. · ห่าง 42 เมตร" delay={350} />
-            <PreviewChip className="-bottom-4 right-0" sticker="beach" label="ลาพักร้อน 2 วัน" value="อนุมัติแล้ว" delay={500} />
+          {/* การ์ดตัวอย่างหน้าตาระบบ ลอยบนรูปคลังสินค้า */}
+          <div className="relative mt-12 h-40 w-full max-w-md" aria-hidden>
+            <PreviewChip className="left-0 top-0" sticker="check" label="เช็คอินสำเร็จ" value="08:52 น. · ห่าง 42 เมตร" delay={350} />
+            <PreviewChip className="bottom-0 right-0" sticker="beach" label="ลาพักร้อน 2 วัน" value="อนุมัติแล้ว" delay={500} />
           </div>
         </div>
 
@@ -101,7 +102,16 @@ export default function LoginPage() {
         <div className="ht-blob absolute -right-20 -top-20 h-72 w-72 rounded-full bg-[#5BA4E6]/25 blur-3xl" aria-hidden />
         <div className="ht-blob absolute -bottom-24 -left-16 h-72 w-72 rounded-full bg-[#F0C75E]/25 blur-3xl" style={{ animationDelay: "-5s" }} aria-hidden />
         <div className="ht-rise relative w-full max-w-sm">
-          <div className="rounded-3xl border border-white bg-white p-8 shadow-2xl shadow-[#1E5FA8]/15">
+          {/* มือถือ: แบนเนอร์รูปคลังสินค้าเหนือการ์ด (จอใหญ่มีฝั่งซ้ายแทน) */}
+          <div className="relative -mb-8 overflow-hidden rounded-3xl bg-gradient-to-br from-[#1E5FA8] to-[#0F2D52] px-6 pb-14 pt-6 text-white lg:hidden">
+            <BrandPhoto name="warehouse" fade="none" className="inset-0" strength={0.45} sizes="100vw" />
+            <p className="relative text-xl font-bold leading-snug">
+              ทุกเรื่องงานของคุณ
+              <br />
+              <span className="text-[#F0C75E]">ครบจบในที่เดียว</span>
+            </p>
+          </div>
+          <div className="relative rounded-3xl border border-white bg-white p-8 shadow-2xl shadow-[#1E5FA8]/15">
             <div className="mb-8 text-center">
               <Image
                 src="/brand/logo.webp"

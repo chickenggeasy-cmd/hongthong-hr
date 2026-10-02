@@ -62,7 +62,8 @@
   `CardHeading`/`EmptyState` รับ `sticker` (ชื่อไอคอน), `empty-state.tsx` สำหรับกล่อง "ยังไม่มีข้อมูล"
   อนิเมชันกลางอยู่ท้าย `src/app/globals.css` (`ht-rise`, `ht-pop`, `ht-float`, `ht-blob`, `ht-shine` ...) ปิดเองเมื่อเครื่องตั้งลดการเคลื่อนไหว
 - โครงเมนู: `app-header.tsx` → แถบซ้ายสีน้ำเงิน (`sidebar-panel.tsx`) บนจอใหญ่ / แถบบน + เมนูเลื่อนออก (`mobile-nav.tsx`) บนจอเล็ก
-  ภาพประกอบใหญ่ใช้ `WarehouseScene` (เวกเตอร์) + การ์ดข้อมูลลอยข้างภาพ, หัวข้อการ์ด: `card-heading.tsx`
+  รูปถ่ายจริง: `src/components/brand/photo.tsx` (`<BrandPhoto name="..." />` ไฟล์ `public/photos/*.webp` จาก Unsplash ดู CREDITS.md)
+  ใช้บนพื้นน้ำเงินเท่านั้น (ปรับเป็นโทนน้ำเงินอัตโนมัติ) `PageHeader` รับ `photo` ได้ หน้าแรก/ล็อกอินมีการ์ดข้อมูลลอยบนรูป, หัวข้อการ์ด: `card-heading.tsx`
   คลาสกลางใน `globals.css`: `ht-card` (การ์ด), `ht-input` (ช่องกรอก), `ht-btn-primary` (ปุ่มหลัก), `ht-stat` (ตัวเลขบนแบนเนอร์), `ht-canvas` (พื้นหลัง)
   หน้าใหม่ใช้คลาสเหล่านี้ อย่าเขียนสไตล์การ์ด/ปุ่มเองใหม่
 - ดาวน์โหลดไฟล์ (PDF/Excel) ใช้ Route Handler (`route.ts`) และต้องเช็กสิทธิ์เองในนั้น (ดู `src/lib/reports/guard.ts`)

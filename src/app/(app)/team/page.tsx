@@ -31,7 +31,7 @@ export default async function TeamPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader
+      <PageHeader photo="team"
         icon={Users}
         title={isCompanyWide ? "พนักงานทั้งบริษัท" : "ทีมของฉัน"}
         description={`วันนี้ ${formatThaiDate(overview.date)}${overview.holidayName ? ` · วันหยุด: ${overview.holidayName}` : !overview.isWorkingDay ? " · วันหยุดประจำสัปดาห์" : ""}`}

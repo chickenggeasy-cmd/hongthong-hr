@@ -1,24 +1,28 @@
 import type { ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
 import { DotPattern } from "@/components/brand/illustrations";
+import { BrandPhoto, type PhotoName } from "@/components/brand/photo";
 
 /**
- * หัวเพจแบบเดียวกันทุกหน้า: แบนเนอร์น้ำเงินไล่เฉด + ไอคอน + ชื่อหน้า + คำอธิบาย
+ * หัวเพจแบบเดียวกันทุกหน้า: แบนเนอร์น้ำเงินไล่เฉด + รูปถ่ายโทนน้ำเงินด้านขวา + ไอคอน + ชื่อหน้า + คำอธิบาย
  * children = ตัวเลขสรุปด้านขวา (ใช้คลาส ht-stat ให้เป็นการ์ดขาวบนแบนเนอร์)
  */
 export function PageHeader({
   icon: Icon,
   title,
   description,
+  photo,
   children,
 }: {
   icon: LucideIcon;
   title: string;
   description?: ReactNode;
+  photo?: PhotoName;
   children?: ReactNode;
 }) {
   return (
     <section className="ht-rise relative overflow-hidden rounded-[1.75rem] bg-gradient-to-br from-[#1E5FA8] via-[#174D8C] to-[#0F2D52] text-white shadow-[0_24px_48px_-24px_rgb(15_45_82/0.65)]">
+      {photo ? <BrandPhoto name={photo} priority className="inset-y-0 right-0 w-full sm:w-[65%]" strength={0.55} /> : null}
       <DotPattern className="absolute inset-0 h-full w-full text-white/[0.06]" />
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#F0C75E]/80 to-transparent" aria-hidden />
       <div className="ht-blob pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-[#5BA4E6]/30 blur-3xl" aria-hidden />

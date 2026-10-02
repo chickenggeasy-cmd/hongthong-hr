@@ -1,7 +1,8 @@
 import Link from "next/link";
 import type { CSSProperties, ReactNode } from "react";
 import { ArrowRight, CheckCheck, Moon, Sun } from "lucide-react";
-import { DotPattern, WarehouseScene } from "@/components/brand/illustrations";
+import { DotPattern } from "@/components/brand/illustrations";
+import { BrandPhoto } from "@/components/brand/photo";
 import { Sticker, type StickerName } from "@/components/brand/sticker";
 import { LiveClock } from "@/components/features/live-clock";
 import { roleLabel } from "@/lib/permissions";
@@ -229,6 +230,7 @@ export function DashboardView({ data }: { data: DashboardData }) {
     <div className="space-y-8">
       {/* ---------- แบนเนอร์ทักทาย ---------- */}
       <section className="ht-rise relative overflow-hidden rounded-[28px] bg-gradient-to-br from-[#1E5FA8] via-[#0F3B6E] to-[#2A73C2] text-white shadow-xl shadow-[#1E5FA8]/20">
+        <BrandPhoto name="aisle" priority className="inset-y-0 right-0 w-full md:w-[60%]" strength={0.6} />
         <DotPattern className="absolute inset-0 h-full w-full text-white/[0.07]" />
         <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-[#D4A017] via-[#FFF1BF] to-[#D4A017]" aria-hidden />
         <div className="ht-blob absolute -right-24 -top-24 h-72 w-72 rounded-full bg-[#5BA4E6]/25 blur-3xl" aria-hidden />
@@ -280,17 +282,16 @@ export function DashboardView({ data }: { data: DashboardData }) {
             </Link>
           </div>
           {/* ฉาก 3D: ห้างหงส์ทอง + ตัวละครตามบทบาทของคนที่ล็อกอิน */}
-          <div className="relative hidden w-[340px] md:block" aria-hidden>
-            <WarehouseScene className="w-full drop-shadow-xl" />
+          <div className="relative hidden h-[220px] w-[300px] md:block" aria-hidden>
             <HeroChip
-              className="-left-6 top-2"
+              className="right-6 top-6"
               sticker="alarm-clock"
               label="เวลาเข้างานวันนี้"
               value={data.checkIn ?? "ยังไม่เช็คอิน"}
               delay={250}
             />
             <HeroChip
-              className="-bottom-2 -right-2"
+              className="bottom-4 left-0"
               sticker="beach"
               label="วันลาคงเหลือเดือนนี้"
               value={remainingLeave === null ? "-" : `${remainingLeave} วัน`}

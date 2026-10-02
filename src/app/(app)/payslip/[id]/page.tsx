@@ -7,6 +7,7 @@ import { formatThaiDate } from "@/lib/date";
 import { formatBaht, periodLabel } from "@/lib/payroll/logic";
 import { dayStatusLabel, payslipDays, payslipLines, payslipStats } from "@/lib/payroll/payslip-view";
 import { CardHeading } from "@/components/features/card-heading";
+import { BrandPhoto } from "@/components/brand/photo";
 
 const STATUS_COLOR: Record<string, string> = {
   worked: "text-[#2E9E5B]",
@@ -40,9 +41,10 @@ export default async function PayslipDetailPage({ params }: PageProps<"/payslip/
         ← กลับ
       </Link>
 
-      <div className="relative overflow-hidden rounded-2xl bg-[#1E5FA8] p-6 text-white shadow-sm">
-        <div className="absolute left-0 top-0 h-1 w-full bg-[#D4A017]" aria-hidden />
-        <div className="flex flex-wrap items-start justify-between gap-4">
+      <div className="ht-rise relative overflow-hidden rounded-[1.75rem] bg-gradient-to-br from-[#1E5FA8] via-[#174D8C] to-[#0F2D52] p-6 text-white shadow-[0_24px_48px_-24px_rgb(15_45_82/0.65)] sm:p-8">
+        <BrandPhoto name="cashier" priority className="inset-y-0 right-0 w-full sm:w-[60%]" strength={0.5} />
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#F0C75E]/80 to-transparent" aria-hidden />
+        <div className="relative flex flex-wrap items-start justify-between gap-4">
           <div>
             <p className="text-sm text-white/80">สลิปเงินเดือน งวด {periodLabel(run.period)}</p>
             <h1 className="text-xl font-semibold">{payslip.full_name}</h1>
@@ -52,12 +54,12 @@ export default async function PayslipDetailPage({ params }: PageProps<"/payslip/
           </div>
           <div className="text-right">
             <p className="text-sm text-white/80">รับสุทธิ</p>
-            <p className="text-3xl font-bold">{formatBaht(Number(payslip.net_pay))}</p>
+            <p className="text-4xl font-bold tracking-tight tabular-nums">{formatBaht(Number(payslip.net_pay))}</p>
             <p className="text-sm text-white/80">บาท</p>
           </div>
         </div>
         {run.status !== "finalized" ? (
-          <p className="mt-3 inline-block rounded-full bg-[#E8890C] px-3 py-0.5 text-xs">ร่าง ยังไม่ปิดงวด อาจเปลี่ยนแปลงได้</p>
+          <p className="relative mt-3 inline-block rounded-full bg-[#E8890C] px-3 py-0.5 text-xs">ร่าง ยังไม่ปิดงวด อาจเปลี่ยนแปลงได้</p>
         ) : null}
       </div>
 

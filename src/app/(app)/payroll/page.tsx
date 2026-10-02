@@ -52,7 +52,7 @@ export default async function PayrollPage({ searchParams }: PageProps<"/payroll"
 
   return (
     <div className="space-y-6">
-      <PageHeader icon={Wallet} title="เงินเดือน" description={canManage ? "คำนวณ ปิดงวด และดูสลิปของพนักงานทุกคน" : "ดูสรุปเงินเดือนและสลิปของพนักงานทุกคน"} />
+      <PageHeader photo="store" icon={Wallet} title="เงินเดือน" description={canManage ? "คำนวณ ปิดงวด และดูสลิปของพนักงานทุกคน" : "ดูสรุปเงินเดือนและสลิปของพนักงานทุกคน"} />
       <div className="ht-card p-6">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
