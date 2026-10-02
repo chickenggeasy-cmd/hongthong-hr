@@ -44,7 +44,7 @@ export default async function OtPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader icon={Timer} sticker="stopwatch" title="ขอทำ OT" description={`ต้องขอล่วงหน้าก่อน ${workEndTime} น. ของวันนั้น · จ่ายเฉพาะชั่วโมงเต็มที่ทำจริง`}>
+      <PageHeader icon={Timer} title="ขอทำ OT" description={`ต้องขอล่วงหน้าก่อน ${workEndTime} น. ของวันนั้น · จ่ายเฉพาะชั่วโมงเต็มที่ทำจริง`}>
         <span className="ht-stat text-center">
           <span className="block text-2xl font-bold text-[#1E5FA8]">{approvedHours} ชม.</span>
           <span className="text-xs text-[#5B6B7B]">OT ที่อนุมัติเดือนนี้</span>

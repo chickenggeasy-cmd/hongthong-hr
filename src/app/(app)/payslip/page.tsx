@@ -29,7 +29,6 @@ export default async function PayslipListPage() {
     <div className="space-y-4">
       <PageHeader
         icon={ReceiptText}
-        sticker="receipt"
         title="สลิปเงินเดือนของฉัน"
         description="สลิปจะแสดงหลังฝ่ายการเงิน/HR ปิดงวดแล้ว ดาวน์โหลดเป็น PDF ได้"
       />
@@ -51,11 +50,7 @@ export default async function PayslipListPage() {
                 className="group flex items-center justify-between ht-card p-5 ht-lift hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#1E5FA8]/10"
               >
                 <div className="flex items-center gap-4">
-                  <Sticker
-                    name="money-bag"
-                    size={44}
-                    className="transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-rotate-6 group-hover:scale-110"
-                  />
+                  <Sticker name="money-bag" size={44} />
                   <div>
                     <p className="font-medium text-[#1A1A1A]">
                       งวด {periodLabel(p.payroll_runs.period)}

@@ -3,8 +3,8 @@
 import Image from "next/image";
 import { useActionState } from "react";
 import { ShieldCheck } from "lucide-react";
-import { DotPattern } from "@/components/brand/illustrations";
-import { LoginScene } from "@/components/brand/scenes";
+import { DotPattern, WarehouseScene } from "@/components/brand/illustrations";
+
 import { Sticker, type StickerName } from "@/components/brand/sticker";
 import { login, type LoginState } from "./actions";
 
@@ -18,6 +18,34 @@ const FEATURES: { sticker: StickerName; text: string }[] = [
 
 const inputClass =
   "w-full ht-input py-3";
+
+/** การ์ดตัวอย่างหน้าตาระบบ ลอยข้างภาพโกดัง (ภาพประกอบ ไม่ใช่ข้อมูลจริง) */
+function PreviewChip({
+  className,
+  sticker,
+  label,
+  value,
+  delay,
+}: {
+  className: string;
+  sticker: StickerName;
+  label: string;
+  value: string;
+  delay: number;
+}) {
+  return (
+    <span
+      className={`ht-pop absolute flex items-center gap-3 rounded-2xl bg-white px-3.5 py-2.5 text-[#1A1A1A] shadow-[0_20px_44px_-16px_rgb(5_20_40/0.65)] ${className}`}
+      style={{ animationDelay: `${delay}ms` }}
+    >
+      <Sticker name={sticker} size={38} />
+      <span className="leading-tight">
+        <span className="block text-sm font-bold">{label}</span>
+        <span className="block text-xs text-[#5B6B7B]">{value}</span>
+      </span>
+    </span>
+  );
+}
 
 export default function LoginPage() {
   const [state, formAction, pending] = useActionState(login, initialState);
@@ -52,15 +80,17 @@ export default function LoginPage() {
                 className="ht-rise flex items-center gap-3 text-white/90"
                 style={{ animationDelay: `${250 + i * 120}ms` }}
               >
-                <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 ring-1 ring-white/15">
-                  <Sticker name={sticker} size={30} />
-                </span>
+                <Sticker name={sticker} size={40} />
                 {text}
               </li>
             ))}
           </ul>
-          {/* ฉาก 3D: ห้าง + พนักงานหลายฝ่าย + สินค้าของทุกแผนก */}
-          <LoginScene className="mt-10 origin-left scale-[0.85] xl:scale-100" />
+          {/* ภาพโกดังของแบรนด์ + การ์ดตัวอย่างการใช้งานลอยข้างภาพ */}
+          <div className="relative mt-12 w-full max-w-md" aria-hidden>
+            <WarehouseScene className="w-full drop-shadow-2xl" />
+            <PreviewChip className="-left-4 -top-6" sticker="check" label="เช็คอินสำเร็จ" value="08:52 น. · ห่าง 42 เมตร" delay={350} />
+            <PreviewChip className="-bottom-4 right-0" sticker="beach" label="ลาพักร้อน 2 วัน" value="อนุมัติแล้ว" delay={500} />
+          </div>
         </div>
 
         <p className="relative text-sm text-white/60">ของดี ราคาส่ง เพื่อธุรกิจของคุณ</p>
@@ -71,13 +101,6 @@ export default function LoginPage() {
         <div className="ht-blob absolute -right-20 -top-20 h-72 w-72 rounded-full bg-[#5BA4E6]/25 blur-3xl" aria-hidden />
         <div className="ht-blob absolute -bottom-24 -left-16 h-72 w-72 rounded-full bg-[#F0C75E]/25 blur-3xl" style={{ animationDelay: "-5s" }} aria-hidden />
         <div className="ht-rise relative w-full max-w-sm">
-          {/* ภาพ 3D เล็กๆ เกาะขอบการ์ด */}
-          <span className="ht-float absolute -right-2 -top-6 z-10 block sm:-right-5" aria-hidden>
-            <Sticker name="key" size={56} className="ht-pop" style={{ animationDelay: "400ms" }} />
-          </span>
-          <span className="ht-float-slow absolute -bottom-5 -left-2 z-10 block sm:-left-5" style={{ animationDelay: "-2s" }} aria-hidden>
-            <Sticker name="sparkles" size={44} className="ht-pop" style={{ animationDelay: "600ms" }} />
-          </span>
           <div className="rounded-3xl border border-white bg-white p-8 shadow-2xl shadow-[#1E5FA8]/15">
             <div className="mb-8 text-center">
               <Image

@@ -1,23 +1,20 @@
 import type { ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
 import { DotPattern } from "@/components/brand/illustrations";
-import { Sticker, type StickerName } from "@/components/brand/sticker";
 
 /**
- * หัวเพจแบบเดียวกันทุกหน้า: แบนเนอร์น้ำเงินไล่เฉด + ไอคอน + ชื่อหน้า + คำอธิบาย + ภาพ 3D
+ * หัวเพจแบบเดียวกันทุกหน้า: แบนเนอร์น้ำเงินไล่เฉด + ไอคอน + ชื่อหน้า + คำอธิบาย
  * children = ตัวเลขสรุปด้านขวา (ใช้คลาส ht-stat ให้เป็นการ์ดขาวบนแบนเนอร์)
  */
 export function PageHeader({
   icon: Icon,
   title,
   description,
-  sticker,
   children,
 }: {
   icon: LucideIcon;
   title: string;
   description?: ReactNode;
-  sticker?: StickerName;
   children?: ReactNode;
 }) {
   return (
@@ -38,19 +35,7 @@ export function PageHeader({
           </div>
         </div>
 
-        {children || sticker ? (
-          <div className="flex shrink-0 items-center justify-between gap-4 sm:justify-end">
-            {children ? <div className="flex flex-wrap items-center gap-2">{children}</div> : <span />}
-            {sticker ? (
-              <span className="relative hidden h-24 w-24 shrink-0 md:block" aria-hidden>
-                <span className="absolute inset-1 rounded-full bg-white/10 ring-1 ring-white/15" />
-                <span className="ht-float-slow relative block">
-                  <Sticker name={sticker} size={96} priority className="ht-pop" />
-                </span>
-              </span>
-            ) : null}
-          </div>
-        ) : null}
+        {children ? <div className="flex shrink-0 flex-wrap items-center gap-2">{children}</div> : null}
       </div>
     </section>
   );

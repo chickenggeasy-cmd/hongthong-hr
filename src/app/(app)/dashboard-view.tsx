@@ -1,8 +1,7 @@
 import Link from "next/link";
 import type { CSSProperties, ReactNode } from "react";
-import { ArrowRight, CheckCheck } from "lucide-react";
-import { DotPattern } from "@/components/brand/illustrations";
-import { StoreScene } from "@/components/brand/scenes";
+import { ArrowRight, CheckCheck, Moon, Sun } from "lucide-react";
+import { DotPattern, WarehouseScene } from "@/components/brand/illustrations";
 import { Sticker, type StickerName } from "@/components/brand/sticker";
 import { LiveClock } from "@/components/features/live-clock";
 import { roleLabel } from "@/lib/permissions";
@@ -91,11 +90,7 @@ function KpiTile({
     >
       <span className="ht-shine" aria-hidden />
       <span className={`absolute -right-6 -top-6 h-24 w-24 rounded-full blur-2xl transition-opacity group-hover:opacity-100 opacity-60 ${glowClass}`} aria-hidden />
-      <Sticker
-        name={sticker}
-        size={52}
-        className="relative mb-2 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-rotate-6 group-hover:scale-110"
-      />
+      <Sticker name={sticker} size={44} className="relative mb-3" />
       <p className="text-xs text-[#5B6B7B]">{label}</p>
       <p className="mt-0.5 text-xl font-bold text-[#1A1A1A]">{value}</p>
       {hint ? <p className="mt-0.5 text-xs text-[#5B6B7B]">{hint}</p> : null}
@@ -127,9 +122,7 @@ function ShortcutTile({
       className="ht-rise group relative flex items-center gap-3 overflow-hidden ht-card p-4 ht-lift hover:-translate-y-1 hover:border-[#D4A017]/40 hover:shadow-xl hover:shadow-[#1E5FA8]/10"
     >
       <span className="ht-shine" aria-hidden />
-      <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[#EAF3FC] to-[#FFF8E5]">
-        <Sticker name={sticker} size={40} className="transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-rotate-6 group-hover:scale-110" />
-      </span>
+      <Sticker name={sticker} size={48} />
       <span className="min-w-0">
         <span className="block font-semibold text-[#1A1A1A]">{label}</span>
         <span className="block truncate text-xs text-[#5B6B7B]">{hint}</span>
@@ -158,8 +151,7 @@ function AttendanceCard({ overview }: { overview: NonNullable<DashboardData["ove
 
   return (
     <section className="ht-rise relative overflow-hidden ht-card p-6" style={stagger(4)}>
-      <Sticker name="people" size={72} className="ht-float-slow pointer-events-none absolute -right-1 -top-1 opacity-90" />
-      <div className="relative flex flex-wrap items-end justify-between gap-4 pr-16">
+      <div className="relative flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="text-sm text-[#5B6B7B]">มาทำงานแล้ววันนี้</p>
           <p className="mt-1 text-4xl font-bold tracking-tight text-[#1A1A1A]">
@@ -200,6 +192,34 @@ function AttendanceCard({ overview }: { overview: NonNullable<DashboardData["ove
   );
 }
 
+/** การ์ดข้อมูลเล็กๆ ลอยข้างภาพในแบนเนอร์ (ข้อมูลจริงของผู้ใช้) */
+function HeroChip({
+  className,
+  sticker,
+  label,
+  value,
+  delay,
+}: {
+  className: string;
+  sticker: StickerName;
+  label: string;
+  value: string;
+  delay: number;
+}) {
+  return (
+    <span
+      className={`ht-pop absolute flex items-center gap-2.5 rounded-2xl bg-white px-3 py-2 text-[#1A1A1A] shadow-[0_18px_40px_-16px_rgb(5_20_40/0.6)] ${className}`}
+      style={{ animationDelay: `${delay}ms` }}
+    >
+      <Sticker name={sticker} size={34} />
+      <span className="leading-tight">
+        <span className="block text-[11px] text-[#5B6B7B]">{label}</span>
+        <span className="block text-sm font-bold">{value}</span>
+      </span>
+    </span>
+  );
+}
+
 export function DashboardView({ data }: { data: DashboardData }) {
   const { employee } = data;
   const remainingLeave = data.leave.quota === null ? null : Math.max(data.leave.quota - data.leave.used, 0);
@@ -216,13 +236,14 @@ export function DashboardView({ data }: { data: DashboardData }) {
         <div className="relative grid items-center gap-4 p-6 sm:p-8 md:grid-cols-[1fr_auto]">
           <div>
             <p className="flex items-center gap-2 text-sm text-white/75">
-              <Sticker name={data.greeting === "สวัสดีตอนเย็น" ? "moon" : "sun"} size={22} />
+              {data.greeting === "สวัสดีตอนเย็น" ? (
+                <Moon className="h-4 w-4 text-[#F0C75E]" aria-hidden />
+              ) : (
+                <Sun className="h-4 w-4 text-[#F0C75E]" aria-hidden />
+              )}
               {data.greeting} · {data.dateLabel}
             </p>
-            <h1 className="mt-1 flex items-center gap-3 text-3xl font-bold tracking-tight sm:text-4xl">
-              {employee.fullName}
-              <Sticker name="wave" size={44} priority className="ht-wave" />
-            </h1>
+            <h1 className="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">{employee.fullName}</h1>
             <p className="mt-2 flex flex-wrap items-center gap-2 text-sm text-white/80">
               <span>
                 {employee.employeeCode} · {employee.deptName}
@@ -259,7 +280,23 @@ export function DashboardView({ data }: { data: DashboardData }) {
             </Link>
           </div>
           {/* ฉาก 3D: ห้างหงส์ทอง + ตัวละครตามบทบาทของคนที่ล็อกอิน */}
-          <StoreScene role={employee.role} className="hidden md:block" />
+          <div className="relative hidden w-[340px] md:block" aria-hidden>
+            <WarehouseScene className="w-full drop-shadow-xl" />
+            <HeroChip
+              className="-left-6 top-2"
+              sticker="alarm-clock"
+              label="เวลาเข้างานวันนี้"
+              value={data.checkIn ?? "ยังไม่เช็คอิน"}
+              delay={250}
+            />
+            <HeroChip
+              className="-bottom-2 -right-2"
+              sticker="beach"
+              label="วันลาคงเหลือเดือนนี้"
+              value={remainingLeave === null ? "-" : `${remainingLeave} วัน`}
+              delay={400}
+            />
+          </div>
         </div>
       </section>
 
@@ -350,9 +387,7 @@ export function DashboardView({ data }: { data: DashboardData }) {
                   className="ht-rise group relative block overflow-hidden rounded-3xl bg-gradient-to-br from-[#1A1A1A] to-[#2B3440] p-6 text-white shadow-sm ht-lift hover:-translate-y-1 hover:shadow-xl"
                 >
                   <span className="ht-shine" aria-hidden />
-                  <span className="ht-float absolute right-4 top-4 block">
-                    <Sticker name="check" size={64} />
-                  </span>
+                  <Sticker name="check" size={48} className="absolute right-5 top-5" />
                   <p className="flex items-center gap-2 text-sm text-white/70">
                     <CheckCheck className="h-4 w-4" aria-hidden />
                     คุณอนุมัติได้ตอนนี้
@@ -369,7 +404,7 @@ export function DashboardView({ data }: { data: DashboardData }) {
                     className="ht-rise group relative flex items-center gap-3 overflow-hidden rounded-3xl border-2 border-[#D4A017] bg-gradient-to-br from-[#FFF8E5] to-white p-5 shadow-sm ht-lift hover:-translate-y-1 hover:shadow-xl"
                   >
                     <span className="ht-shine" aria-hidden />
-                    <Sticker name="crown" size={52} className="ht-float shrink-0" />
+                    <Sticker name="crown" size={48} />
                     <span>
                       <span className="block text-sm text-[#5B6B7B]">จาก HR/การเงิน ที่ต้องให้คุณอนุมัติเท่านั้น</span>
                       <span className="block text-2xl font-bold text-[#1A1A1A]">{data.approvals.executiveOnly} รายการ</span>
@@ -398,7 +433,7 @@ export function DashboardView({ data }: { data: DashboardData }) {
                 className="ht-rise group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#F0C75E] via-[#D4A017] to-[#B8860B] p-4 text-[#1A1A1A] shadow-sm ht-lift hover:-translate-y-1 hover:shadow-xl sm:col-span-2 lg:col-span-1"
               >
                 <span className="ht-shine" aria-hidden />
-                <Sticker name="money-bag" size={80} className="absolute -bottom-2 -right-2 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-rotate-6 group-hover:scale-110" />
+                <Sticker name="money-bag" size={48} className="absolute right-4 top-4" />
                 <p className="text-sm font-medium">เงินเดือนงวด {periodLabel(data.payroll.period)}</p>
                 <p className="mt-1 text-2xl font-bold">
                   {data.payroll.status === "none" ? "ยังไม่คำนวณ" : data.payroll.status === "finalized" ? "ปิดงวดแล้ว ✓" : "ฉบับร่าง"}

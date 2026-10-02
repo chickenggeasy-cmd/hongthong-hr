@@ -135,7 +135,7 @@ export default async function ApprovalsPage({ searchParams }: PageProps<"/approv
 
   return (
     <div className="space-y-6">
-      <PageHeader icon={CheckCheck} sticker="check" title="อนุมัติคำขอลาและ OT" description={description}>
+      <PageHeader icon={CheckCheck} title="อนุมัติคำขอลาและ OT" description={description}>
         <div className="flex gap-2">
           <span className="ht-stat text-center">
             <span className="block text-2xl font-bold text-[#1E5FA8]">{decidable}</span>

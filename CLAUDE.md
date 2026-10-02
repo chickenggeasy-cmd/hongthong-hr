@@ -57,11 +57,12 @@
 - `src/lib/attendance|leave|ot|payroll|team|warnings|reports/logic.ts` — pure logic ที่มีเทสต์
 - `src/components/features/app-header.tsx`, `page-header.tsx` (หัวหน้าเพจทุกหน้า), `leave-status-badge.tsx`,
   `src/components/brand/illustrations.tsx` (ภาพเวกเตอร์แบรนด์) — คอมโพเนนต์ใช้ซ้ำ โลโก้อยู่ที่ `public/brand/logo.webp`
-- ภาพ 3D: `src/components/brand/sticker.tsx` (`<Sticker name="..." />` ไฟล์อยู่ `public/illustrations/3d/` จาก Fluent Emoji ของ Microsoft, MIT)
-  `PageHeader` รับ `sticker` ได้, `empty-state.tsx` สำหรับกล่อง "ยังไม่มีข้อมูล"
+- ไอคอนในกรอบสี: `src/components/brand/sticker.tsx` (`<Sticker name="..." />` ไอคอนเส้น lucide-react + สีตามความหมาย)
+  **ไม่ใช้อิโมจิ/ภาพการ์ตูน** (เจ้าของโปรเจกต์ขอให้ดูเป็นมืออาชีพ) เพิ่มไอคอนใหม่ที่ตาราง `ICONS` ในไฟล์นั้น
+  `CardHeading`/`EmptyState` รับ `sticker` (ชื่อไอคอน), `empty-state.tsx` สำหรับกล่อง "ยังไม่มีข้อมูล"
   อนิเมชันกลางอยู่ท้าย `src/app/globals.css` (`ht-rise`, `ht-pop`, `ht-float`, `ht-blob`, `ht-shine` ...) ปิดเองเมื่อเครื่องตั้งลดการเคลื่อนไหว
 - โครงเมนู: `app-header.tsx` → แถบซ้ายสีน้ำเงิน (`sidebar-panel.tsx`) บนจอใหญ่ / แถบบน + เมนูเลื่อนออก (`mobile-nav.tsx`) บนจอเล็ก
-  ฉาก 3D: `src/components/brand/scenes.tsx` (`StoreScene` หน้าแรก, `LoginScene`), หัวข้อการ์ด: `card-heading.tsx`
+  ภาพประกอบใหญ่ใช้ `WarehouseScene` (เวกเตอร์) + การ์ดข้อมูลลอยข้างภาพ, หัวข้อการ์ด: `card-heading.tsx`
   คลาสกลางใน `globals.css`: `ht-card` (การ์ด), `ht-input` (ช่องกรอก), `ht-btn-primary` (ปุ่มหลัก), `ht-stat` (ตัวเลขบนแบนเนอร์), `ht-canvas` (พื้นหลัง)
   หน้าใหม่ใช้คลาสเหล่านี้ อย่าเขียนสไตล์การ์ด/ปุ่มเองใหม่
 - ดาวน์โหลดไฟล์ (PDF/Excel) ใช้ Route Handler (`route.ts`) และต้องเช็กสิทธิ์เองในนั้น (ดู `src/lib/reports/guard.ts`)

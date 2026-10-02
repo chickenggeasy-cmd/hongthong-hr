@@ -8,11 +8,11 @@ import { ExceedsQuotaBadge, LeaveStatusBadge } from "@/components/features/leave
 
 // ชิ้นส่วนหน้าตาของหน้าลา (รับข้อมูลที่โหลดแล้ว ไม่ยิงฐานข้อมูลเอง)
 
-// ภาพ 3D ประจำประเภทการลา + สีพื้นอ่อนๆ ด้านหลัง
-const TYPE_ICON: Record<string, { sticker: StickerName; className: string }> = {
-  sick: { sticker: "sick", className: "bg-[#D64545]/[0.08]" },
-  personal: { sticker: "briefcase", className: "bg-[#1E5FA8]/[0.08]" },
-  vacation: { sticker: "beach", className: "bg-[#2E9E5B]/[0.08]" },
+// ไอคอนประจำประเภทการลา (สีของไอคอนบอกประเภท: ป่วย = แดง, กิจ = น้ำเงิน, พักร้อน = เขียว)
+const TYPE_ICON: Record<string, { sticker: StickerName }> = {
+  sick: { sticker: "sick" },
+  personal: { sticker: "briefcase" },
+  vacation: { sticker: "beach" },
 };
 
 function dateRange(start: string, end: string) {
@@ -26,9 +26,7 @@ export function QuotaCard({ quota, used, monthLabel }: { quota: number; used: nu
   return (
     <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1E5FA8] to-[#0F3B6E] p-6 text-white shadow-lg shadow-[#1E5FA8]/20">
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#F0C75E]/80 to-transparent" aria-hidden />
-      <span className="ht-float-slow absolute right-4 top-4 block" aria-hidden>
-        <Sticker name="beach" size={64} className="ht-pop" />
-      </span>
+      <Sticker name="beach" size={48} className="absolute right-5 top-5" />
       <p className="text-sm text-white/75">วันลาคงเหลือ {monthLabel}</p>
       <p className="mt-1 text-5xl font-bold">
         {remaining}
@@ -76,9 +74,7 @@ export function MyLeaveList({ requests }: { requests: MyLeave[] }) {
             const type = TYPE_ICON[r.leave_type] ?? TYPE_ICON.personal;
             return (
               <li key={r.id} className="flex gap-3 rounded-2xl p-3 transition-colors hover:bg-[#F7FAFD]">
-                <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl ${type.className}`}>
-                  <Sticker name={type.sticker} size={34} />
-                </span>
+                <Sticker name={type.sticker} size={44} />
                 <div className="min-w-0 flex-1 text-sm">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <span className="font-semibold text-[#1A1A1A]">
@@ -107,7 +103,7 @@ type TeamLeaveRow = TeamLeave & { leaveType: string; daysCount: number };
 function TeamRow({ leave }: { leave: TeamLeaveRow }) {
   return (
     <li className="flex items-center justify-between gap-2 rounded-2xl bg-[#F7FAFD] px-3 py-2 text-sm">
-      <Sticker name={(TYPE_ICON[leave.leaveType] ?? TYPE_ICON.personal).sticker} size={28} className="shrink-0" />
+      <Sticker name={(TYPE_ICON[leave.leaveType] ?? TYPE_ICON.personal).sticker} size={32} />
       <span className="min-w-0 flex-1">
         <span className="block truncate font-semibold text-[#1A1A1A]">{leave.employeeName}</span>
         <span className="text-[#5B6B7B]">

@@ -29,7 +29,7 @@ export default async function AttendancePage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader icon={Clock} sticker="alarm-clock" title="เช็คอิน / เช็คเอาท์" description="ยืนยันตำแหน่งด้วย GPS · เวลาบันทึกจากเซิร์ฟเวอร์">
+      <PageHeader icon={Clock} title="เช็คอิน / เช็คเอาท์" description="ยืนยันตำแหน่งด้วย GPS · เวลาบันทึกจากเซิร์ฟเวอร์">
         <p className="ht-stat text-2xl font-bold tabular-nums text-[#1E5FA8]">
           <LiveClock initialIso={new Date().toISOString()} />
         </p>
