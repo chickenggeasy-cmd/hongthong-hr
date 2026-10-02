@@ -167,6 +167,7 @@ export type Database = {
           full_name: string
           id: string
           photo_path: string | null
+          resigned_on: string | null
           status: string
           updated_at: string
         }
@@ -178,6 +179,7 @@ export type Database = {
           full_name: string
           id?: string
           photo_path?: string | null
+          resigned_on?: string | null
           status?: string
           updated_at?: string
         }
@@ -189,6 +191,7 @@ export type Database = {
           full_name?: string
           id?: string
           photo_path?: string | null
+          resigned_on?: string | null
           status?: string
           updated_at?: string
         }
@@ -552,6 +555,7 @@ export type Database = {
       auth_dept_code: { Args: never; Returns: string }
       auth_employee_id: { Args: never; Returns: string }
       auth_role: { Args: never; Returns: string }
+      can_manage_employees: { Args: never; Returns: boolean }
       decide_leave_request: {
         Args: { p_approve: boolean; p_note?: string; p_request_id: string }
         Returns: undefined
@@ -629,6 +633,14 @@ export type Database = {
           p_period: string
         }
         Returns: string
+      }
+      set_employee_status: {
+        Args: { p_employee_id: string; p_resigned_on?: string }
+        Returns: undefined
+      }
+      update_employee: {
+        Args: { p_dept_code: string; p_employee_id: string; p_full_name: string }
+        Returns: undefined
       }
     }
     Enums: {

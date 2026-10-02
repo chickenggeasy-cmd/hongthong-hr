@@ -50,8 +50,9 @@ export async function computePayroll(_prev: PayrollActionState, formData: FormDa
     fetchAllRows((from, to) =>
       supabase
         .from("employees")
-        .select("id, employee_code, full_name, created_at, departments(name)")
-        .eq("status", "active")
+        .select("id, employee_code, full_name, created_at, resigned_on, departments(name)")
+        // คนที่ยังทำงานอยู่ + คนที่ลาออกระหว่างงวดนี้ (ได้ค่าจ้างถึงวันทำงานวันสุดท้าย)
+        .or(`status.eq.active,resigned_on.gte.${cycle.start}`)
         .order("employee_code")
         .range(from, to),
     ),
@@ -111,6 +112,7 @@ export async function computePayroll(_prev: PayrollActionState, formData: FormDa
       cycle,
       today,
       employedFrom: bangkokToday(new Date(employee.created_at)),
+      employedUntil: employee.resigned_on,
       holidays: holidaySet,
       attendance: (attendanceBy.get(employee.id) ?? []).map((a) => ({ type: a.type, recordedAt: a.recorded_at })),
       approvedLeaves: (leavesBy.get(employee.id) ?? []).map((l) => ({ startDate: l.start_date, endDate: l.end_date })),

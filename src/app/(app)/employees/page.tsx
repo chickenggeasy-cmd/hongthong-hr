@@ -1,57 +1,59 @@
-﻿import { requirePermission } from "@/lib/auth/require-permission";
+import { Users } from "lucide-react";
+import { requirePermission } from "@/lib/auth/require-permission";
 import { createClient } from "@/lib/supabase/server";
 import { roleLabel } from "@/lib/permissions";
+import { bangkokToday, formatThaiDate } from "@/lib/date";
+import { PageHeader } from "@/components/features/page-header";
 import { RegisterForm } from "./register-form";
+import { EmployeeDirectory } from "./employee-directory";
 
 export default async function EmployeesPage() {
-  await requirePermission("employees.manage");
+  const me = await requirePermission("employees.manage");
 
+  // อ่านผ่าน client ปกติ RLS ให้ 01/HR เห็นพนักงานทุกคนอยู่แล้ว
   const supabase = await createClient();
-
-  const { data: departments } = await supabase
-    .from("departments")
-    .select("code, name, role")
-    .eq("is_active", true)
-    .order("code");
-
-  const { data: employees } = await supabase
-    .from("employees")
-    .select("id, employee_code, full_name, dept_code, status")
-    .order("employee_code");
+  const [{ data: departments }, { data: employees }] = await Promise.all([
+    supabase.from("departments").select("code, name, role").eq("is_active", true).order("code"),
+    supabase
+      .from("employees")
+      .select("id, employee_code, full_name, dept_code, status, resigned_on")
+      .order("dept_code")
+      .order("employee_code"),
+  ]);
 
   const deptByCode = new Map((departments ?? []).map((d) => [d.code, d]));
+  const list = (employees ?? []).map((e) => {
+    const dept = deptByCode.get(e.dept_code);
+    return {
+      ...e,
+      dept_name: dept?.name ?? e.dept_code,
+      role_label: dept ? roleLabel(dept.role) : "-",
+      resigned_label: e.resigned_on ? formatThaiDate(e.resigned_on) : null,
+    };
+  });
+  const activeCount = list.filter((e) => e.status === "active").length;
+  const deptOptions = (departments ?? []).map((d) => ({ code: d.code, name: d.name }));
 
   return (
     <div className="space-y-6">
-      <RegisterForm departments={(departments ?? []).map((d) => ({ code: d.code, name: d.name }))} />
+      <PageHeader icon={Users} title="จัดการพนักงาน" description="ลงทะเบียน แก้ไขข้อมูล ย้ายแผนก และบันทึกลาออก">
+        <div className="flex gap-2">
+          <span className="rounded-2xl bg-[#EAF3FC] px-4 py-2 text-center">
+            <span className="block text-2xl font-bold text-[#1E5FA8]">{activeCount}</span>
+            <span className="text-xs text-[#5B6B7B]">ทำงานอยู่</span>
+          </span>
+          <span className="rounded-2xl bg-[#5B6B7B]/10 px-4 py-2 text-center">
+            <span className="block text-2xl font-bold text-[#5B6B7B]">{list.length - activeCount}</span>
+            <span className="text-xs text-[#5B6B7B]">ลาออกแล้ว</span>
+          </span>
+        </div>
+      </PageHeader>
 
-      <div className="rounded-2xl bg-white p-6 shadow-sm">
-        <h2 className="mb-3 font-semibold text-[#1A1A1A]">รายชื่อพนักงาน ({employees?.length ?? 0})</h2>
-        {!employees || employees.length === 0 ? (
-          <p className="text-sm text-[#5B6B7B]">ยังไม่มีพนักงานในระบบ</p>
-        ) : (
-          <ul className="divide-y divide-[#5B6B7B]/10 text-sm">
-            {employees.map((emp) => {
-              const dept = deptByCode.get(emp.dept_code);
-              return (
-                <li key={emp.id} className="flex items-center justify-between py-2">
-                  <div>
-                    <p className="font-medium text-[#1A1A1A]">{emp.full_name}</p>
-                    <p className="text-xs text-[#5B6B7B]">
-                      {emp.employee_code} · {dept?.name ?? emp.dept_code}
-                      {dept ? ` · ${roleLabel(dept.role)}` : ""}
-                    </p>
-                  </div>
-                  {emp.status !== "active" ? (
-                    <span className="rounded-full bg-[#D64545]/10 px-2 py-1 text-xs text-[#D64545]">
-                      ลาออกแล้ว
-                    </span>
-                  ) : null}
-                </li>
-              );
-            })}
-          </ul>
-        )}
+      <div className="grid items-start gap-6 lg:grid-cols-[20rem_1fr]">
+        <div className="lg:sticky lg:top-36">
+          <RegisterForm departments={deptOptions} />
+        </div>
+        <EmployeeDirectory employees={list} departments={deptOptions} currentEmployeeId={me.id} today={bangkokToday()} />
       </div>
     </div>
   );

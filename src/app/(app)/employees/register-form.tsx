@@ -16,7 +16,7 @@ export function RegisterForm({ departments }: { departments: { code: string; nam
         await formAction(formData);
         formRef.current?.reset();
       }}
-      className="space-y-4 rounded-2xl bg-white p-6 shadow-sm"
+      className="space-y-4 rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm"
     >
       <h2 className="font-semibold text-[#1A1A1A]">ลงทะเบียนพนักงานใหม่</h2>
 

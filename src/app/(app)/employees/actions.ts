@@ -3,7 +3,9 @@
 import { revalidatePath } from "next/cache";
 import { getCurrentEmployee } from "@/lib/auth/current-user";
 import { can } from "@/lib/permissions";
+import { createClient } from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/service";
+import { employeeErrorMessage, validateEmployeeEdit, validateResignDate } from "@/lib/employees/logic";
 import {
   deriveLoginPassword,
   employeeEmail,
@@ -88,4 +90,57 @@ export async function registerEmployee(
 
   revalidatePath("/employees");
   return { error: null, success: true, employeeCode };
+}
+export type EmployeeActionState = { error: string | null; success: boolean; message?: string };
+
+/** แก้ชื่อ / ย้ายแผนก — update_employee() ตรวจสิทธิ์ 01/HR จาก auth.uid() ซ้ำในฐานข้อมูล */
+export async function updateEmployee(_prev: EmployeeActionState, formData: FormData): Promise<EmployeeActionState> {
+  const actor = await getCurrentEmployee();
+  if (!actor || !can(actor.role, "employees.manage")) {
+    return { error: employeeErrorMessage("employee.forbidden"), success: false };
+  }
+
+  const employeeId = String(formData.get("employeeId") ?? "");
+  const fullName = String(formData.get("fullName") ?? "");
+  const deptCode = String(formData.get("deptCode") ?? "");
+  const validationError = validateEmployeeEdit(fullName, deptCode);
+  if (validationError) return { error: validationError, success: false };
+
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("update_employee", {
+    p_employee_id: employeeId,
+    p_full_name: fullName,
+    p_dept_code: deptCode,
+  });
+  if (error) return { error: employeeErrorMessage(error.message), success: false };
+
+  revalidatePath("/employees");
+  return { error: null, success: true, message: "บันทึกแล้ว" };
+}
+
+/** บันทึกลาออก (มีวันทำงานวันสุดท้าย) หรือกลับเข้าทำงาน (ไม่ส่งวันที่) */
+export async function setEmployeeStatus(_prev: EmployeeActionState, formData: FormData): Promise<EmployeeActionState> {
+  const actor = await getCurrentEmployee();
+  if (!actor || !can(actor.role, "employees.manage")) {
+    return { error: employeeErrorMessage("employee.forbidden"), success: false };
+  }
+
+  const employeeId = String(formData.get("employeeId") ?? "");
+  const resign = formData.get("action") === "resign";
+  const resignedOn = String(formData.get("resignedOn") ?? "");
+  if (resign) {
+    const dateError = validateResignDate(resignedOn);
+    if (dateError) return { error: dateError, success: false };
+  }
+
+  const supabase = await createClient();
+  const { error } = await supabase.rpc(
+    "set_employee_status",
+    resign ? { p_employee_id: employeeId, p_resigned_on: resignedOn } : { p_employee_id: employeeId },
+  );
+  if (error) return { error: employeeErrorMessage(error.message), success: false };
+
+  revalidatePath("/employees");
+  revalidatePath("/team");
+  return { error: null, success: true, message: resign ? "บันทึกลาออกแล้ว" : "กลับเข้าทำงานแล้ว" };
 }
