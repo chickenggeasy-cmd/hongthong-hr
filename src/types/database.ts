@@ -644,7 +644,11 @@ export type Database = {
         Returns: undefined
       }
       update_employee: {
-        Args: { p_dept_code: string; p_employee_id: string; p_full_name: string }
+        Args: {
+          p_dept_code: string
+          p_employee_id: string
+          p_full_name: string
+        }
         Returns: undefined
       }
     }
