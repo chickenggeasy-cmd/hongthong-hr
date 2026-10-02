@@ -21,7 +21,7 @@ export default async function PayslipListPage() {
 
   return (
     <div className="space-y-4">
-      <div className="rounded-2xl bg-white p-6 shadow-sm">
+      <div className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
         <h1 className="text-lg font-semibold text-[#1A1A1A]">สลิปเงินเดือนของฉัน</h1>
         <p className="mt-1 text-sm text-[#5B6B7B]">สลิปจะแสดงหลังฝ่ายการเงิน/HR ปิดงวดแล้ว</p>
       </div>

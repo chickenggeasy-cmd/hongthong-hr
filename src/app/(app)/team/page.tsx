@@ -1,4 +1,6 @@
 import { requirePermission } from "@/lib/auth/require-permission";
+import { Users } from "lucide-react";
+import { PageHeader } from "@/components/features/page-header";
 import { createClient } from "@/lib/supabase/server";
 import { formatThaiDate } from "@/lib/date";
 import { leaveStatusLabel, leaveTypeLabel } from "@/lib/leave/logic";
@@ -28,15 +30,15 @@ export default async function TeamPage() {
 
   return (
     <div className="space-y-6">
-      <div className="rounded-2xl bg-white p-6 shadow-sm">
-        <h1 className="text-lg font-semibold text-[#1A1A1A]">{isCompanyWide ? "พนักงานทั้งบริษัท" : "ทีมของฉัน"}</h1>
-        <p className="mt-1 text-sm text-[#5B6B7B]">
-          วันนี้ {formatThaiDate(overview.date)}
-          {overview.holidayName ? ` · วันหยุด: ${overview.holidayName}` : !overview.isWorkingDay ? " · วันหยุดประจำสัปดาห์" : ""}
-        </p>
-        <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <PageHeader
+        icon={Users}
+        title={isCompanyWide ? "พนักงานทั้งบริษัท" : "ทีมของฉัน"}
+        description={`วันนี้ ${formatThaiDate(overview.date)}${overview.holidayName ? ` · วันหยุด: ${overview.holidayName}` : !overview.isWorkingDay ? " · วันหยุดประจำสัปดาห์" : ""}`}
+      />
+      <div>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           {SUMMARY.map((item) => (
-            <div key={item.label} className="rounded-xl bg-[#EAF3FC] p-3">
+            <div key={item.label} className="rounded-2xl border border-[#1E5FA8]/5 bg-white p-4 shadow-sm">
               <p className="text-xs text-[#5B6B7B]">{item.label}</p>
               <p className={`text-2xl font-semibold ${item.className}`}>
                 {overview.members.filter((m) => item.status.includes(m.today.status)).length}
@@ -52,7 +54,7 @@ export default async function TeamPage() {
         </div>
       ) : (
         [...byDepartment.entries()].map(([department, members]) => (
-          <section key={department} className="rounded-2xl bg-white p-6 shadow-sm">
+          <section key={department} className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
             <h2 className="mb-2 font-semibold text-[#1A1A1A]">{department}</h2>
             <ul className="divide-y divide-[#5B6B7B]/10 text-sm">
               {members.map((m) => (

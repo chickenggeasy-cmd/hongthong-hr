@@ -53,7 +53,7 @@ export function LeaveRequestForm({
       : null;
 
   return (
-    <form action={formAction} className="space-y-4 rounded-2xl bg-white p-6 shadow-sm">
+    <form action={formAction} className="space-y-4 rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
       <h1 className="text-lg font-semibold text-[#1A1A1A]">ยื่นคำขอลา</h1>
 
       <div>

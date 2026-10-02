@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { Wallet } from "lucide-react";
+import { PageHeader } from "@/components/features/page-header";
 import { requirePermission } from "@/lib/auth/require-permission";
 import { can } from "@/lib/permissions";
 import { createClient } from "@/lib/supabase/server";
@@ -50,10 +52,11 @@ export default async function PayrollPage({ searchParams }: PageProps<"/payroll"
 
   return (
     <div className="space-y-6">
-      <div className="rounded-2xl bg-white p-6 shadow-sm">
+      <PageHeader icon={Wallet} title="เงินเดือน" description={canManage ? "คำนวณ ปิดงวด และดูสลิปของพนักงานทุกคน" : "ดูสรุปเงินเดือนและสลิปของพนักงานทุกคน"} />
+      <div className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <h1 className="text-lg font-semibold text-[#1A1A1A]">เงินเดือนงวด {periodLabel(period)}</h1>
+            <h2 className="text-lg font-semibold text-[#1A1A1A]">งวด {periodLabel(period)}</h2>
             <p className="mt-1 text-sm text-[#5B6B7B]">
               {formatThaiDate(cycle.start)} – {formatThaiDate(cycle.end)} ·{" "}
               {!run ? (
@@ -110,7 +113,7 @@ export default async function PayrollPage({ searchParams }: PageProps<"/payroll"
             ))}
           </div>
 
-          <div className="overflow-x-auto rounded-2xl bg-white shadow-sm">
+          <div className="overflow-x-auto rounded-3xl border border-[#1E5FA8]/5 bg-white shadow-sm">
             <table className="w-full min-w-[44rem] text-sm">
               <thead className="bg-[#EAF3FC] text-left text-[#5B6B7B]">
                 <tr>
