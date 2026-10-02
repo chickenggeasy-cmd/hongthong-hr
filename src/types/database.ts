@@ -297,16 +297,15 @@ export type Database = {
         }
         Insert: {
           failed_at?: string
-          id?: number
+          id?: never
           throttle_key: string
         }
         Update: {
           failed_at?: string
-          id?: number
+          id?: never
           throttle_key?: string
         }
-        Relationships: [
-        ]
+        Relationships: []
       }
       ot_requests: {
         Row: {
