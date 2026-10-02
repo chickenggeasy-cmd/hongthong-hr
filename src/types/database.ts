@@ -289,6 +289,25 @@ export type Database = {
           },
         ]
       }
+      login_failures: {
+        Row: {
+          failed_at: string
+          id: number
+          throttle_key: string
+        }
+        Insert: {
+          failed_at?: string
+          id?: number
+          throttle_key: string
+        }
+        Update: {
+          failed_at?: string
+          id?: number
+          throttle_key?: string
+        }
+        Relationships: [
+        ]
+      }
       ot_requests: {
         Row: {
           approver_id: string | null

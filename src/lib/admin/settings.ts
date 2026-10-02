@@ -17,7 +17,7 @@ export type SettingDefinition = {
   help?: string;
 };
 
-export const SETTING_GROUPS = ["เวลาทำงานและค่าจ้าง", "การลา", "เงินเดือน", "ใบเตือน", "ตำแหน่งบริษัท"] as const;
+export const SETTING_GROUPS = ["เวลาทำงานและค่าจ้าง", "การลา", "เงินเดือน", "ใบเตือน", "ตำแหน่งบริษัท", "ความปลอดภัย"] as const;
 
 export const SETTING_DEFINITIONS: readonly SettingDefinition[] = [
   { key: "work.start_time", label: "เวลาเข้างาน", group: "เวลาทำงานและค่าจ้าง", kind: "time", help: "หลังเวลานี้ 1 นาทีขึ้นไปนับว่ามาสาย" },
@@ -38,6 +38,9 @@ export const SETTING_DEFINITIONS: readonly SettingDefinition[] = [
   { key: "company.latitude", label: "ละติจูดบริษัท", group: "ตำแหน่งบริษัท", kind: "decimal", min: -90, max: 90 },
   { key: "company.longitude", label: "ลองจิจูดบริษัท", group: "ตำแหน่งบริษัท", kind: "decimal", min: -180, max: 180 },
   { key: "attendance.radius_meters", label: "รัศมีเช็คอิน", group: "ตำแหน่งบริษัท", kind: "integer", unit: "เมตร", min: 10, max: 10000 },
+  { key: "login.max_failures_per_code", label: "ล็อกอินผิดได้ต่อรหัสพนักงาน", group: "ความปลอดภัย", kind: "integer", unit: "ครั้ง", min: 1, max: 100, help: "ผิดครบแล้วรหัสนี้ล็อกอินไม่ได้ชั่วคราว" },
+  { key: "login.max_failures_per_ip", label: "ล็อกอินผิดได้ต่อเครื่อง (IP)", group: "ความปลอดภัย", kind: "integer", unit: "ครั้ง", min: 1, max: 1000, help: "นับทุกรหัสที่ลองจากเครื่องเดียวกันรวมกัน" },
+  { key: "login.lock_minutes", label: "ช่วงเวลานับและล็อก", group: "ความปลอดภัย", kind: "integer", unit: "นาที", min: 1, max: 1440, help: "นับครั้งที่ผิดย้อนหลังกี่นาที" },
 ];
 
 const DEFINITIONS_BY_KEY = new Map(SETTING_DEFINITIONS.map((d) => [d.key, d]));
