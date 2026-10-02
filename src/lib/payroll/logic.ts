@@ -87,7 +87,7 @@ export const DAY_STATUS_LABEL_TH: Record<DayStatus, string> = {
   holiday: "วันหยุดนักขัตฤกษ์",
   weekly_off: "วันหยุดประจำสัปดาห์",
   future: "ยังไม่ถึง",
-  not_employed: "ก่อนเริ่มงาน",
+  not_employed: "ไม่อยู่ในช่วงจ้างงาน",
 };
 
 export type PayslipDay = {
@@ -124,6 +124,7 @@ export type PayslipInput = {
   cycle: PayrollCycle;
   today: DateOnly; // วันหลังจากนี้ยังไม่นับ (กรณีคำนวณก่อนสิ้นงวด)
   employedFrom: DateOnly; // วันเริ่มงาน วันก่อนหน้านี้ไม่นับเป็นขาดงาน
+  employedUntil?: DateOnly | null; // วันทำงานวันสุดท้าย (ลาออกกลางงวด) วันหลังจากนี้ไม่นับ
   holidays: HolidaySet;
   attendance: readonly { type: string; recordedAt: string }[];
   approvedLeaves: readonly { startDate: DateOnly; endDate: DateOnly }[]; // ต้องครอบคลุมทั้งเดือนปฏิทินที่งวดคาบเกี่ยว
@@ -215,7 +216,7 @@ export function computePayslip(input: PayslipInput): PayslipComputation {
     day.checkOut = checkOut ? bangkokTimeOfDay(checkOut) : null;
 
     if (date > input.today) day.status = "future";
-    else if (date < input.employedFrom) day.status = "not_employed";
+    else if (date < input.employedFrom || (input.employedUntil && date > input.employedUntil)) day.status = "not_employed";
     else if (holidays.has(date)) {
       day.status = "holiday";
       totals.paidHolidayDays++;

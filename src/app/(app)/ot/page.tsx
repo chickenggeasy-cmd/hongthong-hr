@@ -27,7 +27,7 @@ export default async function OtPage() {
   const workEndTime = timeSetting(settings, "work.end_time");
   if (maxHoursPerDay === null || workEndTime === null) {
     return (
-      <div className="rounded-2xl bg-white p-6 shadow-sm">
+      <div className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
         <p className="text-[#D64545]">ระบบยังไม่ได้ตั้งค่ากติกา OT กรุณาติดต่อ HR</p>
       </div>
     );
@@ -42,7 +42,7 @@ export default async function OtPage() {
         hourlyRate={numberSetting(settings, "ot.hourly_rate")}
       />
 
-      <div className="rounded-2xl bg-white p-6 shadow-sm">
+      <div className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
         <h2 className="mb-3 font-semibold text-[#1A1A1A]">คำขอ OT ของฉัน</h2>
         {!requests || requests.length === 0 ? (
           <p className="text-sm text-[#5B6B7B]">ยังไม่มีคำขอ OT</p>

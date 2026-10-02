@@ -42,7 +42,7 @@ export default async function LeavePage() {
   const settings = settingsRows?.[0];
   if (!settings) {
     return (
-      <div className="rounded-2xl bg-white p-6 shadow-sm">
+      <div className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
         <p className="text-[#D64545]">ระบบยังไม่ได้ตั้งค่ากติกาการลา กรุณาติดต่อ HR</p>
       </div>
     );
@@ -53,7 +53,7 @@ export default async function LeavePage() {
 
   return (
     <div className="space-y-6">
-      <div className="rounded-2xl bg-white p-6 shadow-sm">
+      <div className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
         <p className="text-sm text-[#5B6B7B]">วันลาเดือนนี้ (รวมคำขอที่รออนุมัติ)</p>
         <p className="mt-1 text-[#1A1A1A]">
           ใช้ไป <span className="text-xl font-semibold">{usedThisMonth}</span> จาก {settings.monthly_quota_days} วัน ·
@@ -76,7 +76,7 @@ export default async function LeavePage() {
         }}
       />
 
-      <div className="rounded-2xl bg-white p-6 shadow-sm">
+      <div className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
         <h2 className="mb-3 font-semibold text-[#1A1A1A]">คำขอลาของฉัน</h2>
         {!requests || requests.length === 0 ? (
           <p className="text-sm text-[#5B6B7B]">ยังไม่มีคำขอลา</p>

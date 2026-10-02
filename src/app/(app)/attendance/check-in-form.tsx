@@ -58,7 +58,7 @@ export function CheckInForm({ nextType }: { nextType: AttendanceType }) {
   const canSubmit = coords !== null && !pending;
 
   return (
-    <form action={submit} className="space-y-4 rounded-2xl bg-white p-6 shadow-sm">
+    <form action={submit} className="space-y-4 rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
       <div>
         <p className="text-sm text-[#5B6B7B]">การดำเนินการถัดไป</p>
         <p className="text-lg font-semibold text-[#1A1A1A]">{label}</p>

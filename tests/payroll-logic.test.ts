@@ -200,6 +200,15 @@ describe("computePayslip", () => {
     expect(result.absentDays).toBe(0);
   });
 
+  it("ลาออกกลางงวด: วันหลังวันทำงานวันสุดท้ายไม่นับ (ไม่เป็นขาดงาน ไม่ได้ค่าจ้างวันหยุดหลังลาออก)", () => {
+    const result = computePayslip(input({ employedUntil: "2026-10-09" }));
+    // ทำงาน 26 ก.ย.–9 ต.ค.: วันทำงาน 26,28,29,30 ก.ย. + 1,2,3,5,6,7,8,9 ต.ค. = 12 วัน
+    expect(result.workedDays).toBe(12);
+    expect(result.paidHolidayDays).toBe(0);
+    expect(result.absentDays).toBe(0);
+    expect(result.days.filter((d) => d.status === "not_employed").length).toBe(16);
+  });
+
   it("ประกันสังคมไม่เกินเพดาน", () => {
     const result = computePayslip(input({ settings: { ...settings, dailyRate: 1000 } }));
     expect(result.socialSecurity).toBe(750);

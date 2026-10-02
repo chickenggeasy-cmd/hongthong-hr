@@ -6,6 +6,23 @@ import { MAX_NOTE_LENGTH } from "@/lib/approvals/logic";
 
 const initialState: DecideRequestState = { error: null, success: false };
 
+/** ปุ่มอนุมัติ/ไม่อนุมัติแบบสีจาง กดไม่ได้ พร้อมเหตุผล (เช่น "ต้องรอผู้บริหารอนุมัติ") */
+export function DisabledDecision({ reason }: { reason: string }) {
+  return (
+    <div className="space-y-2" aria-disabled>
+      <div className="flex gap-2 opacity-40">
+        <button type="button" disabled className="flex-1 cursor-not-allowed rounded-lg bg-[#2E9E5B] py-1.5 text-sm font-medium text-white">
+          อนุมัติ
+        </button>
+        <button type="button" disabled className="flex-1 cursor-not-allowed rounded-lg border border-[#D64545]/40 py-1.5 text-sm font-medium text-[#D64545]">
+          ไม่อนุมัติ
+        </button>
+      </div>
+      <p className="rounded-lg bg-[#E8890C]/10 py-1 text-center text-xs font-medium text-[#9A5A00]">{reason}</p>
+    </div>
+  );
+}
+
 export function DecideRequestForm({ kind, requestId }: { kind: "leave" | "ot"; requestId: string }) {
   const [state, formAction, pending] = useActionState(decideRequest, initialState);
 

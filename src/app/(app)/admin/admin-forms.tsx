@@ -41,7 +41,7 @@ export function SettingsForm({
   return (
     <form action={formAction} className="space-y-6">
       {groups.map((group) => (
-        <fieldset key={group.name} className="rounded-2xl bg-white p-6 shadow-sm">
+        <fieldset key={group.name} className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
           <legend className="sr-only">{group.name}</legend>
           <h2 className="mb-4 font-semibold text-[#1A1A1A]">{group.name}</h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">

@@ -1,4 +1,6 @@
 import { requirePermission } from "@/lib/auth/require-permission";
+import { FileSpreadsheet } from "lucide-react";
+import { PageHeader } from "@/components/features/page-header";
 import { createClient } from "@/lib/supabase/server";
 import { addDays, bangkokToday, startOfMonth } from "@/lib/date";
 import { periodLabel } from "@/lib/payroll/logic";
@@ -20,12 +22,9 @@ export default async function ReportsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="rounded-2xl bg-white p-6 shadow-sm">
-        <h1 className="text-lg font-semibold text-[#1A1A1A]">รายงาน</h1>
-        <p className="mt-1 text-sm text-[#5B6B7B]">ดาวน์โหลดเป็นไฟล์ Excel (.xlsx) เปิดได้ด้วย Excel หรือ Google Sheets</p>
-      </div>
+      <PageHeader icon={FileSpreadsheet} title="รายงาน" description="ดาวน์โหลดเป็นไฟล์ Excel (.xlsx) เปิดได้ด้วย Excel หรือ Google Sheets" />
 
-      <section className="rounded-2xl bg-white p-6 shadow-sm">
+      <section className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
         <h2 className="font-semibold text-[#1A1A1A]">เงินเดือนรายงวด</h2>
         <p className="mb-3 text-sm text-[#5B6B7B]">สรุปเงินเดือนทุกคนในงวด (รายได้ รายการหัก รับสุทธิ)</p>
         {!runs || runs.length === 0 ? (
@@ -51,7 +50,7 @@ export default async function ReportsPage() {
         { action: "/reports/attendance", title: "การเข้างานรายวัน", help: "เวลาเข้า-ออก และนาทีที่มาสาย ของทุกคนทุกวัน" },
         { action: "/reports/requests", title: "คำขอลาและ OT", help: "คำขอทุกสถานะในช่วงวันที่ (2 ชีต: ลา / OT)" },
       ].map((report) => (
-        <section key={report.action} className="rounded-2xl bg-white p-6 shadow-sm">
+        <section key={report.action} className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
           <h2 className="font-semibold text-[#1A1A1A]">{report.title}</h2>
           <p className="mb-3 text-sm text-[#5B6B7B]">
             {report.help} · เลือกได้ไม่เกิน {MAX_REPORT_DAYS} วัน

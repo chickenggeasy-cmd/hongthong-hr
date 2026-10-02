@@ -22,7 +22,7 @@ export default async function AttendancePage() {
     <div className="space-y-6">
       <CheckInForm nextType={nextType} />
 
-      <div className="rounded-2xl bg-white p-6 shadow-sm">
+      <div className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
         <h2 className="mb-3 font-semibold text-[#1A1A1A]">ประวัติล่าสุด</h2>
         {!logs || logs.length === 0 ? (
           <p className="text-sm text-[#5B6B7B]">ยังไม่มีประวัติ</p>

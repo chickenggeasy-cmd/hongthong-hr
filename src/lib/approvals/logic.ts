@@ -19,7 +19,7 @@ export function canDecideRequest(params: {
   if (!can(params.approverRole, "approvals.view")) return { allowed: false, reason: "ไม่มีสิทธิ์อนุมัติ" };
   if (params.approverId === params.requesterId) return { allowed: false, reason: "อนุมัติคำขอของตัวเองไม่ได้" };
   if (can(params.requesterRole, "approvals.view") && params.approverRole !== "executive") {
-    return { allowed: false, reason: "ต้องให้ผู้บริหารอนุมัติ" };
+    return { allowed: false, reason: "ต้องรอผู้บริหารอนุมัติ" };
   }
   return { allowed: true };
 }

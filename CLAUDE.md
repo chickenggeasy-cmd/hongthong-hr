@@ -37,7 +37,7 @@
    (ดู `src/lib/leave/logic.ts` + `tests/leave-logic.test.ts` เป็นตัวอย่าง)
    ไฟล์ใน `src/lib/` ที่เทสต์เรียกใช้ ให้ import กันเองแบบ relative (`../date`) เพราะ Vitest ไม่รู้จัก `@/`
 9. ตัวเลขกติกาธุรกิจที่อาจเปลี่ยน เก็บในตาราง `app_settings` ไม่ hardcode ในโค้ด
-10. ก่อนส่งงานทุกครั้ง: `npx tsc --noEmit` ผ่าน + `npx vitest run` ผ่านทั้งหมด (ปัจจุบัน 109 ข้อ)
+10. ก่อนส่งงานทุกครั้ง: `npx tsc --noEmit` ผ่าน + `npx vitest run` ผ่านทั้งหมด (ปัจจุบัน 122 ข้อ)
     (ถ้า tsc ฟ้อง `LayoutProps` ไม่รู้จัก ให้รัน `npx next typegen` ก่อน)
 
 ## โครงสร้างที่ตั้งไว้แล้ว ห้ามสร้างซ้ำซ้อน
@@ -55,7 +55,8 @@
 - `src/lib/export/excel.ts` (`sheet`, `buildWorkbook`, `excelResponse`) และ `payslip-pdf.tsx`
   (PDF ต้องผ่าน `fixThaiForPdf()` เพราะบั๊กสระ "ำ" ทำตัวอักษรท้ายข้อความหาย)
 - `src/lib/attendance|leave|ot|payroll|team|warnings|reports/logic.ts` — pure logic ที่มีเทสต์
-- `src/components/features/app-header.tsx`, `placeholder-page.tsx`, `leave-status-badge.tsx` — คอมโพเนนต์ใช้ซ้ำ
+- `src/components/features/app-header.tsx`, `page-header.tsx` (หัวหน้าเพจทุกหน้า), `leave-status-badge.tsx`,
+  `src/components/brand/illustrations.tsx` (ภาพเวกเตอร์แบรนด์) — คอมโพเนนต์ใช้ซ้ำ โลโก้อยู่ที่ `public/brand/logo.webp`
 - ดาวน์โหลดไฟล์ (PDF/Excel) ใช้ Route Handler (`route.ts`) และต้องเช็กสิทธิ์เองในนั้น (ดู `src/lib/reports/guard.ts`)
 - `scripts/create-first-user.ts` — อ้างอิงถ้าต้องเขียนสคริปต์รันครั้งเดียวอีก
 - error จาก SQL function ใช้ message เป็นรหัสภาษาอังกฤษ (เช่น `leave.overlap`) แล้วแปลเป็นไทยฝั่งเว็บ
@@ -77,14 +78,17 @@
 **ลงทะเบียนพนักงานผ่านเว็บ** (`/employees`): ขึ้น GitHub แล้ว สร้างพนักงาน + บัญชี Supabase Auth + ผูกกัน
 (ขั้นตอนเดียวกับ `scripts/create-first-user.ts` ถ้าพลาดกลางทางจะล้างข้อมูลที่สร้างค้าง)
 
-**ค้างอยู่:** หน้าลา/อนุมัติแสดงต่างกันตาม 5 บทบาท (ดู "งานที่วางแผนไว้" ด้านล่าง), ESLint ฟ้อง 2 จุดเดิมใน
-`attendance/check-in-form.tsx` (setState ใน useEffect), ภาษีหัก ณ ที่จ่าย, พนักงานลาออกกลางงวด
+**ส่วน HR เสร็จครบ (3 ต.ค. 2569):** จัดการพนักงาน (แก้ไข/ย้ายแผนก/ลาออก/กลับเข้าทำงาน), เงินเดือนคนลาออกกลางงวด,
+หน้าอนุมัติแยกมุมมองการเงิน/HR/ผู้บริหาร (`src/lib/approvals/view.ts`), ดีไซน์ใหม่ทุกหน้า HR (`PageHeader`)
+
+**ค้างอยู่ (รอบถัดไป = ส่วนของพนักงาน):** หน้าลาแยกมุมมองพนักงาน/หัวหน้า (ข้อ 1–2 ใน "งานที่วางแผนไว้"),
+ดีไซน์ใหม่หน้าเช็คอิน/ลา/OT/สลิป, ภาษีหัก ณ ที่จ่าย, จำกัดจำนวนครั้งล็อกอินผิด
 
 ## ประเด็นที่ยังไม่ยืนยัน (ห้ามเดาเติมเอง ถ้าไม่ชัวร์ให้ถามหรือทำเป็นค่าตั้งต้นที่แก้ง่าย)
 
 ดูหัวข้อ "ประเด็นที่ต้องตัดสินใจเอง" ใน README.md — มีผลต่อสูตรเงินเดือนและกฎการลา/OT โดยตรง
 
-## งานที่วางแผนไว้ (เจ้าของโปรเจกต์สั่งไว้ 1 ต.ค. 2569 — ยังไม่ทำ)
+## งานที่วางแผนไว้ (เจ้าของโปรเจกต์สั่งไว้ 1 ต.ค. 2569 — ข้อ 3–5 ทำแล้ว 3 ต.ค., ข้อ 1–2 ยังไม่ทำ)
 
 หน้าลา/อนุมัติแสดงผลต่างกันตามบทบาท (ใช้ permission เดิม ไม่เพิ่ม permission ใหม่):
 
