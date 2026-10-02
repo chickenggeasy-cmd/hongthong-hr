@@ -1,5 +1,6 @@
 import { Briefcase, CalendarClock, History, Thermometer, TreePalm, UsersRound, type LucideIcon } from "lucide-react";
 import { formatThaiDate } from "@/lib/date";
+import { EmptyState } from "@/components/features/empty-state";
 import { leaveTypeLabel } from "@/lib/leave/logic";
 import type { TeamLeave } from "@/lib/leave/team";
 import { ExceedsQuotaBadge, LeaveStatusBadge } from "@/components/features/leave-status-badge";
@@ -63,7 +64,7 @@ export function MyLeaveList({ requests }: { requests: MyLeave[] }) {
         คำขอลาของฉัน
       </h2>
       {requests.length === 0 ? (
-        <p className="py-8 text-center text-sm text-[#5B6B7B]">ยังไม่มีคำขอลา</p>
+        <EmptyState sticker="calendar">ยังไม่มีคำขอลา</EmptyState>
       ) : (
         <ul className="space-y-2">
           {requests.map((r) => {

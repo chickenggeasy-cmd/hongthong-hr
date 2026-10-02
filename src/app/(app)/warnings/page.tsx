@@ -35,7 +35,7 @@ export default async function WarningsPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader icon={TriangleAlert} title="ใบเตือน" description="ออกอัตโนมัติจากผลคำนวณเงินเดือน หรือออกเองตามดุลยพินิจ พนักงานกดรับทราบที่หน้าแรก" />
+      <PageHeader icon={TriangleAlert} sticker="warning" title="ใบเตือน" description="ออกอัตโนมัติจากผลคำนวณเงินเดือน หรือออกเองตามดุลยพินิจ พนักงานกดรับทราบที่หน้าแรก" />
       <div className="grid gap-4 sm:grid-cols-2">
         <section className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
           <h2 className="mb-1 font-semibold text-[#1A1A1A]">ใบเตือนอัตโนมัติ</h2>

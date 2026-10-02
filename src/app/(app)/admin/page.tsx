@@ -34,6 +34,7 @@ export default async function AdminPage() {
     <div className="space-y-6">
       <PageHeader
         icon={Settings}
+        sticker="gear"
         title="ตั้งค่าระบบ"
         description="แก้กติกาบริษัทได้โดยไม่ต้องแก้โปรแกรม มีผลกับการคำนวณครั้งถัดไปทันที (งวดที่ปิดแล้วไม่ถูกคำนวณใหม่)"
       />

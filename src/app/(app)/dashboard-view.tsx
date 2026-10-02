@@ -1,22 +1,8 @@
 import Link from "next/link";
-import type { ReactNode } from "react";
-import {
-  ArrowRight,
-  CalendarCheck,
-  CheckCheck,
-  Crown,
-  FileSpreadsheet,
-  Hourglass,
-  ReceiptText,
-  Settings,
-  Timer,
-  TriangleAlert,
-  UserPlus,
-  Users,
-  Wallet,
-  type LucideIcon,
-} from "lucide-react";
+import type { CSSProperties, ReactNode } from "react";
+import { ArrowRight, CheckCheck } from "lucide-react";
 import { DotPattern, WarehouseScene } from "@/components/brand/illustrations";
+import { Sticker, type StickerName } from "@/components/brand/sticker";
 import { LiveClock } from "@/components/features/live-clock";
 import { roleLabel } from "@/lib/permissions";
 import { formatBaht, periodLabel } from "@/lib/payroll/logic";
@@ -73,48 +59,74 @@ function SectionTitle({ children, href, linkLabel }: { children: ReactNode; href
   );
 }
 
+/** หน่วงเวลาให้การ์ดค่อยๆ ไล่กันขึ้นมาทีละใบ */
+function stagger(index: number): CSSProperties {
+  return { animationDelay: `${120 + index * 70}ms` };
+}
+
 function KpiTile({
-  icon: Icon,
-  iconClass,
+  sticker,
+  glowClass,
   label,
   value,
   hint,
   href,
+  index,
 }: {
-  icon: LucideIcon;
-  iconClass: string;
+  sticker: StickerName;
+  glowClass: string;
   label: string;
   value: ReactNode;
   hint?: ReactNode;
   href: string;
+  index: number;
 }) {
   return (
     <Link
       href={href}
-      className="group relative overflow-hidden rounded-2xl border border-[#1E5FA8]/5 bg-white p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#1E5FA8]/10"
+      style={stagger(index)}
+      className="ht-rise group relative overflow-hidden rounded-3xl border border-[#1E5FA8]/5 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#1E5FA8]/10"
     >
-      <span className={`mb-3 flex h-10 w-10 items-center justify-center rounded-xl ${iconClass}`}>
-        <Icon className="h-5 w-5" aria-hidden />
-      </span>
+      <span className="ht-shine" aria-hidden />
+      <span className={`absolute -right-6 -top-6 h-24 w-24 rounded-full blur-2xl transition-opacity group-hover:opacity-100 opacity-60 ${glowClass}`} aria-hidden />
+      <Sticker
+        name={sticker}
+        size={52}
+        className="relative mb-2 transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110"
+      />
       <p className="text-xs text-[#5B6B7B]">{label}</p>
       <p className="mt-0.5 text-xl font-bold text-[#1A1A1A]">{value}</p>
       {hint ? <p className="mt-0.5 text-xs text-[#5B6B7B]">{hint}</p> : null}
       <ArrowRight
-        className="absolute right-4 top-4 h-4 w-4 text-[#5B6B7B]/0 transition-all group-hover:text-[#1E5FA8]"
+        className="absolute bottom-4 right-4 h-4 w-4 -translate-x-1 text-[#1E5FA8] opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100"
         aria-hidden
       />
     </Link>
   );
 }
 
-function ShortcutTile({ icon: Icon, label, hint, href }: { icon: LucideIcon; label: string; hint: string; href: string }) {
+function ShortcutTile({
+  sticker,
+  label,
+  hint,
+  href,
+  index,
+}: {
+  sticker: StickerName;
+  label: string;
+  hint: string;
+  href: string;
+  index: number;
+}) {
   return (
     <Link
       href={href}
-      className="group flex items-center gap-3 rounded-2xl border border-[#1E5FA8]/5 bg-white p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-[#D4A017]/40 hover:shadow-lg hover:shadow-[#1E5FA8]/10"
+      style={stagger(index)}
+      className="ht-rise group relative flex items-center gap-3 overflow-hidden rounded-2xl border border-[#1E5FA8]/5 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#D4A017]/40 hover:shadow-xl hover:shadow-[#1E5FA8]/10"
     >
-      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#1E5FA8] to-[#164A85] text-white shadow-sm transition-transform group-hover:scale-105">
-        <Icon className="h-5 w-5" aria-hidden />
+      <span className="ht-shine" aria-hidden />
+      <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[#EAF3FC] to-[#FFF8E5]">
+        <Sticker name={sticker} size={40} className="transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110" />
       </span>
       <span className="min-w-0">
         <span className="block font-semibold text-[#1A1A1A]">{label}</span>
@@ -143,8 +155,9 @@ function AttendanceCard({ overview }: { overview: NonNullable<DashboardData["ove
   const rate = overview.total > 0 ? Math.round((arrived / overview.total) * 100) : 0;
 
   return (
-    <section className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
-      <div className="flex flex-wrap items-end justify-between gap-4">
+    <section className="ht-rise relative overflow-hidden rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm" style={stagger(4)}>
+      <Sticker name="people" size={72} className="ht-float-slow pointer-events-none absolute -right-1 -top-1 opacity-90" />
+      <div className="relative flex flex-wrap items-end justify-between gap-4 pr-16">
         <div>
           <p className="text-sm text-[#5B6B7B]">มาทำงานแล้ววันนี้</p>
           <p className="mt-1 text-4xl font-bold tracking-tight text-[#1A1A1A]">
@@ -193,16 +206,21 @@ export function DashboardView({ data }: { data: DashboardData }) {
   return (
     <div className="space-y-8">
       {/* ---------- แบนเนอร์ทักทาย ---------- */}
-      <section className="relative overflow-hidden rounded-[28px] bg-gradient-to-br from-[#1E5FA8] via-[#18528F] to-[#0F3B6E] text-white shadow-xl shadow-[#1E5FA8]/20 animate-in fade-in slide-in-from-bottom-2 duration-500">
+      <section className="ht-rise ht-gradient relative overflow-hidden rounded-[28px] bg-gradient-to-br from-[#1E5FA8] via-[#0F3B6E] to-[#2A73C2] text-white shadow-xl shadow-[#1E5FA8]/20">
         <DotPattern className="absolute inset-0 h-full w-full text-white/[0.07]" />
-        <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-[#D4A017] via-[#F0C75E] to-[#D4A017]" aria-hidden />
-        <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-[#5BA4E6]/20 blur-3xl" aria-hidden />
+        <div className="ht-gradient absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-[#D4A017] via-[#FFF1BF] to-[#D4A017]" aria-hidden />
+        <div className="ht-blob absolute -right-24 -top-24 h-72 w-72 rounded-full bg-[#5BA4E6]/25 blur-3xl" aria-hidden />
+        <div className="ht-blob absolute -bottom-32 left-1/3 h-72 w-72 rounded-full bg-[#D4A017]/15 blur-3xl" style={{ animationDelay: "-6s" }} aria-hidden />
         <div className="relative grid items-center gap-4 p-6 sm:p-8 md:grid-cols-[1fr_auto]">
           <div>
-            <p className="text-sm text-white/75">
+            <p className="flex items-center gap-2 text-sm text-white/75">
+              <Sticker name={data.greeting === "สวัสดีตอนเย็น" ? "moon" : "sun"} size={22} />
               {data.greeting} · {data.dateLabel}
             </p>
-            <h1 className="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">{employee.fullName}</h1>
+            <h1 className="mt-1 flex items-center gap-3 text-3xl font-bold tracking-tight sm:text-4xl">
+              {employee.fullName}
+              <Sticker name="wave" size={44} priority className="ht-wave" />
+            </h1>
             <p className="mt-2 flex flex-wrap items-center gap-2 text-sm text-white/80">
               <span>
                 {employee.employeeCode} · {employee.deptName}
@@ -238,15 +256,28 @@ export function DashboardView({ data }: { data: DashboardData }) {
               <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" aria-hidden />
             </Link>
           </div>
-          <WarehouseScene className="hidden w-[360px] max-w-full drop-shadow-xl md:block" />
+          {/* ภาพโกดังของแบรนด์ + ภาพ 3D ลอยรอบๆ */}
+          <div className="relative hidden w-[360px] max-w-full md:block" aria-hidden>
+            <WarehouseScene className="w-full drop-shadow-xl" />
+            <Sticker name="cart" size={76} priority className="ht-pop absolute -left-6 bottom-2" style={{ animationDelay: "300ms" }} />
+            <span className="ht-float absolute -top-4 right-2 block" style={{ ["--ht-tilt" as string]: "8deg" }}>
+              <Sticker name="package" size={64} className="ht-pop" style={{ animationDelay: "450ms" }} />
+            </span>
+            <span className="ht-float-slow absolute left-10 top-0 block" style={{ animationDelay: "-2s" }}>
+              <Sticker name="coin" size={40} className="ht-pop" style={{ animationDelay: "600ms" }} />
+            </span>
+            <span className="ht-float absolute -right-3 bottom-10 block" style={{ animationDelay: "-3s" }}>
+              <Sticker name="star" size={36} className="ht-pop" style={{ animationDelay: "750ms" }} />
+            </span>
+          </div>
         </div>
       </section>
 
       {/* ---------- ใบเตือนที่ยังไม่รับทราบ ---------- */}
       {data.warnings.length > 0 ? (
-        <section className="rounded-3xl border border-[#D64545]/25 bg-gradient-to-br from-[#D64545]/[0.06] to-white p-5">
+        <section className="ht-rise rounded-3xl border border-[#D64545]/25 bg-gradient-to-br from-[#D64545]/[0.06] to-white p-5">
           <p className="flex items-center gap-2 font-bold text-[#D64545]">
-            <TriangleAlert className="h-5 w-5" aria-hidden />
+            <Sticker name="warning" size={32} className="ht-pop" />
             คุณมีใบเตือน {data.warnings.length} ใบที่ยังไม่ได้รับทราบ
           </p>
           <ul className="mt-3 space-y-2">
@@ -268,25 +299,36 @@ export function DashboardView({ data }: { data: DashboardData }) {
         <SectionTitle>ของฉัน</SectionTitle>
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
           <KpiTile
-            icon={CalendarCheck}
-            iconClass="bg-[#2E9E5B]/10 text-[#2E9E5B]"
+            index={0}
+            sticker="calendar"
+            glowClass="bg-[#2E9E5B]/20"
             label="วันลาคงเหลือเดือนนี้"
             value={remainingLeave === null ? "-" : `${remainingLeave} วัน`}
             hint={data.leave.quota === null ? undefined : `ใช้ไป ${data.leave.used} จาก ${data.leave.quota} วัน`}
             href="/leave"
           />
           <KpiTile
-            icon={Hourglass}
-            iconClass="bg-[#E8890C]/10 text-[#E8890C]"
+            index={1}
+            sticker="hourglass"
+            glowClass="bg-[#E8890C]/20"
             label="คำขอรออนุมัติ"
             value={`${pendingMine} รายการ`}
             hint={`ลา ${data.myPending.leaves} · OT ${data.myPending.ots}`}
             href="/leave"
           />
-          <KpiTile icon={Timer} iconClass="bg-[#1E5FA8]/10 text-[#1E5FA8]" label="ขอทำ OT" value="ยื่นคำขอ" hint="ต้องขอก่อนเวลาเลิกงาน" href="/ot" />
           <KpiTile
-            icon={ReceiptText}
-            iconClass="bg-[#D4A017]/15 text-[#9A7410]"
+            index={2}
+            sticker="stopwatch"
+            glowClass="bg-[#1E5FA8]/20"
+            label="ขอทำ OT"
+            value="ยื่นคำขอ"
+            hint="ต้องขอก่อนเวลาเลิกงาน"
+            href="/ot"
+          />
+          <KpiTile
+            index={3}
+            sticker="receipt"
+            glowClass="bg-[#D4A017]/25"
             label="สลิปล่าสุด"
             value={data.latestPayslip ? `${formatBaht(data.latestPayslip.netPay)} ฿` : "-"}
             hint={data.latestPayslip ? `งวด ${periodLabel(data.latestPayslip.period)}` : "ยังไม่มีสลิป"}
@@ -314,8 +356,13 @@ export function DashboardView({ data }: { data: DashboardData }) {
               <div className="space-y-3">
                 <Link
                   href="/approvals"
-                  className="group block rounded-3xl bg-gradient-to-br from-[#1A1A1A] to-[#2B3440] p-6 text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg"
+                  style={stagger(5)}
+                  className="ht-rise group relative block overflow-hidden rounded-3xl bg-gradient-to-br from-[#1A1A1A] to-[#2B3440] p-6 text-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl"
                 >
+                  <span className="ht-shine" aria-hidden />
+                  <span className="ht-float absolute right-4 top-4 block">
+                    <Sticker name="check" size={64} />
+                  </span>
                   <p className="flex items-center gap-2 text-sm text-white/70">
                     <CheckCheck className="h-4 w-4" aria-hidden />
                     คุณอนุมัติได้ตอนนี้
@@ -328,11 +375,11 @@ export function DashboardView({ data }: { data: DashboardData }) {
                 {data.approvals.executiveOnly !== null ? (
                   <Link
                     href="/approvals"
-                    className="flex items-center gap-3 rounded-3xl border-2 border-[#D4A017] bg-gradient-to-br from-[#FFF8E5] to-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg"
+                    style={stagger(6)}
+                    className="ht-rise group relative flex items-center gap-3 overflow-hidden rounded-3xl border-2 border-[#D4A017] bg-gradient-to-br from-[#FFF8E5] to-white p-5 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl"
                   >
-                    <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#D4A017] text-white">
-                      <Crown className="h-5 w-5" aria-hidden />
-                    </span>
+                    <span className="ht-shine" aria-hidden />
+                    <Sticker name="crown" size={52} className="ht-float shrink-0" />
                     <span>
                       <span className="block text-sm text-[#5B6B7B]">จาก HR/การเงิน ที่ต้องให้คุณอนุมัติเท่านั้น</span>
                       <span className="block text-2xl font-bold text-[#1A1A1A]">{data.approvals.executiveOnly} รายการ</span>
@@ -357,9 +404,11 @@ export function DashboardView({ data }: { data: DashboardData }) {
             {data.payroll ? (
               <Link
                 href={`/payroll?period=${data.payroll.period}`}
-                className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#D4A017] to-[#B8860B] p-4 text-[#1A1A1A] shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg sm:col-span-2 lg:col-span-1"
+                style={stagger(7)}
+                className="ht-rise ht-gradient group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#F0C75E] via-[#D4A017] to-[#B8860B] p-4 text-[#1A1A1A] shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl sm:col-span-2 lg:col-span-1"
               >
-                <Wallet className="absolute -bottom-3 -right-3 h-24 w-24 text-white/20" aria-hidden />
+                <span className="ht-shine" aria-hidden />
+                <Sticker name="money-bag" size={80} className="absolute -bottom-2 -right-2 transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110" />
                 <p className="text-sm font-medium">เงินเดือนงวด {periodLabel(data.payroll.period)}</p>
                 <p className="mt-1 text-2xl font-bold">
                   {data.payroll.status === "none" ? "ยังไม่คำนวณ" : data.payroll.status === "finalized" ? "ปิดงวดแล้ว ✓" : "ฉบับร่าง"}
@@ -367,13 +416,13 @@ export function DashboardView({ data }: { data: DashboardData }) {
                 <p className="mt-1 text-sm">ไปหน้าเงินเดือน →</p>
               </Link>
             ) : null}
-            {data.payroll ? <ShortcutTile icon={FileSpreadsheet} label="รายงาน Excel" hint="เงินเดือน · เข้างาน · ลา/OT" href="/reports" /> : null}
+            {data.payroll ? <ShortcutTile index={8} sticker="chart" label="รายงาน Excel" hint="เงินเดือน · เข้างาน · ลา/OT" href="/reports" /> : null}
             {data.showHrShortcuts ? (
               <>
-                <ShortcutTile icon={UserPlus} label="พนักงาน" hint="ลงทะเบียนพนักงานใหม่" href="/employees" />
-                <ShortcutTile icon={Users} label="ทีมทั้งบริษัท" hint="สถานะการมาทำงานรายคน" href="/team" />
-                <ShortcutTile icon={TriangleAlert} label="ใบเตือน" hint="ออกอัตโนมัติ / ออกเอง" href="/warnings" />
-                <ShortcutTile icon={Settings} label="ตั้งค่าระบบ" hint="อัตราค่าจ้าง · วันหยุด · พิกัด" href="/admin" />
+                <ShortcutTile index={9} sticker="people" label="พนักงาน" hint="ลงทะเบียนพนักงานใหม่" href="/employees" />
+                <ShortcutTile index={10} sticker="office" label="ทีมทั้งบริษัท" hint="สถานะการมาทำงานรายคน" href="/team" />
+                <ShortcutTile index={11} sticker="warning" label="ใบเตือน" hint="ออกอัตโนมัติ / ออกเอง" href="/warnings" />
+                <ShortcutTile index={12} sticker="gear" label="ตั้งค่าระบบ" hint="อัตราค่าจ้าง · วันหยุด · พิกัด" href="/admin" />
               </>
             ) : null}
           </div>

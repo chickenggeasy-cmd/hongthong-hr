@@ -1,5 +1,6 @@
 import { History, LogIn, LogOut, MapPin } from "lucide-react";
 import { formatThaiDate } from "@/lib/date";
+import { EmptyState } from "@/components/features/empty-state";
 import type { AttendanceDay } from "@/lib/attendance/logic";
 
 // ชิ้นส่วนหน้าตาของหน้าเช็คอิน (รับข้อมูลที่โหลดแล้ว)
@@ -32,7 +33,7 @@ export function AttendanceTimeline({ days }: { days: AttendanceDay[] }) {
         ประวัติล่าสุด
       </h2>
       {days.length === 0 ? (
-        <p className="py-8 text-center text-sm text-[#5B6B7B]">ยังไม่มีประวัติ</p>
+        <EmptyState sticker="alarm-clock">ยังไม่มีประวัติ</EmptyState>
       ) : (
         <div className="space-y-5">
           {days.map((day) => (

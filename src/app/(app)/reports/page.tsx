@@ -22,7 +22,7 @@ export default async function ReportsPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader icon={FileSpreadsheet} title="รายงาน" description="ดาวน์โหลดเป็นไฟล์ Excel (.xlsx) เปิดได้ด้วย Excel หรือ Google Sheets" />
+      <PageHeader icon={FileSpreadsheet} sticker="chart" title="รายงาน" description="ดาวน์โหลดเป็นไฟล์ Excel (.xlsx) เปิดได้ด้วย Excel หรือ Google Sheets" />
 
       <section className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
         <h2 className="font-semibold text-[#1A1A1A]">เงินเดือนรายงวด</h2>

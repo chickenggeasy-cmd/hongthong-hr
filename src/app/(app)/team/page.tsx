@@ -32,6 +32,7 @@ export default async function TeamPage() {
     <div className="space-y-6">
       <PageHeader
         icon={Users}
+        sticker={isCompanyWide ? "office" : "people"}
         title={isCompanyWide ? "พนักงานทั้งบริษัท" : "ทีมของฉัน"}
         description={`วันนี้ ${formatThaiDate(overview.date)}${overview.holidayName ? ` · วันหยุด: ${overview.holidayName}` : !overview.isWorkingDay ? " · วันหยุดประจำสัปดาห์" : ""}`}
       />

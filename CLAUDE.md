@@ -57,6 +57,9 @@
 - `src/lib/attendance|leave|ot|payroll|team|warnings|reports/logic.ts` — pure logic ที่มีเทสต์
 - `src/components/features/app-header.tsx`, `page-header.tsx` (หัวหน้าเพจทุกหน้า), `leave-status-badge.tsx`,
   `src/components/brand/illustrations.tsx` (ภาพเวกเตอร์แบรนด์) — คอมโพเนนต์ใช้ซ้ำ โลโก้อยู่ที่ `public/brand/logo.webp`
+- ภาพ 3D: `src/components/brand/sticker.tsx` (`<Sticker name="..." />` ไฟล์อยู่ `public/illustrations/3d/` จาก Fluent Emoji ของ Microsoft, MIT)
+  `PageHeader` รับ `sticker` ได้, `empty-state.tsx` สำหรับกล่อง "ยังไม่มีข้อมูล"
+  อนิเมชันกลางอยู่ท้าย `src/app/globals.css` (`ht-rise`, `ht-pop`, `ht-float`, `ht-blob`, `ht-shine` ...) ปิดเองเมื่อเครื่องตั้งลดการเคลื่อนไหว
 - ดาวน์โหลดไฟล์ (PDF/Excel) ใช้ Route Handler (`route.ts`) และต้องเช็กสิทธิ์เองในนั้น (ดู `src/lib/reports/guard.ts`)
 - `scripts/create-first-user.ts` — อ้างอิงถ้าต้องเขียนสคริปต์รันครั้งเดียวอีก
 - error จาก SQL function ใช้ message เป็นรหัสภาษาอังกฤษ (เช่น `leave.overlap`) แล้วแปลเป็นไทยฝั่งเว็บ

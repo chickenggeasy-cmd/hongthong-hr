@@ -81,7 +81,7 @@ export default async function LeavePage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader icon={CalendarDays} title="ขอลา" description="ลาป่วย ลากิจ ลาพักร้อน · ติดตามสถานะคำขอได้ที่นี่" />
+      <PageHeader icon={CalendarDays} sticker="calendar" title="ขอลา" description="ลาป่วย ลากิจ ลาพักร้อน · ติดตามสถานะคำขอได้ที่นี่" />
 
       <div className="grid items-start gap-6 lg:grid-cols-[22rem_1fr]">
         <div className="space-y-6">

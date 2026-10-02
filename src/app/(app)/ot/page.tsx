@@ -5,6 +5,7 @@ import { bangkokToday, formatThaiDate } from "@/lib/date";
 import { numberSetting, timeSetting, toSettingsRecord } from "@/lib/settings";
 import { LeaveStatusBadge } from "@/components/features/leave-status-badge";
 import { PageHeader } from "@/components/features/page-header";
+import { EmptyState } from "@/components/features/empty-state";
 import { OtRequestForm } from "./ot-request-form";
 
 export default async function OtPage() {
@@ -42,7 +43,7 @@ export default async function OtPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader icon={Timer} title="ขอทำ OT" description={`ต้องขอล่วงหน้าก่อน ${workEndTime} น. ของวันนั้น · จ่ายเฉพาะชั่วโมงเต็มที่ทำจริง`}>
+      <PageHeader icon={Timer} sticker="stopwatch" title="ขอทำ OT" description={`ต้องขอล่วงหน้าก่อน ${workEndTime} น. ของวันนั้น · จ่ายเฉพาะชั่วโมงเต็มที่ทำจริง`}>
         <span className="rounded-2xl bg-[#EAF3FC] px-4 py-2 text-center">
           <span className="block text-2xl font-bold text-[#1E5FA8]">{approvedHours} ชม.</span>
           <span className="text-xs text-[#5B6B7B]">OT ที่อนุมัติเดือนนี้</span>
@@ -60,7 +61,7 @@ export default async function OtPage() {
         <section className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
           <h2 className="mb-3 font-bold text-[#1A1A1A]">คำขอ OT ของฉัน</h2>
           {!requests || requests.length === 0 ? (
-            <p className="py-8 text-center text-sm text-[#5B6B7B]">ยังไม่มีคำขอ OT</p>
+            <EmptyState sticker="stopwatch">ยังไม่มีคำขอ OT</EmptyState>
           ) : (
             <ul className="space-y-2">
               {requests.map((request) => (
