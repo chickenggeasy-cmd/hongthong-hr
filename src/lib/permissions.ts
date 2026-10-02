@@ -9,6 +9,19 @@ export const ROLE_LABEL_TH: Record<Role, string> = {
   employee: "พนักงาน",
 };
 
+// ชื่อ "พื้นที่ทำงาน" ใต้โลโก้หลังล็อกอิน (หน้าล็อกอินใช้ร่วมกันทุกคน จึงไม่ผูกกับบทบาทใด)
+const ROLE_PORTAL_TH: Record<Role, string> = {
+  executive: "ผู้บริหาร",
+  finance: "ฝ่ายการเงิน",
+  hr: "ฝ่ายบุคคล (HR)",
+  head: "หัวหน้าแผนก",
+  employee: "พื้นที่พนักงาน",
+};
+
+export function portalLabel(role: string): string {
+  return ROLE_PORTAL_TH[role as Role] ?? "ระบบพนักงาน";
+}
+
 /** แปลง role จากฐานข้อมูล (เผื่อค่าที่ไม่รู้จัก) เป็นป้ายภาษาไทยที่แสดงผลได้เสมอ */
 export function roleLabel(role: string): string {
   return ROLE_LABEL_TH[role as Role] ?? role;

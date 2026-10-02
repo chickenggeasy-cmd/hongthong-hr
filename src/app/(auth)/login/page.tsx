@@ -31,14 +31,14 @@ export default function LoginPage() {
         <div className="relative flex items-center gap-3">
           <Image src="/brand/logo.webp" alt="" width={56} height={56} className="h-14 w-14 rounded-full ring-2 ring-[#D4A017]" />
           <div>
-            <p className="text-xl font-bold">หงส์ทอง HR</p>
-            <p className="text-sm text-white/70">Cash &amp; Carry</p>
+            <p className="text-xl font-bold">หงส์ทอง</p>
+            <p className="text-sm text-white/70">Cash &amp; Carry · ระบบพนักงาน</p>
           </div>
         </div>
 
         <div className="relative animate-in fade-in slide-in-from-bottom-4 duration-700">
           <h2 className="text-4xl font-bold leading-tight">
-            ระบบบริหารพนักงาน
+            ทุกเรื่องงานของคุณ
             <br />
             <span className="text-[#F0C75E]">ครบจบในที่เดียว</span>
           </h2>

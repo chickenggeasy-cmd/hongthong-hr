@@ -31,7 +31,7 @@ export function sheet<T>(definition: ExcelSheet<T>): PreparedSheet {
 
 export async function buildWorkbook(sheets: readonly PreparedSheet[]): Promise<Buffer> {
   const workbook = new ExcelJS.Workbook();
-  workbook.creator = "Hongthong HR";
+  workbook.creator = "Hongthong Cash & Carry";
   workbook.created = new Date();
 
   for (const prepared of sheets) {

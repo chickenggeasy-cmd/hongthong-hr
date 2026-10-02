@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { LogOut } from "lucide-react";
 import { logout } from "@/lib/auth/actions";
-import { navForRole, roleLabel } from "@/lib/permissions";
+import { navForRole, portalLabel, roleLabel } from "@/lib/permissions";
 import type { CurrentEmployee } from "@/lib/auth/current-user";
 import { NavLinks } from "./nav-links";
 
@@ -16,8 +16,8 @@ export function AppHeader({ employee }: { employee: CurrentEmployee }) {
         <Link href="/" className="flex items-center gap-2.5">
           <Image src="/brand/logo.webp" alt="หงส์ทอง" width={44} height={44} priority className="h-11 w-11 rounded-full ring-2 ring-[#D4A017]/40" />
           <div className="leading-tight">
-            <p className="font-bold text-[#1E5FA8]">หงส์ทอง HR</p>
-            <p className="text-[11px] tracking-wide text-[#5B6B7B]">CASH &amp; CARRY</p>
+            <p className="font-bold text-[#1E5FA8]">หงส์ทอง</p>
+            <p className="text-[11px] text-[#5B6B7B]">{portalLabel(employee.role)}</p>
           </div>
         </Link>
 

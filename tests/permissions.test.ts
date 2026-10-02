@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { NAV_ITEMS, can, isApproverRole, navForRole, type Permission } from "../src/lib/permissions";
+import { NAV_ITEMS, can, isApproverRole, navForRole, portalLabel, type Permission } from "../src/lib/permissions";
 
 const ALL: Permission[] = [
   "team.view",
@@ -68,5 +68,12 @@ describe("isApproverRole", () => {
     expect(["executive", "finance", "hr"].every(isApproverRole)).toBe(true);
     expect(isApproverRole("head")).toBe(false);
     expect(isApproverRole("employee")).toBe(false);
+  });
+});
+describe("portalLabel", () => {
+  it("หลังล็อกอินแต่ละบทบาทเห็นชื่อพื้นที่ของตัวเอง", () => {
+    expect(portalLabel("employee")).toBe("พื้นที่พนักงาน");
+    expect(portalLabel("hr")).toBe("ฝ่ายบุคคล (HR)");
+    expect(portalLabel("unknown")).toBe("ระบบพนักงาน");
   });
 });

@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: { default: "หงส์ทอง HR", template: "%s · หงส์ทอง HR" },
+  title: { default: "หงส์ทอง · ระบบพนักงาน", template: "%s · หงส์ทอง" },
   description: "ระบบลงเวลา ลา OT และเงินเดือนพนักงาน บริษัท หงส์ทอง จำกัด",
 };
 
