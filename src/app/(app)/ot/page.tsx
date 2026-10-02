@@ -8,6 +8,9 @@ import { PageHeader } from "@/components/features/page-header";
 import { EmptyState } from "@/components/features/empty-state";
 import { OtRequestForm } from "./ot-request-form";
 import { CardHeading } from "@/components/features/card-heading";
+import { CancelRequestButton } from "@/components/features/cancel-request-button";
+import { canCancelRequest } from "@/lib/leave/logic";
+import { cancelOtRequest } from "../requests-cancel";
 
 export default async function OtPage() {
   // ทุกคนที่ล็อกอินขอ OT ได้ จึงไม่ต้อง requirePermission()
@@ -78,6 +81,11 @@ export default async function OtPage() {
                     </div>
                     {request.reason ? <p className="text-[#5B6B7B]">งาน: {request.reason}</p> : null}
                     {request.decision_note ? <p className="text-[#5B6B7B]">หมายเหตุผู้อนุมัติ: {request.decision_note}</p> : null}
+                    {canCancelRequest(request.status) ? (
+                      <div className="mt-1 flex justify-end">
+                        <CancelRequestButton requestId={request.id} action={cancelOtRequest} label="คำขอ OT" />
+                      </div>
+                    ) : null}
                   </div>
                 </li>
               ))}

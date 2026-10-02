@@ -7,7 +7,7 @@ export function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // ทำงานกับทุกหน้ายกเว้นไฟล์ static และรูปภาพ ป้องกันการเช็ค session โดยไม่จำเป็น
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    // ทำงานกับทุกหน้ายกเว้นไฟล์ static รูปภาพ และ manifest (ต้องโหลดได้ก่อนล็อกอิน เพื่อให้ติดตั้งเป็นแอปได้)
+    "/((?!_next/static|_next/image|favicon.ico|manifest.webmanifest|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };

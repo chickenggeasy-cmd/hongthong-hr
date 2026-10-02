@@ -14,7 +14,7 @@ import { dbErrorMessage, GENERIC_ERROR } from "../approvals/logic";
 // แก้กติกาที่ไหน ต้องแก้อีกฝั่งให้ตรงกันด้วย
 
 export type LeaveType = "sick" | "personal" | "vacation";
-export type LeaveStatus = "pending" | "approved" | "rejected";
+export type LeaveStatus = "pending" | "approved" | "rejected" | "cancelled";
 
 export const LEAVE_TYPES: readonly LeaveType[] = ["sick", "personal", "vacation"];
 
@@ -28,7 +28,13 @@ export const LEAVE_STATUS_LABEL_TH: Record<LeaveStatus, string> = {
   pending: "รออนุมัติ",
   approved: "อนุมัติแล้ว",
   rejected: "ไม่อนุมัติ",
+  cancelled: "ยกเลิกแล้ว",
 };
+
+/** ผู้ยื่นยกเลิกคำขอ (ลา/OT) ของตัวเองได้เฉพาะตอนที่ยังรออนุมัติ — ฐานข้อมูลตรวจซ้ำใน cancel_*_request() */
+export function canCancelRequest(status: string): boolean {
+  return status === "pending";
+}
 
 export const MAX_REASON_LENGTH = 500;
 // กันช่วงวันที่ยาวผิดปกติ (ไม่ใช่กติกาธุรกิจ) ต้องตรงกับ request_leave()

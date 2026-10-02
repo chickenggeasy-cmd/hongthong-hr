@@ -13,6 +13,7 @@ import {
   isValidThaiNationalId,
   normalizeNationalId,
 } from "@/lib/auth/national-id";
+import { recordAudit } from "@/lib/audit/record";
 
 export type RegisterEmployeeState = {
   error: string | null;
@@ -88,6 +89,7 @@ export async function registerEmployee(
     return { error: "ลงทะเบียนไม่สำเร็จ กรุณาลองใหม่", success: false };
   }
 
+  await recordAudit(actor.id, "employee.register", employeeCode, { name: fullName, dept: deptCode });
   revalidatePath("/employees");
   return { error: null, success: true, employeeCode };
 }
@@ -114,6 +116,7 @@ export async function updateEmployee(_prev: EmployeeActionState, formData: FormD
   });
   if (error) return { error: employeeErrorMessage(error.message), success: false };
 
+  await recordAudit(actor.id, "employee.update", employeeId, { name: fullName.trim(), dept: deptCode });
   revalidatePath("/employees");
   return { error: null, success: true, message: "บันทึกแล้ว" };
 }
@@ -140,6 +143,7 @@ export async function setEmployeeStatus(_prev: EmployeeActionState, formData: Fo
   );
   if (error) return { error: employeeErrorMessage(error.message), success: false };
 
+  await recordAudit(actor.id, resign ? "employee.resign" : "employee.reinstate", employeeId, resign ? { last_day: resignedOn } : {});
   revalidatePath("/employees");
   revalidatePath("/team");
   return { error: null, success: true, message: resign ? "บันทึกลาออกแล้ว" : "กลับเข้าทำงานแล้ว" };

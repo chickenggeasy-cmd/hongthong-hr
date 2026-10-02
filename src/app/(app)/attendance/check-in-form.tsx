@@ -3,6 +3,7 @@
 import { useActionState, useEffect, useRef, useState } from "react";
 import { checkInOrOut, type CheckInState } from "./actions";
 import type { AttendanceType } from "@/lib/attendance/logic";
+import { compressPhoto } from "@/lib/attendance/compress-photo";
 
 const initialState: CheckInState = { error: null, success: false };
 
@@ -86,9 +87,12 @@ export function CheckInForm({ nextType }: { nextType: AttendanceType }) {
           type="file"
           accept="image/jpeg,image/png,image/webp"
           capture="user"
-          onChange={(event) => {
-            const file = event.target.files?.[0];
-            if (file) setPhoto({ file, previewUrl: URL.createObjectURL(file) });
+          onChange={async (event) => {
+            const original = event.target.files?.[0];
+            if (!original) return;
+            // ย่อรูปก่อนเก็บ ส่งเร็วขึ้นและไม่ติดขนาดสูงสุดของเซิร์ฟเวอร์
+            const file = await compressPhoto(original);
+            setPhoto({ file, previewUrl: URL.createObjectURL(file) });
           }}
           className="sr-only"
         />

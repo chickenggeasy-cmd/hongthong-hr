@@ -45,6 +45,7 @@ export async function GET(request: NextRequest) {
         { header: "หักมาสาย", value: (r) => Number(r.late_deduction), numFmt: MONEY_FORMAT },
         { header: "หักลาเกินโควตา", value: (r) => Number(r.leave_penalty), numFmt: MONEY_FORMAT },
         { header: "ประกันสังคม", value: (r) => Number(r.social_security), numFmt: MONEY_FORMAT },
+        { header: "ภาษีหัก ณ ที่จ่าย", value: (r) => Number(r.withholding_tax), numFmt: MONEY_FORMAT },
         { header: "รับสุทธิ", value: (r) => Number(r.net_pay), numFmt: MONEY_FORMAT },
       ],
     }),

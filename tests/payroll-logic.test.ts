@@ -28,6 +28,7 @@ const settings: PayrollSettings = {
   overQuotaDeduction: 250,
   socialSecurityRatePercent: 5,
   socialSecurityMaxAmount: 750,
+  withholdingTaxPercent: 0,
   cutoffDay: 25,
 };
 const holidays = new Set(["2026-10-13", "2026-10-23"]);
@@ -99,6 +100,17 @@ describe("computePayslip", () => {
     // ประกันสังคม 5% ของ 13,750 = 687.5 → ปัดเป็น 688
     expect(result.socialSecurity).toBe(688);
     expect(result.netPay).toBe(13750 - 688);
+  });
+
+  it("ไม่ได้ตั้งภาษี: ไม่หักภาษีหัก ณ ที่จ่าย", () => {
+    expect(computePayslip(input()).withholdingTax).toBe(0);
+  });
+
+  it("ตั้งภาษี 3%: หักจากฐานเดียวกับประกันสังคม ปัดเป็นบาท แล้วหักออกจากยอดสุทธิ", () => {
+    const result = computePayslip({ ...input(), settings: { ...settings, withholdingTaxPercent: 3 } });
+    // 3% ของ 13,750 = 412.5 → 413
+    expect(result.withholdingTax).toBe(413);
+    expect(result.netPay).toBe(13750 - 688 - 413);
   });
 
   it("มาสาย: นับเป็นนาทีเต็ม เริ่มนับนาทีที่ 1 หลังเวลาเข้างาน", () => {
@@ -245,5 +257,25 @@ describe("overQuotaLeaveDates", () => {
       holidays,
     );
     expect(result.size).toBe(0);
+  });
+});
+
+describe("ภาษีหัก ณ ที่จ่าย", () => {
+  it("อ่านค่าจาก app_settings ไม่มีค่า = 0 (ไม่หัก) และจำกัด 0–100", () => {
+    const base = {
+      "wage.daily_rate": "550",
+      "wage.late_deduction_per_minute": "2.5",
+      "ot.hourly_rate": "150",
+      "work.start_time": "09:00",
+      "work.end_time": "17:00",
+      "leave.monthly_quota_days": "4",
+      "leave.over_quota_deduction": "250",
+      "social_security.rate_percent": "5",
+      "social_security.max_amount": "750",
+      "payroll.cutoff_day": "25",
+    };
+    expect(readPayrollSettings(base)?.withholdingTaxPercent).toBe(0);
+    expect(readPayrollSettings({ ...base, "tax.withholding_percent": "3" })?.withholdingTaxPercent).toBe(3);
+    expect(readPayrollSettings({ ...base, "tax.withholding_percent": "-5" })?.withholdingTaxPercent).toBe(0);
   });
 });

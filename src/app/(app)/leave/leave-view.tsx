@@ -2,9 +2,11 @@ import { CalendarClock, History, UsersRound } from "lucide-react";
 import { Sticker, type StickerName } from "@/components/brand/sticker";
 import { formatThaiDate } from "@/lib/date";
 import { EmptyState } from "@/components/features/empty-state";
-import { leaveTypeLabel } from "@/lib/leave/logic";
+import { canCancelRequest, leaveTypeLabel } from "@/lib/leave/logic";
 import type { TeamLeave } from "@/lib/leave/team";
 import { ExceedsQuotaBadge, LeaveStatusBadge } from "@/components/features/leave-status-badge";
+import { CancelRequestButton } from "@/components/features/cancel-request-button";
+import { cancelLeaveRequest } from "../requests-cancel";
 
 // ชิ้นส่วนหน้าตาของหน้าลา (รับข้อมูลที่โหลดแล้ว ไม่ยิงฐานข้อมูลเอง)
 
@@ -86,6 +88,11 @@ export function MyLeaveList({ requests }: { requests: MyLeave[] }) {
                     </span>
                   </div>
                   <p className="text-[#5B6B7B]">{dateRange(r.start_date, r.end_date)}</p>
+                  {canCancelRequest(r.status) ? (
+                    <div className="mt-1 flex justify-end">
+                      <CancelRequestButton requestId={r.id} action={cancelLeaveRequest} label="คำขอลา" />
+                    </div>
+                  ) : null}
                   {r.reason ? <p className="text-[#5B6B7B]">เหตุผล: {r.reason}</p> : null}
                   {r.decision_note ? <p className="text-[#5B6B7B]">หมายเหตุผู้อนุมัติ: {r.decision_note}</p> : null}
                 </div>

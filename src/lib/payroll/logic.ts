@@ -23,6 +23,8 @@ export type PayrollSettings = {
   overQuotaDeduction: number;
   socialSecurityRatePercent: number;
   socialSecurityMaxAmount: number;
+  /** ภาษีหัก ณ ที่จ่าย (% ของค่าจ้าง + OT − หักมาสาย) 0 = ไม่หัก */
+  withholdingTaxPercent: number;
   cutoffDay: number;
 };
 
@@ -41,7 +43,9 @@ export function readPayrollSettings(settings: SettingsRecord): PayrollSettings |
     cutoffDay: numberSetting(settings, "payroll.cutoff_day"),
   };
   if (Object.values(values).some((v) => v === null)) return null;
-  return values as PayrollSettings;
+  // ภาษีเพิ่มทีหลัง: ฐานข้อมูลที่ยังไม่มีค่านี้ = ไม่หัก (ไม่ทำให้คำนวณเงินเดือนไม่ได้)
+  const taxPercent = numberSetting(settings, "tax.withholding_percent") ?? 0;
+  return { ...(values as Omit<PayrollSettings, "withholdingTaxPercent">), withholdingTaxPercent: Math.min(Math.max(taxPercent, 0), 100) };
 }
 
 // ---------- รอบเงินเดือน ----------
@@ -116,6 +120,7 @@ export type PayslipComputation = {
   lateDeduction: number;
   leavePenalty: number;
   socialSecurity: number;
+  withholdingTax: number;
   netPay: number;
   days: PayslipDay[];
 };
@@ -261,7 +266,9 @@ export function computePayslip(input: PayslipInput): PayslipComputation {
     Math.round((insurable * settings.socialSecurityRatePercent) / 100 / 100) * 100, // ปัดเป็นบาทเต็ม
     toSatang(settings.socialSecurityMaxAmount),
   );
-  const netPay = Math.max(0, basePay + otPay - totals.lateDeductionSatang - leavePenalty - socialSecurity);
+  // ภาษีหัก ณ ที่จ่ายแบบอัตราคงที่ ฐานเดียวกับประกันสังคม ปัดเป็นบาทเต็ม
+  const withholdingTax = Math.round((insurable * settings.withholdingTaxPercent) / 100 / 100) * 100;
+  const netPay = Math.max(0, basePay + otPay - totals.lateDeductionSatang - leavePenalty - socialSecurity - withholdingTax);
 
   return {
     workingDays: totals.workingDays,
@@ -279,6 +286,7 @@ export function computePayslip(input: PayslipInput): PayslipComputation {
     lateDeduction: toBaht(totals.lateDeductionSatang),
     leavePenalty: toBaht(leavePenalty),
     socialSecurity: toBaht(socialSecurity),
+    withholdingTax: toBaht(withholdingTax),
     netPay: toBaht(netPay),
     days,
   };

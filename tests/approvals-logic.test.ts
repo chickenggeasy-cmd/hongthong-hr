@@ -47,3 +47,9 @@ describe("dbErrorMessage", () => {
     expect(dbErrorMessage(null, {})).toBe(GENERIC_ERROR);
   });
 });
+
+describe("ข้อความยกเลิกคำขอ", () => {
+  it("แปลรหัส request.not_cancellable เป็นไทย ไม่บอกว่าคำขอของคนอื่นมีจริงหรือไม่", () => {
+    expect(dbErrorMessage("request.not_cancellable", {})).toBe("ยกเลิกไม่ได้ คำขอนี้ถูกพิจารณาไปแล้ว หรือไม่ใช่คำขอของคุณ");
+  });
+});

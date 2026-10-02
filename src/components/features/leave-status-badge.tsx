@@ -4,6 +4,7 @@ const STATUS_CLASS: Record<string, string> = {
   pending: "bg-[#E8890C]/10 text-[#E8890C]",
   approved: "bg-[#2E9E5B]/10 text-[#2E9E5B]",
   rejected: "bg-[#D64545]/10 text-[#D64545]",
+  cancelled: "bg-[#5B6B7B]/10 text-[#5B6B7B] line-through decoration-[#5B6B7B]/40",
 };
 
 export function LeaveStatusBadge({ status }: { status: string }) {
