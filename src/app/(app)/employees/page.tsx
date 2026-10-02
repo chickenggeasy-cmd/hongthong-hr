@@ -38,11 +38,11 @@ export default async function EmployeesPage() {
     <div className="space-y-6">
       <PageHeader icon={Users} sticker="people" title="จัดการพนักงาน" description="ลงทะเบียน แก้ไขข้อมูล ย้ายแผนก และบันทึกลาออก">
         <div className="flex gap-2">
-          <span className="rounded-2xl bg-[#EAF3FC] px-4 py-2 text-center">
+          <span className="ht-stat text-center">
             <span className="block text-2xl font-bold text-[#1E5FA8]">{activeCount}</span>
             <span className="text-xs text-[#5B6B7B]">ทำงานอยู่</span>
           </span>
-          <span className="rounded-2xl bg-[#5B6B7B]/10 px-4 py-2 text-center">
+          <span className="ht-stat text-center">
             <span className="block text-2xl font-bold text-[#5B6B7B]">{list.length - activeCount}</span>
             <span className="text-xs text-[#5B6B7B]">ลาออกแล้ว</span>
           </span>

@@ -16,7 +16,7 @@ const FEATURES: { sticker: StickerName; text: string }[] = [
 ];
 
 const inputClass =
-  "w-full rounded-xl border border-[#5B6B7B]/25 bg-white px-4 py-3 text-[#1A1A1A] outline-none transition-shadow focus:border-[#1E5FA8] focus:ring-4 focus:ring-[#1E5FA8]/15";
+  "w-full ht-input py-3";
 
 export default function LoginPage() {
   const [state, formAction, pending] = useActionState(login, initialState);
@@ -147,7 +147,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={pending}
-                className="group relative w-full overflow-hidden rounded-xl bg-gradient-to-r from-[#1E5FA8] to-[#164A85] py-3 font-bold text-white shadow-lg shadow-[#1E5FA8]/25 transition-all hover:-translate-y-0.5 hover:shadow-xl disabled:translate-y-0 disabled:opacity-60"
+                className="group relative w-full overflow-hidden ht-btn-primary py-3"
               >
                 <span className="ht-shine" aria-hidden />
                 {pending ? "กำลังเข้าสู่ระบบ..." : "เข้าสู่ระบบ"}

@@ -1,8 +1,12 @@
 import type { ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
+import { DotPattern } from "@/components/brand/illustrations";
 import { Sticker, type StickerName } from "@/components/brand/sticker";
 
-/** หัวหน้าเพจแบบเดียวกันทุกหน้า (ไอคอน + ชื่อ + คำอธิบาย + ภาพ 3D ลอยได้ + ปุ่ม/ข้อมูลด้านขวา) */
+/**
+ * หัวเพจแบบเดียวกันทุกหน้า: แบนเนอร์น้ำเงินไล่เฉด + ไอคอน + ชื่อหน้า + คำอธิบาย + ภาพ 3D
+ * children = ตัวเลขสรุปด้านขวา (ใช้คลาส ht-stat ให้เป็นการ์ดขาวบนแบนเนอร์)
+ */
 export function PageHeader({
   icon: Icon,
   title,
@@ -17,35 +21,37 @@ export function PageHeader({
   children?: ReactNode;
 }) {
   return (
-    <div className="ht-rise relative overflow-hidden rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
-      <div className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-[#D4A017] to-[#F0C75E]" aria-hidden />
-      {/* แสงฟุ้งด้านขวา ให้ภาพ 3D ดูมีมิติ */}
-      <div className="ht-blob absolute -right-16 -top-20 h-56 w-56 rounded-full bg-[#5BA4E6]/15 blur-3xl" aria-hidden />
-      <div className="absolute -bottom-24 right-32 h-40 w-40 rounded-full bg-[#F0C75E]/15 blur-3xl" aria-hidden />
+    <section className="ht-rise relative overflow-hidden rounded-[1.75rem] bg-gradient-to-br from-[#1E5FA8] via-[#174D8C] to-[#0F2D52] text-white shadow-[0_24px_48px_-24px_rgb(15_45_82/0.65)]">
+      <DotPattern className="absolute inset-0 h-full w-full text-white/[0.06]" />
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#F0C75E]/80 to-transparent" aria-hidden />
+      <div className="ht-blob pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-[#5BA4E6]/30 blur-3xl" aria-hidden />
+      <div className="pointer-events-none absolute -bottom-28 left-1/4 h-56 w-56 rounded-full bg-[#D4A017]/15 blur-3xl" aria-hidden />
 
-      <div className="relative flex flex-wrap items-center justify-between gap-4">
+      <div className="relative flex flex-col gap-5 px-5 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-8 sm:py-7">
         <div className="flex min-w-0 items-center gap-4">
-          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[#1E5FA8] to-[#164A85] text-white shadow-md shadow-[#1E5FA8]/20">
-            <Icon className="h-6 w-6" aria-hidden />
+          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/[0.12] ring-1 ring-white/20 sm:h-14 sm:w-14">
+            <Icon className="h-6 w-6 sm:h-7 sm:w-7" aria-hidden />
           </span>
           <div className="min-w-0">
-            <h1 className="text-xl font-bold text-[#1A1A1A] sm:text-2xl">{title}</h1>
-            {description ? <p className="mt-0.5 text-sm text-[#5B6B7B]">{description}</p> : null}
+            <h1 className="text-2xl font-bold tracking-tight sm:text-[1.75rem]">{title}</h1>
+            {description ? <p className="mt-1 text-sm leading-relaxed text-white/75">{description}</p> : null}
           </div>
         </div>
-        <div className="flex flex-wrap items-center gap-4">
-          {children}
-          {sticker ? (
-            <span className="relative hidden h-20 w-20 shrink-0 sm:block" aria-hidden>
-              <span className="absolute inset-2 rounded-full bg-gradient-to-br from-[#EAF3FC] to-[#FFF8E5]" />
-              <span className="ht-float-slow relative block">
-                <Sticker name={sticker} size={80} priority className="ht-pop" />
+
+        {children || sticker ? (
+          <div className="flex shrink-0 items-center justify-between gap-4 sm:justify-end">
+            {children ? <div className="flex flex-wrap items-center gap-2">{children}</div> : <span />}
+            {sticker ? (
+              <span className="relative hidden h-24 w-24 shrink-0 md:block" aria-hidden>
+                <span className="absolute inset-1 rounded-full bg-white/10 ring-1 ring-white/15" />
+                <span className="ht-float-slow relative block">
+                  <Sticker name={sticker} size={96} priority className="ht-pop" />
+                </span>
               </span>
-              <Sticker name="sparkles" size={24} className="ht-float absolute -right-2 -top-1" style={{ animationDelay: "0.8s" }} />
-            </span>
-          ) : null}
-        </div>
+            ) : null}
+          </div>
+        ) : null}
       </div>
-    </div>
+    </section>
   );
 }

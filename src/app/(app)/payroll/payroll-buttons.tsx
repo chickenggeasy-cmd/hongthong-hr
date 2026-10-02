@@ -45,7 +45,7 @@ export function PayrollButtons({
           <button
             type="submit"
             disabled={computing || !canCompute}
-            className="rounded-lg bg-[#1E5FA8] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#1E5FA8]/90 disabled:opacity-50"
+            className="ht-btn-primary px-4 py-2 text-sm"
           >
             {computing ? "กำลังคำนวณ..." : hasRun ? "คำนวณใหม่" : "คำนวณเงินเดือน"}
           </button>

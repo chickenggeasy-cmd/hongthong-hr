@@ -48,7 +48,7 @@ export default async function PayslipListPage() {
             >
               <Link
                 href={`/payslip/${p.id}`}
-                className="group flex items-center justify-between rounded-3xl border border-[#1E5FA8]/5 bg-white p-5 shadow-sm ht-lift hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#1E5FA8]/10"
+                className="group flex items-center justify-between ht-card p-5 ht-lift hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#1E5FA8]/10"
               >
                 <div className="flex items-center gap-4">
                   <Sticker

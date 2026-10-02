@@ -53,7 +53,7 @@ export default async function PayrollPage({ searchParams }: PageProps<"/payroll"
   return (
     <div className="space-y-6">
       <PageHeader icon={Wallet} sticker="money-bag" title="เงินเดือน" description={canManage ? "คำนวณ ปิดงวด และดูสลิปของพนักงานทุกคน" : "ดูสรุปเงินเดือนและสลิปของพนักงานทุกคน"} />
-      <div className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
+      <div className="ht-card p-6">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <h2 className="text-lg font-semibold text-[#1A1A1A]">งวด {periodLabel(period)}</h2>
@@ -113,7 +113,7 @@ export default async function PayrollPage({ searchParams }: PageProps<"/payroll"
             ))}
           </div>
 
-          <div className="overflow-x-auto rounded-3xl border border-[#1E5FA8]/5 bg-white shadow-sm">
+          <div className="overflow-x-auto ht-card">
             <table className="w-full min-w-[44rem] text-sm">
               <thead className="bg-[#EAF3FC] text-left text-[#5B6B7B]">
                 <tr>

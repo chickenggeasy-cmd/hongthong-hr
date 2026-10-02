@@ -16,7 +16,7 @@ export function RegisterForm({ departments }: { departments: { code: string; nam
         await formAction(formData);
         formRef.current?.reset();
       }}
-      className="space-y-4 rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm"
+      className="space-y-4 ht-card p-6"
     >
       <h2 className="font-semibold text-[#1A1A1A]">ลงทะเบียนพนักงานใหม่</h2>
 
@@ -86,7 +86,7 @@ export function RegisterForm({ departments }: { departments: { code: string; nam
       <button
         type="submit"
         disabled={pending}
-        className="w-full rounded-lg bg-[#1E5FA8] py-2.5 font-medium text-white transition-colors hover:bg-[#1E5FA8]/90 disabled:opacity-50"
+        className="w-full ht-btn-primary py-2.5"
       >
         {pending ? "กำลังลงทะเบียน..." : "ลงทะเบียน"}
       </button>

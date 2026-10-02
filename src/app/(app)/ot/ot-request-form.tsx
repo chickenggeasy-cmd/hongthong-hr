@@ -8,7 +8,7 @@ import type { DateOnly } from "@/lib/date";
 const initialState: OtRequestState = { error: null, success: false };
 
 const inputClass =
-  "w-full rounded-lg border border-[#5B6B7B]/30 px-3 py-2 text-[#1A1A1A] outline-none focus:border-[#1E5FA8] focus:ring-2 focus:ring-[#1E5FA8]/20";
+  "w-full ht-input";
 
 export function OtRequestForm({
   today,
@@ -38,7 +38,7 @@ export function OtRequestForm({
   }
 
   return (
-    <form action={formAction} className="space-y-4 rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
+    <form action={formAction} className="space-y-4 ht-card p-6">
       <div>
         <h2 className="text-lg font-semibold text-[#1A1A1A]">ยื่นคำขอ OT</h2>
         <p className="mt-1 text-sm text-[#5B6B7B]">
@@ -111,7 +111,7 @@ export function OtRequestForm({
       <button
         type="submit"
         disabled={pending}
-        className="w-full rounded-2xl bg-gradient-to-r from-[#1E5FA8] to-[#164A85] py-3 font-bold text-white shadow-lg shadow-[#1E5FA8]/25 transition-all hover:-translate-y-0.5 hover:shadow-xl disabled:translate-y-0 disabled:opacity-50"
+        className="w-full ht-btn-primary py-3"
       >
         {pending ? "กำลังส่ง..." : "ยื่นคำขอ OT"}
       </button>

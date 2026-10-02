@@ -137,16 +137,16 @@ export default async function ApprovalsPage({ searchParams }: PageProps<"/approv
     <div className="space-y-6">
       <PageHeader icon={CheckCheck} sticker="check" title="อนุมัติคำขอลาและ OT" description={description}>
         <div className="flex gap-2">
-          <span className="rounded-2xl bg-[#EAF3FC] px-4 py-2 text-center">
+          <span className="ht-stat text-center">
             <span className="block text-2xl font-bold text-[#1E5FA8]">{decidable}</span>
             <span className="text-xs text-[#5B6B7B]">คุณอนุมัติได้</span>
           </span>
-          <span className="rounded-2xl bg-[#5B6B7B]/10 px-4 py-2 text-center">
+          <span className="ht-stat text-center">
             <span className="block text-2xl font-bold text-[#1A1A1A]">{cards.length}</span>
             <span className="text-xs text-[#5B6B7B]">รอทั้งหมด</span>
           </span>
           {view === "finance" ? (
-            <span className="rounded-2xl bg-[#D64545]/10 px-4 py-2 text-center">
+            <span className="ht-stat text-center">
               <span className="block text-2xl font-bold text-[#D64545]">{overQuota}</span>
               <span className="text-xs text-[#5B6B7B]">เกินโควตา</span>
             </span>
@@ -221,7 +221,7 @@ export default async function ApprovalsPage({ searchParams }: PageProps<"/approv
           })()
         : null}
 
-      <section className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
+      <section className="ht-card p-6">
         <h2 className="mb-3 flex items-center gap-2 font-bold text-[#1A1A1A]">
           <span className="h-5 w-1 rounded-full bg-[#D4A017]" aria-hidden />
           พิจารณาล่าสุด

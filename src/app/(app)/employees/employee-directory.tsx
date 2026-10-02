@@ -20,7 +20,7 @@ export type DirectoryEmployee = {
 const initialState: EmployeeActionState = { error: null, success: false };
 
 const inputClass =
-  "w-full rounded-xl border border-[#5B6B7B]/25 bg-white px-3 py-2 text-sm text-[#1A1A1A] outline-none focus:border-[#1E5FA8] focus:ring-4 focus:ring-[#1E5FA8]/15";
+  "w-full ht-input text-sm";
 
 function Message({ state }: { state: EmployeeActionState }) {
   if (state.error) return <p role="alert" className="text-sm text-[#D64545]">{state.error}</p>;
@@ -60,7 +60,7 @@ function EditPanel({
         <button
           type="submit"
           disabled={editing}
-          className="rounded-xl bg-[#1E5FA8] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#1E5FA8]/90 disabled:opacity-50"
+          className="ht-btn-primary px-4 py-2 text-sm"
         >
           {editing ? "กำลังบันทึก..." : "บันทึก"}
         </button>
@@ -134,7 +134,7 @@ export function EmployeeDirectory({
   };
 
   return (
-    <section className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-5 shadow-sm">
+    <section className="ht-card p-5">
       <div className="flex flex-wrap gap-2">
         <div className="relative min-w-48 flex-1">
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#5B6B7B]" aria-hidden />

@@ -58,7 +58,7 @@ export function CheckInForm({ nextType }: { nextType: AttendanceType }) {
   const canSubmit = coords !== null && !pending;
 
   return (
-    <form action={submit} className="space-y-4 rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
+    <form action={submit} className="space-y-4 ht-card p-6">
       <div>
         <p className="text-sm text-[#5B6B7B]">การดำเนินการถัดไป</p>
         <p className="text-lg font-semibold text-[#1A1A1A]">{label}</p>
@@ -129,7 +129,7 @@ export function CheckInForm({ nextType }: { nextType: AttendanceType }) {
       <button
         type="submit"
         disabled={!canSubmit}
-        className="w-full rounded-2xl bg-gradient-to-r from-[#1E5FA8] to-[#164A85] py-4 text-lg font-bold text-white shadow-lg shadow-[#1E5FA8]/25 transition-all hover:-translate-y-0.5 hover:shadow-xl disabled:translate-y-0 disabled:opacity-50"
+        className="w-full ht-btn-primary py-4 text-lg"
       >
         {pending ? "กำลังบันทึก..." : label}
       </button>

@@ -41,7 +41,7 @@ export default async function AdminPage() {
 
       <SettingsForm groups={groups} values={values} />
 
-      <section className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
+      <section className="ht-card p-6">
         <h2 className="mb-1 font-semibold text-[#1A1A1A]">วันหยุดนักขัตฤกษ์</h2>
         <p className="mb-4 text-sm text-[#5B6B7B]">
           ไม่นับเป็นวันลา ขอ OT ไม่ได้ และได้รับค่าจ้างตามปกติแม้ไม่ได้มาทำงาน

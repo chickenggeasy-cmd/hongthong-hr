@@ -30,7 +30,7 @@ export default async function OtPage() {
   const workEndTime = timeSetting(settings, "work.end_time");
   if (maxHoursPerDay === null || workEndTime === null) {
     return (
-      <div className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
+      <div className="ht-card p-6">
         <p className="text-[#D64545]">ระบบยังไม่ได้ตั้งค่ากติกา OT กรุณาติดต่อ HR</p>
       </div>
     );
@@ -44,7 +44,7 @@ export default async function OtPage() {
   return (
     <div className="space-y-6">
       <PageHeader icon={Timer} sticker="stopwatch" title="ขอทำ OT" description={`ต้องขอล่วงหน้าก่อน ${workEndTime} น. ของวันนั้น · จ่ายเฉพาะชั่วโมงเต็มที่ทำจริง`}>
-        <span className="rounded-2xl bg-[#EAF3FC] px-4 py-2 text-center">
+        <span className="ht-stat text-center">
           <span className="block text-2xl font-bold text-[#1E5FA8]">{approvedHours} ชม.</span>
           <span className="text-xs text-[#5B6B7B]">OT ที่อนุมัติเดือนนี้</span>
         </span>
@@ -58,7 +58,7 @@ export default async function OtPage() {
           hourlyRate={numberSetting(settings, "ot.hourly_rate")}
         />
 
-        <section className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
+        <section className="ht-card p-6">
           <h2 className="mb-3 font-bold text-[#1A1A1A]">คำขอ OT ของฉัน</h2>
           {!requests || requests.length === 0 ? (
             <EmptyState sticker="stopwatch">ยังไม่มีคำขอ OT</EmptyState>

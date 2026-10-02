@@ -12,7 +12,7 @@ import { MAX_WARNING_REASON_LENGTH } from "@/lib/warnings/logic";
 const initialState: WarningActionState = { error: null, success: false };
 
 const inputClass =
-  "w-full rounded-lg border border-[#5B6B7B]/30 px-3 py-2 text-[#1A1A1A] outline-none focus:border-[#1E5FA8] focus:ring-2 focus:ring-[#1E5FA8]/20";
+  "w-full ht-input";
 
 function Message({ state }: { state: WarningActionState }) {
   if (state.error) {
@@ -47,7 +47,7 @@ export function GenerateWarningsForm({ periods }: { periods: { value: string; la
         <button
           type="submit"
           disabled={pending || periods.length === 0}
-          className="rounded-lg bg-[#1E5FA8] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#1E5FA8]/90 disabled:opacity-50"
+          className="ht-btn-primary px-4 py-2 text-sm"
         >
           {pending ? "กำลังตรวจ..." : "ตรวจและออกใบเตือนอัตโนมัติ"}
         </button>

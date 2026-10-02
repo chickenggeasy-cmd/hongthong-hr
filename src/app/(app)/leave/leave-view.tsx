@@ -58,7 +58,7 @@ export type MyLeave = {
 
 export function MyLeaveList({ requests }: { requests: MyLeave[] }) {
   return (
-    <section className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
+    <section className="ht-card p-6">
       <h2 className="mb-3 flex items-center gap-2 font-bold text-[#1A1A1A]">
         <History className="h-5 w-5 text-[#1E5FA8]" aria-hidden />
         คำขอลาของฉัน
@@ -117,7 +117,7 @@ function TeamRow({ leave }: { leave: TeamLeaveRow }) {
 /** หัวหน้าแผนก: การลาของลูกทีม (อ่านอย่างเดียว) */
 export function TeamLeaveCard({ today, upcoming }: { today: TeamLeaveRow[]; upcoming: TeamLeaveRow[] }) {
   return (
-    <section className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
+    <section className="ht-card p-6">
       <h2 className="flex items-center gap-2 font-bold text-[#1A1A1A]">
         <UsersRound className="h-5 w-5 text-[#1E5FA8]" aria-hidden />
         ทีมของฉัน

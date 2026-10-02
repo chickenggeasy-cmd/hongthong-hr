@@ -37,14 +37,14 @@ export default async function WarningsPage() {
     <div className="space-y-6">
       <PageHeader icon={TriangleAlert} sticker="warning" title="ใบเตือน" description="ออกอัตโนมัติจากผลคำนวณเงินเดือน หรือออกเองตามดุลยพินิจ พนักงานกดรับทราบที่หน้าแรก" />
       <div className="grid gap-4 sm:grid-cols-2">
-        <section className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
+        <section className="ht-card p-6">
           <h2 className="mb-1 font-semibold text-[#1A1A1A]">ใบเตือนอัตโนมัติ</h2>
           <p className="mb-4 text-sm text-[#5B6B7B]">
             ตรวจจากผลคำนวณเงินเดือนของงวด (มาสาย/ขาดงานถึงเกณฑ์ในหน้าตั้งค่า) กดซ้ำได้ ไม่ออกซ้ำ
           </p>
           <GenerateWarningsForm periods={(runs ?? []).map((r) => ({ value: r.period, label: periodLabel(r.period) }))} />
         </section>
-        <section className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
+        <section className="ht-card p-6">
           <h2 className="mb-4 font-semibold text-[#1A1A1A]">ออกใบเตือนเอง</h2>
           <IssueWarningForm
             employees={(employees ?? [])
@@ -54,7 +54,7 @@ export default async function WarningsPage() {
         </section>
       </div>
 
-      <section className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
+      <section className="ht-card p-6">
         <h2 className="mb-3 font-semibold text-[#1A1A1A]">ใบเตือนล่าสุด</h2>
         {!warnings || warnings.length === 0 ? (
           <p className="text-sm text-[#5B6B7B]">ยังไม่มีใบเตือน</p>

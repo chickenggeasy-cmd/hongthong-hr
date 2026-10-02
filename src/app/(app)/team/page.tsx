@@ -39,7 +39,7 @@ export default async function TeamPage() {
       <div>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           {SUMMARY.map((item) => (
-            <div key={item.label} className="rounded-2xl border border-[#1E5FA8]/5 bg-white p-4 shadow-sm">
+            <div key={item.label} className="ht-card p-4">
               <p className="text-xs text-[#5B6B7B]">{item.label}</p>
               <p className={`text-2xl font-semibold ${item.className}`}>
                 {overview.members.filter((m) => item.status.includes(m.today.status)).length}
@@ -55,7 +55,7 @@ export default async function TeamPage() {
         </div>
       ) : (
         [...byDepartment.entries()].map(([department, members]) => (
-          <section key={department} className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
+          <section key={department} className="ht-card p-6">
             <h2 className="mb-2 font-semibold text-[#1A1A1A]">{department}</h2>
             <ul className="divide-y divide-[#5B6B7B]/10 text-sm">
               {members.map((m) => (

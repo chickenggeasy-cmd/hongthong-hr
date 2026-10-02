@@ -209,6 +209,97 @@
   animation: ht-shine 1.1s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+/* ---------- ชิ้นส่วนหน้าตาที่ใช้ร่วมกันทั้งเว็บ (ระบบดีไซน์) ----------
+   แนวทาง: เรียบ สะอาด มีมิติจากเงาหลายชั้นบางๆ ไม่ใช้ขอบหนา ระยะห่างสม่ำเสมอ */
+
+/* พื้นหลังของพื้นที่ทำงาน: ฟ้าอ่อนไล่แสง + จุดตารางจางๆ (อยู่กับที่ ไม่ขยับ จึงไม่กินแรงเครื่อง) */
+@utility ht-canvas {
+  background-color: #eef4fb;
+  background-image:
+    radial-gradient(1200px 600px at 100% -10%, rgb(30 95 168 / 0.10), transparent 60%),
+    radial-gradient(900px 500px at -10% 110%, rgb(212 160 23 / 0.08), transparent 60%),
+    radial-gradient(rgb(30 95 168 / 0.07) 1px, transparent 1px);
+  background-size: auto, auto, 22px 22px;
+  background-attachment: fixed;
+}
+
+/* การ์ดมาตรฐาน: ขอบไล่สีบางมาก + เงา 2 ชั้น (ชั้นใกล้คม ชั้นไกลนุ่ม) */
+@utility ht-card {
+  border: 1px solid transparent;
+  border-radius: 1.5rem;
+  background:
+    linear-gradient(#ffffff, #ffffff) padding-box,
+    linear-gradient(160deg, rgb(30 95 168 / 0.14), rgb(30 95 168 / 0.04) 45%, rgb(212 160 23 / 0.14)) border-box;
+  box-shadow:
+    0 1px 2px rgb(15 45 82 / 0.04),
+    0 12px 32px -12px rgb(15 45 82 / 0.14);
+}
+
+/* ตัวเลขสรุปบนแบนเนอร์หัวหน้า (พื้นขาวบนแบนเนอร์น้ำเงิน อ่านง่าย) */
+@utility ht-stat {
+  border-radius: 1rem;
+  background: #ffffff;
+  padding: 0.5rem 1rem;
+  box-shadow: 0 8px 20px -10px rgb(5 20 40 / 0.45);
+  min-width: 5.5rem;
+}
+
+/* ช่องกรอกข้อมูล */
+@utility ht-input {
+  border-radius: 0.875rem;
+  border: 1px solid rgb(91 107 123 / 0.22);
+  background-color: #f8fbfe;
+  padding: 0.625rem 0.875rem;
+  color: #1a1a1a;
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+  &:hover {
+    border-color: rgb(30 95 168 / 0.35);
+  }
+  &:focus {
+    border-color: #1e5fa8;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 4px rgb(30 95 168 / 0.12);
+  }
+}
+
+/* ปุ่มหลัก */
+@utility ht-btn-primary {
+  border-radius: 1rem;
+  background-image: linear-gradient(135deg, #2a6fbf, #1e5fa8 45%, #164a85);
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.18),
+    0 10px 24px -10px rgb(30 95 168 / 0.6);
+  transition:
+    translate 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.2s ease;
+  &:hover:not(:disabled) {
+    translate: 0 -2px;
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.18),
+      0 16px 32px -12px rgb(30 95 168 / 0.7);
+  }
+  &:active:not(:disabled) {
+    translate: 0 0;
+  }
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+/* แถบเลื่อนบางๆ ในเมนูด้านข้าง */
+@utility ht-scroll-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(255 255 255 / 0.15) transparent;
+}
+
 /* คนที่ตั้งค่าเครื่องให้ลดการเคลื่อนไหว (เวียนหัวง่าย) ไม่ต้องเห็นอนิเมชัน */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

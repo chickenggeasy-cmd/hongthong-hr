@@ -11,8 +11,8 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
   // ให้กดออกจากระบบเอง (signOut ผ่าน Server Action ทำได้ ต่างจาก redirect ระหว่าง render)
   if (!employee) {
     return (
-      <main className="flex min-h-dvh items-center justify-center bg-[#EAF3FC] px-4">
-        <div className="w-full max-w-sm rounded-2xl bg-white p-8 text-center shadow-sm">
+      <main className="ht-canvas flex min-h-dvh items-center justify-center px-4">
+        <div className="ht-card w-full max-w-sm p-8 text-center">
           <p className="text-[#1A1A1A]">บัญชีนี้ไม่สามารถใช้งานได้ในขณะนี้</p>
           <p className="mt-1 text-sm text-[#5B6B7B]">กรุณาติดต่อ HR หากคิดว่านี่คือความผิดพลาด</p>
           <form action={logout} className="mt-6">
@@ -29,9 +29,11 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
   }
 
   return (
-    <div className="min-h-dvh bg-[#EAF3FC]">
+    <div className="ht-canvas min-h-dvh lg:pl-72">
       <AppHeader employee={employee} />
-      <main className="mx-auto w-full max-w-5xl px-4 py-6">{children}</main>
+      <main className="mx-auto w-full max-w-6xl px-4 pb-[max(2rem,env(safe-area-inset-bottom))] pt-5 sm:px-6 lg:px-10 lg:pt-8">
+        {children}
+      </main>
     </div>
   );
 }

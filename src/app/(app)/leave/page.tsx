@@ -45,7 +45,7 @@ export default async function LeavePage() {
   const settings = settingsRows?.[0];
   if (!settings) {
     return (
-      <div className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
+      <div className="ht-card p-6">
         <p className="text-[#D64545]">ระบบยังไม่ได้ตั้งค่ากติกาการลา กรุณาติดต่อ HR</p>
       </div>
     );

@@ -13,7 +13,7 @@ export function TodayTimes({ checkIn, checkOut }: { checkIn: string | null; chec
   return (
     <div className="grid grid-cols-2 gap-3">
       {tiles.map(({ label, value, icon: Icon, className }) => (
-        <div key={label} className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-5 shadow-sm">
+        <div key={label} className="ht-card p-5">
           <span className={`flex h-10 w-10 items-center justify-center rounded-xl ${className}`}>
             <Icon className="h-5 w-5" aria-hidden />
           </span>
@@ -27,7 +27,7 @@ export function TodayTimes({ checkIn, checkOut }: { checkIn: string | null; chec
 
 export function AttendanceTimeline({ days }: { days: AttendanceDay[] }) {
   return (
-    <section className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
+    <section className="ht-card p-6">
       <h2 className="mb-4 flex items-center gap-2 font-bold text-[#1A1A1A]">
         <History className="h-5 w-5 text-[#1E5FA8]" aria-hidden />
         ประวัติล่าสุด

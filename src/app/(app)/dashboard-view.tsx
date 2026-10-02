@@ -86,7 +86,7 @@ function KpiTile({
     <Link
       href={href}
       style={stagger(index)}
-      className="ht-rise group relative overflow-hidden rounded-3xl border border-[#1E5FA8]/5 bg-white p-4 shadow-sm ht-lift hover:-translate-y-1 hover:shadow-xl hover:shadow-[#1E5FA8]/10"
+      className="ht-rise group relative overflow-hidden ht-card p-4 ht-lift hover:-translate-y-1 hover:shadow-xl hover:shadow-[#1E5FA8]/10"
     >
       <span className="ht-shine" aria-hidden />
       <span className={`absolute -right-6 -top-6 h-24 w-24 rounded-full blur-2xl transition-opacity group-hover:opacity-100 opacity-60 ${glowClass}`} aria-hidden />
@@ -123,7 +123,7 @@ function ShortcutTile({
     <Link
       href={href}
       style={stagger(index)}
-      className="ht-rise group relative flex items-center gap-3 overflow-hidden rounded-2xl border border-[#1E5FA8]/5 bg-white p-4 shadow-sm ht-lift hover:-translate-y-1 hover:border-[#D4A017]/40 hover:shadow-xl hover:shadow-[#1E5FA8]/10"
+      className="ht-rise group relative flex items-center gap-3 overflow-hidden ht-card p-4 ht-lift hover:-translate-y-1 hover:border-[#D4A017]/40 hover:shadow-xl hover:shadow-[#1E5FA8]/10"
     >
       <span className="ht-shine" aria-hidden />
       <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[#EAF3FC] to-[#FFF8E5]">
@@ -156,7 +156,7 @@ function AttendanceCard({ overview }: { overview: NonNullable<DashboardData["ove
   const rate = overview.total > 0 ? Math.round((arrived / overview.total) * 100) : 0;
 
   return (
-    <section className="ht-rise relative overflow-hidden rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm" style={stagger(4)}>
+    <section className="ht-rise relative overflow-hidden ht-card p-6" style={stagger(4)}>
       <Sticker name="people" size={72} className="ht-float-slow pointer-events-none absolute -right-1 -top-1 opacity-90" />
       <div className="relative flex flex-wrap items-end justify-between gap-4 pr-16">
         <div>

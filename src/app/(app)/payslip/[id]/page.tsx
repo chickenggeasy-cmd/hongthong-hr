@@ -74,7 +74,7 @@ export default async function PayslipDetailPage({ params }: PageProps<"/payslip/
           { title: "รายได้", lines: earnings, color: "text-[#2E9E5B]" },
           { title: "รายการหัก", lines: deductions, color: "text-[#D64545]" },
         ].map((section) => (
-          <section key={section.title} className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
+          <section key={section.title} className="ht-card p-6">
             <h2 className="mb-3 font-semibold text-[#1A1A1A]">{section.title}</h2>
             <dl className="space-y-2 text-sm">
               {section.lines.map((line) => (
@@ -100,7 +100,7 @@ export default async function PayslipDetailPage({ params }: PageProps<"/payslip/
       </a>
 
       {days.length > 0 ? (
-        <details className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
+        <details className="ht-card p-6">
           <summary className="cursor-pointer font-semibold text-[#1A1A1A]">รายละเอียดรายวัน</summary>
           <ul className="mt-3 divide-y divide-[#5B6B7B]/10 text-sm">
             {days.map((day) => (

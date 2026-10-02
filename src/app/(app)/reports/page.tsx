@@ -7,7 +7,7 @@ import { periodLabel } from "@/lib/payroll/logic";
 import { MAX_REPORT_DAYS } from "@/lib/reports/logic";
 
 const inputClass =
-  "rounded-lg border border-[#5B6B7B]/30 px-3 py-2 text-[#1A1A1A] outline-none focus:border-[#1E5FA8] focus:ring-2 focus:ring-[#1E5FA8]/20";
+  "ht-input";
 const buttonClass =
   "rounded-lg bg-[#1E5FA8] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#1E5FA8]/90";
 
@@ -24,7 +24,7 @@ export default async function ReportsPage() {
     <div className="space-y-6">
       <PageHeader icon={FileSpreadsheet} sticker="chart" title="รายงาน" description="ดาวน์โหลดเป็นไฟล์ Excel (.xlsx) เปิดได้ด้วย Excel หรือ Google Sheets" />
 
-      <section className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
+      <section className="ht-card p-6">
         <h2 className="font-semibold text-[#1A1A1A]">เงินเดือนรายงวด</h2>
         <p className="mb-3 text-sm text-[#5B6B7B]">สรุปเงินเดือนทุกคนในงวด (รายได้ รายการหัก รับสุทธิ)</p>
         {!runs || runs.length === 0 ? (
@@ -50,7 +50,7 @@ export default async function ReportsPage() {
         { action: "/reports/attendance", title: "การเข้างานรายวัน", help: "เวลาเข้า-ออก และนาทีที่มาสาย ของทุกคนทุกวัน" },
         { action: "/reports/requests", title: "คำขอลาและ OT", help: "คำขอทุกสถานะในช่วงวันที่ (2 ชีต: ลา / OT)" },
       ].map((report) => (
-        <section key={report.action} className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
+        <section key={report.action} className="ht-card p-6">
           <h2 className="font-semibold text-[#1A1A1A]">{report.title}</h2>
           <p className="mb-3 text-sm text-[#5B6B7B]">
             {report.help} · เลือกได้ไม่เกิน {MAX_REPORT_DAYS} วัน

@@ -7,7 +7,7 @@ import type { SettingDefinition } from "@/lib/admin/settings";
 const initialState: AdminFormState = { error: null, success: false };
 
 const inputClass =
-  "w-full rounded-lg border border-[#5B6B7B]/30 px-3 py-2 text-[#1A1A1A] outline-none focus:border-[#1E5FA8] focus:ring-2 focus:ring-[#1E5FA8]/20";
+  "w-full ht-input";
 
 function FormMessage({ state }: { state: AdminFormState }) {
   if (state.error) {
@@ -41,7 +41,7 @@ export function SettingsForm({
   return (
     <form action={formAction} className="space-y-6">
       {groups.map((group) => (
-        <fieldset key={group.name} className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
+        <fieldset key={group.name} className="ht-card p-6">
           <legend className="sr-only">{group.name}</legend>
           <h2 className="mb-4 font-semibold text-[#1A1A1A]">{group.name}</h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -73,7 +73,7 @@ export function SettingsForm({
         <button
           type="submit"
           disabled={pending}
-          className="w-full rounded-lg bg-[#1E5FA8] py-2.5 font-medium text-white transition-colors hover:bg-[#1E5FA8]/90 disabled:opacity-50"
+          className="w-full ht-btn-primary py-2.5"
         >
           {pending ? "กำลังบันทึก..." : "บันทึกการตั้งค่า"}
         </button>
@@ -92,7 +92,7 @@ export function AddHolidayForm() {
         <button
           type="submit"
           disabled={pending}
-          className="rounded-lg bg-[#1E5FA8] px-4 py-2 font-medium text-white transition-colors hover:bg-[#1E5FA8]/90 disabled:opacity-50"
+          className="ht-btn-primary px-4 py-2"
         >
           เพิ่ม
         </button>
