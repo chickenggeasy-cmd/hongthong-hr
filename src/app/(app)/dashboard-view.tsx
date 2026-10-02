@@ -61,7 +61,8 @@ function SectionTitle({ children, href, linkLabel }: { children: ReactNode; href
 
 /** หน่วงเวลาให้การ์ดค่อยๆ ไล่กันขึ้นมาทีละใบ */
 function stagger(index: number): CSSProperties {
-  return { animationDelay: `${120 + index * 70}ms` };
+  // ไล่กันขึ้นทีละใบ แต่ไม่เกิน ~0.6 วินาที ไม่ให้รอการ์ดท้ายๆ นานจนรู้สึกช้า
+  return { animationDelay: `${80 + Math.min(index, 8) * 60}ms` };
 }
 
 function KpiTile({
@@ -85,20 +86,20 @@ function KpiTile({
     <Link
       href={href}
       style={stagger(index)}
-      className="ht-rise group relative overflow-hidden rounded-3xl border border-[#1E5FA8]/5 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#1E5FA8]/10"
+      className="ht-rise group relative overflow-hidden rounded-3xl border border-[#1E5FA8]/5 bg-white p-4 shadow-sm ht-lift hover:-translate-y-1 hover:shadow-xl hover:shadow-[#1E5FA8]/10"
     >
       <span className="ht-shine" aria-hidden />
       <span className={`absolute -right-6 -top-6 h-24 w-24 rounded-full blur-2xl transition-opacity group-hover:opacity-100 opacity-60 ${glowClass}`} aria-hidden />
       <Sticker
         name={sticker}
         size={52}
-        className="relative mb-2 transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110"
+        className="relative mb-2 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-rotate-6 group-hover:scale-110"
       />
       <p className="text-xs text-[#5B6B7B]">{label}</p>
       <p className="mt-0.5 text-xl font-bold text-[#1A1A1A]">{value}</p>
       {hint ? <p className="mt-0.5 text-xs text-[#5B6B7B]">{hint}</p> : null}
       <ArrowRight
-        className="absolute bottom-4 right-4 h-4 w-4 -translate-x-1 text-[#1E5FA8] opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100"
+        className="absolute bottom-4 right-4 h-4 w-4 -translate-x-1 text-[#1E5FA8] opacity-0 transition-[transform,opacity] duration-300 group-hover:translate-x-0 group-hover:opacity-100"
         aria-hidden
       />
     </Link>
@@ -122,11 +123,11 @@ function ShortcutTile({
     <Link
       href={href}
       style={stagger(index)}
-      className="ht-rise group relative flex items-center gap-3 overflow-hidden rounded-2xl border border-[#1E5FA8]/5 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#D4A017]/40 hover:shadow-xl hover:shadow-[#1E5FA8]/10"
+      className="ht-rise group relative flex items-center gap-3 overflow-hidden rounded-2xl border border-[#1E5FA8]/5 bg-white p-4 shadow-sm ht-lift hover:-translate-y-1 hover:border-[#D4A017]/40 hover:shadow-xl hover:shadow-[#1E5FA8]/10"
     >
       <span className="ht-shine" aria-hidden />
       <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[#EAF3FC] to-[#FFF8E5]">
-        <Sticker name={sticker} size={40} className="transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110" />
+        <Sticker name={sticker} size={40} className="transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-rotate-6 group-hover:scale-110" />
       </span>
       <span className="min-w-0">
         <span className="block font-semibold text-[#1A1A1A]">{label}</span>
@@ -206,9 +207,9 @@ export function DashboardView({ data }: { data: DashboardData }) {
   return (
     <div className="space-y-8">
       {/* ---------- แบนเนอร์ทักทาย ---------- */}
-      <section className="ht-rise ht-gradient relative overflow-hidden rounded-[28px] bg-gradient-to-br from-[#1E5FA8] via-[#0F3B6E] to-[#2A73C2] text-white shadow-xl shadow-[#1E5FA8]/20">
+      <section className="ht-rise relative overflow-hidden rounded-[28px] bg-gradient-to-br from-[#1E5FA8] via-[#0F3B6E] to-[#2A73C2] text-white shadow-xl shadow-[#1E5FA8]/20">
         <DotPattern className="absolute inset-0 h-full w-full text-white/[0.07]" />
-        <div className="ht-gradient absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-[#D4A017] via-[#FFF1BF] to-[#D4A017]" aria-hidden />
+        <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-[#D4A017] via-[#FFF1BF] to-[#D4A017]" aria-hidden />
         <div className="ht-blob absolute -right-24 -top-24 h-72 w-72 rounded-full bg-[#5BA4E6]/25 blur-3xl" aria-hidden />
         <div className="ht-blob absolute -bottom-32 left-1/3 h-72 w-72 rounded-full bg-[#D4A017]/15 blur-3xl" style={{ animationDelay: "-6s" }} aria-hidden />
         <div className="relative grid items-center gap-4 p-6 sm:p-8 md:grid-cols-[1fr_auto]">
@@ -231,7 +232,7 @@ export function DashboardView({ data }: { data: DashboardData }) {
             </p>
 
             <div className="mt-6 flex flex-wrap items-center gap-4">
-              <div className="rounded-2xl bg-white/10 px-4 py-2 ring-1 ring-white/15 backdrop-blur">
+              <div className="rounded-2xl bg-white/10 px-4 py-2 ring-1 ring-white/15">
                 <p className="text-[11px] uppercase tracking-wider text-white/60">เวลาขณะนี้</p>
                 <p className="text-2xl font-bold">
                   <LiveClock initialIso={data.nowIso} />
@@ -250,7 +251,7 @@ export function DashboardView({ data }: { data: DashboardData }) {
 
             <Link
               href="/attendance"
-              className="group mt-6 inline-flex items-center gap-2 rounded-2xl bg-white px-6 py-3 font-bold text-[#1E5FA8] shadow-lg shadow-black/10 transition-all hover:-translate-y-0.5 hover:shadow-xl"
+              className="group mt-6 inline-flex items-center gap-2 rounded-2xl bg-white px-6 py-3 font-bold text-[#1E5FA8] shadow-lg shadow-black/10 ht-lift hover:-translate-y-0.5 hover:shadow-xl"
             >
               {data.nextAction}เลย
               <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" aria-hidden />
@@ -357,7 +358,7 @@ export function DashboardView({ data }: { data: DashboardData }) {
                 <Link
                   href="/approvals"
                   style={stagger(5)}
-                  className="ht-rise group relative block overflow-hidden rounded-3xl bg-gradient-to-br from-[#1A1A1A] to-[#2B3440] p-6 text-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl"
+                  className="ht-rise group relative block overflow-hidden rounded-3xl bg-gradient-to-br from-[#1A1A1A] to-[#2B3440] p-6 text-white shadow-sm ht-lift hover:-translate-y-1 hover:shadow-xl"
                 >
                   <span className="ht-shine" aria-hidden />
                   <span className="ht-float absolute right-4 top-4 block">
@@ -376,7 +377,7 @@ export function DashboardView({ data }: { data: DashboardData }) {
                   <Link
                     href="/approvals"
                     style={stagger(6)}
-                    className="ht-rise group relative flex items-center gap-3 overflow-hidden rounded-3xl border-2 border-[#D4A017] bg-gradient-to-br from-[#FFF8E5] to-white p-5 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl"
+                    className="ht-rise group relative flex items-center gap-3 overflow-hidden rounded-3xl border-2 border-[#D4A017] bg-gradient-to-br from-[#FFF8E5] to-white p-5 shadow-sm ht-lift hover:-translate-y-1 hover:shadow-xl"
                   >
                     <span className="ht-shine" aria-hidden />
                     <Sticker name="crown" size={52} className="ht-float shrink-0" />
@@ -405,10 +406,10 @@ export function DashboardView({ data }: { data: DashboardData }) {
               <Link
                 href={`/payroll?period=${data.payroll.period}`}
                 style={stagger(7)}
-                className="ht-rise ht-gradient group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#F0C75E] via-[#D4A017] to-[#B8860B] p-4 text-[#1A1A1A] shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl sm:col-span-2 lg:col-span-1"
+                className="ht-rise group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#F0C75E] via-[#D4A017] to-[#B8860B] p-4 text-[#1A1A1A] shadow-sm ht-lift hover:-translate-y-1 hover:shadow-xl sm:col-span-2 lg:col-span-1"
               >
                 <span className="ht-shine" aria-hidden />
-                <Sticker name="money-bag" size={80} className="absolute -bottom-2 -right-2 transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110" />
+                <Sticker name="money-bag" size={80} className="absolute -bottom-2 -right-2 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-rotate-6 group-hover:scale-110" />
                 <p className="text-sm font-medium">เงินเดือนงวด {periodLabel(data.payroll.period)}</p>
                 <p className="mt-1 text-2xl font-bold">
                   {data.payroll.status === "none" ? "ยังไม่คำนวณ" : data.payroll.status === "finalized" ? "ปิดงวดแล้ว ✓" : "ฉบับร่าง"}

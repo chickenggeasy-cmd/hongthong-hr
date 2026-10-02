@@ -24,9 +24,9 @@ export default function LoginPage() {
   return (
     <main className="grid min-h-dvh bg-[#EAF3FC] lg:grid-cols-[1.1fr_1fr]">
       {/* ฝั่งแบรนด์ (จอใหญ่) */}
-      <section className="ht-gradient relative hidden overflow-hidden bg-gradient-to-br from-[#1E5FA8] via-[#0F3B6E] to-[#2A73C2] p-12 text-white lg:flex lg:flex-col lg:justify-between">
+      <section className="relative hidden overflow-hidden bg-gradient-to-br from-[#1E5FA8] via-[#0F3B6E] to-[#2A73C2] p-12 text-white lg:flex lg:flex-col lg:justify-between">
         <DotPattern className="absolute inset-0 h-full w-full text-white/[0.07]" />
-        <div className="ht-gradient absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-[#D4A017] via-[#FFF1BF] to-[#D4A017]" aria-hidden />
+        <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-[#D4A017] via-[#FFF1BF] to-[#D4A017]" aria-hidden />
         <div className="ht-blob absolute -bottom-32 -left-24 h-96 w-96 rounded-full bg-[#5BA4E6]/25 blur-3xl" aria-hidden />
         <div className="ht-blob absolute -right-24 top-24 h-80 w-80 rounded-full bg-[#D4A017]/15 blur-3xl" style={{ animationDelay: "-7s" }} aria-hidden />
 
@@ -51,7 +51,7 @@ export default function LoginPage() {
                 className="ht-rise flex items-center gap-3 text-white/90"
                 style={{ animationDelay: `${250 + i * 120}ms` }}
               >
-                <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 ring-1 ring-white/15 backdrop-blur">
+                <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 ring-1 ring-white/15">
                   <Sticker name={sticker} size={30} />
                 </span>
                 {text}
@@ -89,7 +89,7 @@ export default function LoginPage() {
           <span className="ht-float-slow absolute -bottom-5 -left-2 z-10 block sm:-left-5" style={{ animationDelay: "-2s" }} aria-hidden>
             <Sticker name="sparkles" size={44} className="ht-pop" style={{ animationDelay: "600ms" }} />
           </span>
-          <div className="rounded-3xl border border-white bg-white/90 p-8 shadow-2xl shadow-[#1E5FA8]/15 backdrop-blur">
+          <div className="rounded-3xl border border-white bg-white p-8 shadow-2xl shadow-[#1E5FA8]/15">
             <div className="mb-8 text-center">
               <Image
                 src="/brand/logo.webp"

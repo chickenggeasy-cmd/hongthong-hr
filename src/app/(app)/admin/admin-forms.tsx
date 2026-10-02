@@ -68,7 +68,7 @@ export function SettingsForm({
         </fieldset>
       ))}
 
-      <div className="sticky bottom-4 space-y-2 rounded-2xl bg-white/95 p-4 shadow-sm backdrop-blur">
+      <div className="sticky bottom-4 space-y-2 rounded-2xl bg-white/95 p-4 shadow-sm">
         <FormMessage state={state} />
         <button
           type="submit"

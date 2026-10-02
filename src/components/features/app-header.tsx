@@ -11,7 +11,7 @@ export function AppHeader({ employee }: { employee: CurrentEmployee }) {
   const initials = employee.fullName.trim().slice(0, 1);
 
   return (
-    <header className="sticky top-0 z-20 border-b border-[#5B6B7B]/10 bg-white/90 pt-[env(safe-area-inset-top,0px)] backdrop-blur-md">
+    <header className="sticky top-0 z-20 border-b border-[#5B6B7B]/10 bg-white/95 pt-[env(safe-area-inset-top,0px)]">
       <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-2.5">
         <Link href="/" className="flex items-center gap-2.5">
           <Image src="/brand/logo.webp" alt="หงส์ทอง" width={44} height={44} priority className="h-11 w-11 rounded-full ring-2 ring-[#D4A017]/40" />
