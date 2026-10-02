@@ -1,8 +1,10 @@
+import { Timer } from "lucide-react";
 import { getCurrentEmployee } from "@/lib/auth/current-user";
 import { createClient } from "@/lib/supabase/server";
 import { bangkokToday, formatThaiDate } from "@/lib/date";
 import { numberSetting, timeSetting, toSettingsRecord } from "@/lib/settings";
 import { LeaveStatusBadge } from "@/components/features/leave-status-badge";
+import { PageHeader } from "@/components/features/page-header";
 import { OtRequestForm } from "./ot-request-form";
 
 export default async function OtPage() {
@@ -33,37 +35,53 @@ export default async function OtPage() {
     );
   }
 
+  const thisMonth = bangkokToday().slice(0, 7);
+  const approvedHours = (requests ?? [])
+    .filter((r) => r.status === "approved" && r.work_date.startsWith(thisMonth))
+    .reduce((sum, r) => sum + r.hours, 0);
+
   return (
     <div className="space-y-6">
-      <OtRequestForm
-        today={bangkokToday()}
-        maxHoursPerDay={maxHoursPerDay}
-        workEndTime={workEndTime}
-        hourlyRate={numberSetting(settings, "ot.hourly_rate")}
-      />
+      <PageHeader icon={Timer} title="ขอทำ OT" description={`ต้องขอล่วงหน้าก่อน ${workEndTime} น. ของวันนั้น · จ่ายเฉพาะชั่วโมงเต็มที่ทำจริง`}>
+        <span className="rounded-2xl bg-[#EAF3FC] px-4 py-2 text-center">
+          <span className="block text-2xl font-bold text-[#1E5FA8]">{approvedHours} ชม.</span>
+          <span className="text-xs text-[#5B6B7B]">OT ที่อนุมัติเดือนนี้</span>
+        </span>
+      </PageHeader>
 
-      <div className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
-        <h2 className="mb-3 font-semibold text-[#1A1A1A]">คำขอ OT ของฉัน</h2>
-        {!requests || requests.length === 0 ? (
-          <p className="text-sm text-[#5B6B7B]">ยังไม่มีคำขอ OT</p>
-        ) : (
-          <ul className="divide-y divide-[#5B6B7B]/10 text-sm">
-            {requests.map((request) => (
-              <li key={request.id} className="space-y-1 py-3">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <span className="font-medium text-[#1A1A1A]">
-                    {formatThaiDate(request.work_date)} · {request.hours} ชั่วโมง
+      <div className="grid items-start gap-6 lg:grid-cols-[22rem_1fr]">
+        <OtRequestForm
+          today={bangkokToday()}
+          maxHoursPerDay={maxHoursPerDay}
+          workEndTime={workEndTime}
+          hourlyRate={numberSetting(settings, "ot.hourly_rate")}
+        />
+
+        <section className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
+          <h2 className="mb-3 font-bold text-[#1A1A1A]">คำขอ OT ของฉัน</h2>
+          {!requests || requests.length === 0 ? (
+            <p className="py-8 text-center text-sm text-[#5B6B7B]">ยังไม่มีคำขอ OT</p>
+          ) : (
+            <ul className="space-y-2">
+              {requests.map((request) => (
+                <li key={request.id} className="flex gap-3 rounded-2xl p-3 transition-colors hover:bg-[#F7FAFD]">
+                  <span className="flex h-10 w-10 shrink-0 flex-col items-center justify-center rounded-xl bg-[#1E5FA8]/10 text-[#1E5FA8]">
+                    <span className="text-sm font-bold leading-none">{request.hours}</span>
+                    <span className="text-[10px] leading-none">ชม.</span>
                   </span>
-                  <LeaveStatusBadge status={request.status} />
-                </div>
-                {request.reason ? <p className="text-[#5B6B7B]">งาน: {request.reason}</p> : null}
-                {request.decision_note ? (
-                  <p className="text-[#5B6B7B]">หมายเหตุผู้อนุมัติ: {request.decision_note}</p>
-                ) : null}
-              </li>
-            ))}
-          </ul>
-        )}
+                  <div className="min-w-0 flex-1 text-sm">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <span className="font-semibold text-[#1A1A1A]">{formatThaiDate(request.work_date)}</span>
+                      <LeaveStatusBadge status={request.status} />
+                    </div>
+                    {request.reason ? <p className="text-[#5B6B7B]">งาน: {request.reason}</p> : null}
+                    {request.decision_note ? <p className="text-[#5B6B7B]">หมายเหตุผู้อนุมัติ: {request.decision_note}</p> : null}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
       </div>
     </div>
   );

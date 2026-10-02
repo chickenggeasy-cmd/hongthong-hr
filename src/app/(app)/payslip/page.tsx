@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { ReceiptText } from "lucide-react";
+import { PageHeader } from "@/components/features/page-header";
 import { getCurrentEmployee } from "@/lib/auth/current-user";
 import { createClient } from "@/lib/supabase/server";
 import { formatThaiDate } from "@/lib/date";
@@ -21,10 +23,7 @@ export default async function PayslipListPage() {
 
   return (
     <div className="space-y-4">
-      <div className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
-        <h1 className="text-lg font-semibold text-[#1A1A1A]">สลิปเงินเดือนของฉัน</h1>
-        <p className="mt-1 text-sm text-[#5B6B7B]">สลิปจะแสดงหลังฝ่ายการเงิน/HR ปิดงวดแล้ว</p>
-      </div>
+      <PageHeader icon={ReceiptText} title="สลิปเงินเดือนของฉัน" description="สลิปจะแสดงหลังฝ่ายการเงิน/HR ปิดงวดแล้ว ดาวน์โหลดเป็น PDF ได้" />
 
       {!payslips || payslips.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-[#5B6B7B]/30 bg-white/60 p-6 text-center text-sm text-[#5B6B7B]">
@@ -36,7 +35,7 @@ export default async function PayslipListPage() {
             <li key={p.id}>
               <Link
                 href={`/payslip/${p.id}`}
-                className="flex items-center justify-between rounded-2xl bg-white p-5 shadow-sm transition-colors hover:bg-[#EAF3FC]"
+                className="group flex items-center justify-between rounded-3xl border border-[#1E5FA8]/5 bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[#1E5FA8]/10"
               >
                 <div>
                   <p className="font-medium text-[#1A1A1A]">งวด {periodLabel(p.payroll_runs.period)}</p>

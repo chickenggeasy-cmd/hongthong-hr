@@ -129,7 +129,7 @@ export function CheckInForm({ nextType }: { nextType: AttendanceType }) {
       <button
         type="submit"
         disabled={!canSubmit}
-        className="w-full rounded-lg bg-[#1E5FA8] py-2.5 font-medium text-white transition-colors hover:bg-[#1E5FA8]/90 disabled:opacity-50"
+        className="w-full rounded-2xl bg-gradient-to-r from-[#1E5FA8] to-[#164A85] py-4 text-lg font-bold text-white shadow-lg shadow-[#1E5FA8]/25 transition-all hover:-translate-y-0.5 hover:shadow-xl disabled:translate-y-0 disabled:opacity-50"
       >
         {pending ? "กำลังบันทึก..." : label}
       </button>

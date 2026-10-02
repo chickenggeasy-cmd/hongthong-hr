@@ -1,9 +1,12 @@
 import { getCurrentEmployee } from "@/lib/auth/current-user";
 import { createClient } from "@/lib/supabase/server";
-import { addDays, addMonths, bangkokToday, endOfMonth, formatThaiDate, startOfMonth } from "@/lib/date";
-import { leaveTypeLabel, usedLeaveDaysInMonth } from "@/lib/leave/logic";
-import { ExceedsQuotaBadge, LeaveStatusBadge } from "@/components/features/leave-status-badge";
+import { addDays, addMonths, bangkokToday, endOfMonth, startOfMonth } from "@/lib/date";
+import { CalendarDays } from "lucide-react";
+import { usedLeaveDaysInMonth } from "@/lib/leave/logic";
+import { teamLeaveSections } from "@/lib/leave/team";
+import { PageHeader } from "@/components/features/page-header";
 import { LeaveRequestForm } from "./leave-request-form";
+import { MyLeaveList, QuotaCard, TeamLeaveCard } from "./leave-view";
 
 export default async function LeavePage() {
   // ทุกคนที่ล็อกอินยื่นลาได้ จึงไม่ต้อง requirePermission() (layout.tsx กันคนไม่มีบัญชีไว้แล้ว)
@@ -49,62 +52,54 @@ export default async function LeavePage() {
   }
 
   const usedThisMonth = usedLeaveDaysInMonth(thisMonthRequests ?? [], today, new Set(holidays));
-  const remaining = Math.max(settings.monthly_quota_days - usedThisMonth, 0);
+  const monthLabel = new Date(`${today}T00:00:00Z`).toLocaleDateString("th-TH", { month: "long", timeZone: "UTC" });
+
+  // หัวหน้าแผนก: การลาของลูกทีม (RLS ให้หัวหน้าเห็นเฉพาะทีมกลุ่มเดียวกันอยู่แล้ว)
+  const isHead = employee.role === "head";
+  const { data: teamRows } = isHead
+    ? await supabase
+        .from("leave_requests")
+        .select("id, leave_type, start_date, end_date, days_count, status, employee:employees!leave_requests_employee_id_fkey(full_name)")
+        .neq("employee_id", employee.id)
+        .in("status", ["pending", "approved"])
+        .gte("end_date", today)
+        .lte("start_date", addDays(today, 30))
+        .order("start_date")
+    : { data: null };
+  const team = teamLeaveSections(
+    (teamRows ?? []).map((r) => ({
+      id: r.id,
+      employeeName: r.employee?.full_name ?? "-",
+      startDate: r.start_date,
+      endDate: r.end_date,
+      status: r.status,
+      leaveType: r.leave_type,
+      daysCount: r.days_count,
+    })),
+    today,
+  );
 
   return (
     <div className="space-y-6">
-      <div className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
-        <p className="text-sm text-[#5B6B7B]">วันลาเดือนนี้ (รวมคำขอที่รออนุมัติ)</p>
-        <p className="mt-1 text-[#1A1A1A]">
-          ใช้ไป <span className="text-xl font-semibold">{usedThisMonth}</span> จาก {settings.monthly_quota_days} วัน ·
-          เหลือ{" "}
-          <span className={`text-xl font-semibold ${remaining === 0 ? "text-[#D64545]" : "text-[#2E9E5B]"}`}>
-            {remaining}
-          </span>{" "}
-          วัน
-        </p>
-        <p className="mt-1 text-xs text-[#5B6B7B]">โควตารวมทุกประเภทการลา ยกยอดไปเดือนถัดไปไม่ได้</p>
-      </div>
+      <PageHeader icon={CalendarDays} title="ขอลา" description="ลาป่วย ลากิจ ลาพักร้อน · ติดตามสถานะคำขอได้ที่นี่" />
 
-      <LeaveRequestForm
-        today={today}
-        holidays={holidays}
-        settings={{
-          monthlyQuotaDays: settings.monthly_quota_days,
-          advanceNoticeMonths: settings.advance_notice_months,
-          sickBackdateDays: settings.sick_backdate_days,
-        }}
-      />
-
-      <div className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
-        <h2 className="mb-3 font-semibold text-[#1A1A1A]">คำขอลาของฉัน</h2>
-        {!requests || requests.length === 0 ? (
-          <p className="text-sm text-[#5B6B7B]">ยังไม่มีคำขอลา</p>
-        ) : (
-          <ul className="divide-y divide-[#5B6B7B]/10 text-sm">
-            {requests.map((request) => (
-              <li key={request.id} className="space-y-1 py-3">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <span className="font-medium text-[#1A1A1A]">
-                    {leaveTypeLabel(request.leave_type)} · {request.days_count} วัน
-                  </span>
-                  <span className="flex gap-1">
-                    {request.exceeds_quota ? <ExceedsQuotaBadge /> : null}
-                    <LeaveStatusBadge status={request.status} />
-                  </span>
-                </div>
-                <p className="text-[#5B6B7B]">
-                  {formatThaiDate(request.start_date)}
-                  {request.end_date !== request.start_date ? ` – ${formatThaiDate(request.end_date)}` : ""}
-                </p>
-                {request.reason ? <p className="text-[#5B6B7B]">เหตุผล: {request.reason}</p> : null}
-                {request.decision_note ? (
-                  <p className="text-[#5B6B7B]">หมายเหตุผู้อนุมัติ: {request.decision_note}</p>
-                ) : null}
-              </li>
-            ))}
-          </ul>
-        )}
+      <div className="grid items-start gap-6 lg:grid-cols-[22rem_1fr]">
+        <div className="space-y-6">
+          <QuotaCard quota={settings.monthly_quota_days} used={usedThisMonth} monthLabel={monthLabel} />
+          <LeaveRequestForm
+            today={today}
+            holidays={holidays}
+            settings={{
+              monthlyQuotaDays: settings.monthly_quota_days,
+              advanceNoticeMonths: settings.advance_notice_months,
+              sickBackdateDays: settings.sick_backdate_days,
+            }}
+          />
+        </div>
+        <div className="space-y-6">
+          {isHead ? <TeamLeaveCard today={team.today} upcoming={team.upcoming} /> : null}
+          <MyLeaveList requests={requests ?? []} />
+        </div>
       </div>
     </div>
   );

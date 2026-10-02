@@ -8,3 +8,24 @@ export type AttendanceType = "check_in" | "check_out";
 export function nextAttendanceType(lastType: AttendanceType | null | undefined): AttendanceType {
   return lastType === "check_in" ? "check_out" : "check_in";
 }
+const BANGKOK_OFFSET_MS = 7 * 60 * 60 * 1000;
+
+export type AttendanceLogEntry = { id: string; type: string; recorded_at: string; distance_meters: number; within_radius: boolean };
+
+export type AttendanceDay = {
+  date: string; // YYYY-MM-DD ตามเวลาไทย
+  entries: (AttendanceLogEntry & { time: string })[]; // เรียงจากเช้าไปเย็น, time = HH:MM เวลาไทย
+};
+
+/** จัดกลุ่มประวัติเช็คอินเป็นรายวันตามเวลาไทย (วันล่าสุดก่อน) — ไม่พึ่งโซนเวลาของเครื่องเซิร์ฟเวอร์ */
+export function groupLogsByDay(logs: readonly AttendanceLogEntry[]): AttendanceDay[] {
+  const days = new Map<string, AttendanceDay["entries"]>();
+  for (const log of logs) {
+    const local = new Date(new Date(log.recorded_at).getTime() + BANGKOK_OFFSET_MS).toISOString();
+    const date = local.slice(0, 10);
+    days.set(date, [...(days.get(date) ?? []), { ...log, time: local.slice(11, 16) }]);
+  }
+  return [...days.entries()]
+    .sort(([a], [b]) => b.localeCompare(a))
+    .map(([date, entries]) => ({ date, entries: entries.sort((a, b) => a.recorded_at.localeCompare(b.recorded_at)) }));
+}

@@ -1,7 +1,12 @@
-﻿import { getCurrentEmployee } from "@/lib/auth/current-user";
+import { Clock } from "lucide-react";
+import { getCurrentEmployee } from "@/lib/auth/current-user";
 import { createClient } from "@/lib/supabase/server";
-import { nextAttendanceType, type AttendanceType } from "@/lib/attendance/logic";
+import { bangkokToday } from "@/lib/date";
+import { groupLogsByDay, nextAttendanceType, type AttendanceType } from "@/lib/attendance/logic";
+import { PageHeader } from "@/components/features/page-header";
+import { LiveClock } from "@/components/features/live-clock";
 import { CheckInForm } from "./check-in-form";
+import { AttendanceTimeline, TodayTimes } from "./attendance-view";
 
 export default async function AttendancePage() {
   const employee = await getCurrentEmployee();
@@ -14,33 +19,28 @@ export default async function AttendancePage() {
     .select("id, type, recorded_at, within_radius, distance_meters")
     .eq("employee_id", employee.id)
     .order("recorded_at", { ascending: false })
-    .limit(10);
+    .limit(20);
 
   const nextType = nextAttendanceType((logs?.[0]?.type as AttendanceType | undefined) ?? null);
+  const days = groupLogsByDay(logs ?? []);
+  const todayEntries = days.find((d) => d.date === bangkokToday())?.entries ?? [];
+  const checkIn = todayEntries.find((e) => e.type === "check_in")?.time ?? null;
+  const checkOut = [...todayEntries].reverse().find((e) => e.type === "check_out")?.time ?? null;
 
   return (
     <div className="space-y-6">
-      <CheckInForm nextType={nextType} />
+      <PageHeader icon={Clock} title="เช็คอิน / เช็คเอาท์" description="ยืนยันตำแหน่งด้วย GPS · เวลาบันทึกจากเซิร์ฟเวอร์">
+        <p className="rounded-2xl bg-[#EAF3FC] px-4 py-2 text-2xl font-bold text-[#1E5FA8]">
+          <LiveClock initialIso={new Date().toISOString()} />
+        </p>
+      </PageHeader>
 
-      <div className="rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
-        <h2 className="mb-3 font-semibold text-[#1A1A1A]">ประวัติล่าสุด</h2>
-        {!logs || logs.length === 0 ? (
-          <p className="text-sm text-[#5B6B7B]">ยังไม่มีประวัติ</p>
-        ) : (
-          <ul className="divide-y divide-[#5B6B7B]/10 text-sm">
-            {logs.map((log) => (
-              <li key={log.id} className="flex items-center justify-between py-2">
-                <span className="text-[#1A1A1A]">
-                  {log.type === "check_in" ? "เช็คอิน" : "เช็คเอาท์"} ·{" "}
-                  {new Date(log.recorded_at).toLocaleString("th-TH", { dateStyle: "medium", timeStyle: "short" })}
-                </span>
-                <span className={log.within_radius ? "text-[#2E9E5B]" : "text-[#D64545]"}>
-                  {Math.round(log.distance_meters)} ม.
-                </span>
-              </li>
-            ))}
-          </ul>
-        )}
+      <div className="grid items-start gap-6 lg:grid-cols-[1fr_1fr]">
+        <div className="space-y-6">
+          <TodayTimes checkIn={checkIn} checkOut={checkOut} />
+          <CheckInForm nextType={nextType} />
+        </div>
+        <AttendanceTimeline days={days} />
       </div>
     </div>
   );

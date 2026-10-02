@@ -54,7 +54,7 @@ export function LeaveRequestForm({
 
   return (
     <form action={formAction} className="space-y-4 rounded-3xl border border-[#1E5FA8]/5 bg-white p-6 shadow-sm">
-      <h1 className="text-lg font-semibold text-[#1A1A1A]">ยื่นคำขอลา</h1>
+      <h2 className="text-lg font-semibold text-[#1A1A1A]">ยื่นคำขอลา</h2>
 
       <div>
         <label htmlFor="leaveType" className="mb-1.5 block text-sm font-medium text-[#1A1A1A]">
@@ -150,7 +150,7 @@ export function LeaveRequestForm({
       <button
         type="submit"
         disabled={pending}
-        className="w-full rounded-lg bg-[#1E5FA8] py-2.5 font-medium text-white transition-colors hover:bg-[#1E5FA8]/90 disabled:opacity-50"
+        className="w-full rounded-2xl bg-gradient-to-r from-[#1E5FA8] to-[#164A85] py-3 font-bold text-white shadow-lg shadow-[#1E5FA8]/25 transition-all hover:-translate-y-0.5 hover:shadow-xl disabled:translate-y-0 disabled:opacity-50"
       >
         {pending ? "กำลังส่ง..." : "ยื่นคำขอลา"}
       </button>
