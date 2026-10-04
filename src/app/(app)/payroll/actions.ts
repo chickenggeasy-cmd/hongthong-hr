@@ -17,6 +17,7 @@ import {
   readPayrollSettings,
 } from "@/lib/payroll/logic";
 import { recordAudit } from "@/lib/audit/record";
+import { schedulePushDelivery } from "@/lib/notifications/push";
 
 export type PayrollActionState = { error: string | null; success: boolean; message?: string };
 
@@ -194,5 +195,6 @@ export async function finalizePayroll(_prev: PayrollActionState, formData: FormD
   await recordAudit(manager.id, "payroll.finalize", period);
   revalidatePath("/payroll");
   revalidatePath("/payslip");
+  schedulePushDelivery();
   return { error: null, success: true, message: "ปิดงวดแล้ว พนักงานเห็นสลิปของตัวเองได้แล้ว" };
 }

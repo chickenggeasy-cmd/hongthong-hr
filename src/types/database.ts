@@ -342,6 +342,53 @@ export type Database = {
         }
         Relationships: []
       }
+      notifications: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          kind: string
+          link: string
+          pushed_at: string | null
+          read_at: string | null
+          recipient_id: string
+          ref_id: string | null
+          title: string
+        }
+        Insert: {
+          body?: string
+          created_at?: string
+          id?: string
+          kind: string
+          link?: string
+          pushed_at?: string | null
+          read_at?: string | null
+          recipient_id: string
+          ref_id?: string | null
+          title: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          kind?: string
+          link?: string
+          pushed_at?: string | null
+          read_at?: string | null
+          recipient_id?: string
+          ref_id?: string | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_recipient_id_fkey"
+            columns: ["recipient_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ot_requests: {
         Row: {
           approver_id: string | null
@@ -552,6 +599,44 @@ export type Database = {
           },
         ]
       }
+      push_subscriptions: {
+        Row: {
+          auth: string
+          created_at: string
+          employee_id: string
+          endpoint: string
+          id: string
+          p256dh: string
+          user_agent: string | null
+        }
+        Insert: {
+          auth: string
+          created_at?: string
+          employee_id: string
+          endpoint: string
+          id?: string
+          p256dh: string
+          user_agent?: string | null
+        }
+        Update: {
+          auth?: string
+          created_at?: string
+          employee_id?: string
+          endpoint?: string
+          id?: string
+          p256dh?: string
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "push_subscriptions_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       warnings: {
         Row: {
           acknowledged_at: string | null
@@ -627,6 +712,7 @@ export type Database = {
         Args: { p_approve: boolean; p_note?: string; p_request_id: string }
         Returns: undefined
       }
+      delete_push_subscription: { Args: { p_endpoint: string }; Returns: undefined }
       distance_meters: {
         Args: { lat1: number; lat2: number; lng1: number; lng2: number }
         Returns: number
@@ -650,6 +736,10 @@ export type Database = {
       leave_working_days: {
         Args: { p_end: string; p_start: string }
         Returns: number
+      }
+      mark_notifications_read: {
+        Args: { p_notification_id?: string }
+        Returns: undefined
       }
       public_settings: {
         Args: never
@@ -697,6 +787,16 @@ export type Database = {
         }
         Returns: string
       }
+      save_push_subscription: {
+        Args: {
+          p_auth: string
+          p_endpoint: string
+          p_p256dh: string
+          p_user_agent?: string
+        }
+        Returns: undefined
+      }
+      send_test_notification: { Args: never; Returns: undefined }
       set_employee_status: {
         Args: { p_employee_id: string; p_resigned_on?: string }
         Returns: undefined

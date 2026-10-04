@@ -5,6 +5,7 @@ import { getCurrentEmployee } from "@/lib/auth/current-user";
 import { can } from "@/lib/permissions";
 import { createClient } from "@/lib/supabase/server";
 import { APPROVAL_ERROR_MESSAGES, dbErrorMessage, MAX_NOTE_LENGTH } from "@/lib/approvals/logic";
+import { schedulePushDelivery } from "@/lib/notifications/push";
 
 export type DecideRequestState = {
   error: string | null;
@@ -52,5 +53,6 @@ export async function decideRequest(_prevState: DecideRequestState, formData: Fo
   revalidatePath("/approvals");
   revalidatePath(kind === "leave" ? "/leave" : "/ot");
   revalidatePath("/");
+  schedulePushDelivery();
   return { error: null, success: true, approved: decision === "approve" };
 }

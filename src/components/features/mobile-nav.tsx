@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import type { NavItem } from "@/lib/permissions";
 import { Avatar, SidebarPanel, type ShellUser } from "./sidebar-panel";
+import { NotificationBell } from "./notification-center";
 
 /** แถบบนสำหรับมือถือ/แท็บเล็ต + เมนูเลื่อนออกจากด้านซ้าย (จอใหญ่ใช้แถบด้านข้างแทน) */
 export function MobileNav({ user, items }: { user: ShellUser; items: NavItem[] }) {
@@ -55,7 +56,10 @@ export function MobileNav({ user, items }: { user: ShellUser; items: NavItem[] }
               <p className="text-[11px] text-[#5B6B7B]">{user.portal}</p>
             </div>
           </Link>
-          <Avatar name={user.fullName} size="sm" />
+          <div className="flex items-center gap-1">
+            <NotificationBell placement="topbar" />
+            <Avatar name={user.fullName} size="sm" />
+          </div>
         </div>
       </header>
 

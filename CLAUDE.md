@@ -37,7 +37,7 @@
    (ดู `src/lib/leave/logic.ts` + `tests/leave-logic.test.ts` เป็นตัวอย่าง)
    ไฟล์ใน `src/lib/` ที่เทสต์เรียกใช้ ให้ import กันเองแบบ relative (`../date`) เพราะ Vitest ไม่รู้จัก `@/`
 9. ตัวเลขกติกาธุรกิจที่อาจเปลี่ยน เก็บในตาราง `app_settings` ไม่ hardcode ในโค้ด
-10. ก่อนส่งงานทุกครั้ง: `npx tsc --noEmit` ผ่าน + `npx vitest run` ผ่านทั้งหมด (ปัจจุบัน 152 ข้อ)
+10. ก่อนส่งงานทุกครั้ง: `npx tsc --noEmit` ผ่าน + `npx vitest run` ผ่านทั้งหมด (ปัจจุบัน 164 ข้อ)
     (ถ้า tsc ฟ้อง `LayoutProps` ไม่รู้จัก ให้รัน `npx next typegen` ก่อน)
 
 ## โครงสร้างที่ตั้งไว้แล้ว ห้ามสร้างซ้ำซ้อน
@@ -103,7 +103,15 @@ audit log (`audit_logs` + `src/lib/audit/record.ts` เรียก `recordAudit
 security headers (`next.config.ts`), หน้า error/404/loading, PWA (`src/app/manifest.ts`), ย่อรูปเช็คอินก่อนส่ง (`compress-photo.ts`)
 คู่มือขึ้นระบบจริง: `docs/DEPLOY.md` (Vercel + Supabase ชุดใหม่)
 
-**ค้างอยู่:** เจ้าของโปรเจกต์ต้องทำตาม `docs/DEPLOY.md` เอง (บัญชี Vercel/Supabase), ภาษีแบบขั้นบันได (ยังไม่ทำ)
+**ขึ้นเว็บจริงแล้ว (4 ต.ค. 2569):** https://hongthong-hr.vercel.app (ใช้ Supabase โปรเจกต์เดิม เพราะแพ็กเกจฟรีเปิดใหม่ไม่ได้)
+อัปเดตเว็บ: `npx vercel --prod` จากเครื่องเจ้าของ (push เข้า main แล้ว Vercel อาจไม่ build เอง) · ค่า `NEXT_PUBLIC_*` ใน Vercel ตั้งเป็น Config, ที่เหลือ Secret
+
+**แจ้งเตือนเวลาจริง (5 ต.ค. 2569):** ตาราง `notifications` สร้างโดย trigger เท่านั้น (คำขอใหม่/ผลอนุมัติ/ลูกทีมลา/ใบเตือน/สลิปออก)
+หน้าเว็บฟังผ่าน Supabase Realtime (`notification-center.tsx`: `NotificationProvider` + `NotificationBell`) เด้ง + เสียง (`sound.ts`) + `router.refresh()`
+Web Push ตอนปิดเว็บ: `push_subscriptions` + `public/sw.js` + `src/lib/notifications/push.ts` (เรียก `schedulePushDelivery()` หลัง action ที่ทำให้เกิดแจ้งเตือน)
+เพิ่มเหตุการณ์แจ้งเตือนใหม่ = เพิ่ม trigger ใน migration + ไอคอนใน `notificationIcon()` + เรียก `schedulePushDelivery()` ใน action
+
+**ค้างอยู่:** ภาษีแบบขั้นบันได (ยังไม่ทำ), เจ้าของต้องใส่กุญแจ VAPID ใน Vercel เพื่อเปิดแจ้งเตือนตอนปิดเว็บ
 
 ## ประเด็นที่ยังไม่ยืนยัน (ห้ามเดาเติมเอง ถ้าไม่ชัวร์ให้ถามหรือทำเป็นค่าตั้งต้นที่แก้ง่าย)
 

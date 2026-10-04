@@ -9,6 +9,7 @@ import { numberSetting, toSettingsRecord } from "@/lib/settings";
 import { isValidPeriod, periodLabel } from "@/lib/payroll/logic";
 import { autoWarnings, validateManualWarning } from "@/lib/warnings/logic";
 import { recordAudit } from "@/lib/audit/record";
+import { schedulePushDelivery } from "@/lib/notifications/push";
 
 export type WarningActionState = { error: string | null; success: boolean; message?: string };
 
@@ -61,6 +62,7 @@ export async function generateWarnings(_prev: WarningActionState, formData: Form
   revalidatePath("/warnings");
   revalidatePath("/");
   const count = inserted?.length ?? 0;
+  if (count > 0) schedulePushDelivery();
   if (count > 0) await recordAudit(issuer.id, "warning.generate", period, { issued: count });
   return {
     error: null,
@@ -93,6 +95,7 @@ export async function issueWarning(_prev: WarningActionState, formData: FormData
 
   await recordAudit(issuer.id, "warning.issue", employeeId, { reason: reason.trim().slice(0, 100) });
   revalidatePath("/warnings");
+  schedulePushDelivery();
   return { error: null, success: true, message: "ออกใบเตือนแล้ว" };
 }
 

@@ -16,7 +16,11 @@ const SECURITY_HEADERS = [
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   async headers() {
-    return [{ source: "/:path*", headers: SECURITY_HEADERS }];
+    return [
+      { source: "/:path*", headers: SECURITY_HEADERS },
+      // service worker (แจ้งเตือนบนมือถือ) ต้องได้ไฟล์ล่าสุดเสมอ ไม่งั้นแก้แล้วเครื่องผู้ใช้ยังใช้ตัวเก่า
+      { source: "/sw.js", headers: [{ key: "Cache-Control", value: "no-cache, no-store, must-revalidate" }] },
+    ];
   },
   experimental: {
     serverActions: {

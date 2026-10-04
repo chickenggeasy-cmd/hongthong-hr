@@ -2,6 +2,8 @@ import type { ReactNode } from "react";
 import { getCurrentEmployee } from "@/lib/auth/current-user";
 import { logout } from "@/lib/auth/actions";
 import { AppHeader } from "@/components/features/app-header";
+import { createClient } from "@/lib/supabase/server";
+import { NOTIFICATION_LIST_LIMIT, toNotificationItem } from "@/lib/notifications/logic";
 
 export default async function AppLayout({ children }: { children: ReactNode }) {
   const employee = await getCurrentEmployee();
@@ -28,9 +30,17 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
     );
   }
 
+  // แจ้งเตือนล่าสุดสำหรับกระดิ่ง (RLS ให้เห็นเฉพาะของตัวเอง) ต่อจากนี้หน้าเว็บรับรายการใหม่เองผ่าน Realtime
+  const supabase = await createClient();
+  const { data: notificationRows } = await supabase
+    .from("notifications")
+    .select("id, kind, title, body, link, read_at, created_at")
+    .order("created_at", { ascending: false })
+    .limit(NOTIFICATION_LIST_LIMIT);
+
   return (
     <div className="ht-canvas min-h-dvh lg:pl-72">
-      <AppHeader employee={employee} />
+      <AppHeader employee={employee} notifications={(notificationRows ?? []).map(toNotificationItem)} />
       <main className="mx-auto w-full max-w-6xl px-4 pb-[max(2rem,env(safe-area-inset-bottom))] pt-5 sm:px-6 lg:px-10 lg:pt-8">
         {children}
       </main>

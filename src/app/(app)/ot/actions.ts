@@ -5,6 +5,7 @@ import { getCurrentEmployee } from "@/lib/auth/current-user";
 import { createClient } from "@/lib/supabase/server";
 import { numberSetting, timeSetting, toSettingsRecord } from "@/lib/settings";
 import { otErrorMessage, validateOtInput } from "@/lib/ot/logic";
+import { schedulePushDelivery } from "@/lib/notifications/push";
 
 export type OtRequestState = {
   error: string | null;
@@ -59,5 +60,6 @@ export async function requestOt(_prevState: OtRequestState, formData: FormData):
 
   revalidatePath("/ot");
   revalidatePath("/approvals");
+  schedulePushDelivery();
   return { error: null, success: true, hours: Number(input.hours) };
 }

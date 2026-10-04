@@ -5,6 +5,7 @@ import { getCurrentEmployee } from "@/lib/auth/current-user";
 import { createClient } from "@/lib/supabase/server";
 import { bangkokToday } from "@/lib/date";
 import { leaveErrorMessage, validateLeaveInput, LEAVE_GENERIC_ERROR } from "@/lib/leave/logic";
+import { schedulePushDelivery } from "@/lib/notifications/push";
 
 export type LeaveRequestState = {
   error: string | null;
@@ -73,5 +74,6 @@ export async function requestLeave(_prevState: LeaveRequestState, formData: Form
 
   revalidatePath("/leave");
   revalidatePath("/approvals");
+  schedulePushDelivery();
   return { error: null, success: true, daysCount: created.total_days, exceedsQuota: created.over_quota };
 }

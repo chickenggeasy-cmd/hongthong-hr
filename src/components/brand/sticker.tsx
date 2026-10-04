@@ -55,6 +55,7 @@ import {
   Users,
   Wallet,
   Wrench,
+  XCircle,
   type LucideIcon,
 } from "lucide-react";
 
@@ -122,6 +123,7 @@ const ICONS = {
   warning: [TriangleAlert, "orange"],
   wave: [Hand, "gold"],
   worker: [HardHat, "gold"],
+  "x-circle": [XCircle, "red"],
 } as const satisfies Record<string, readonly [LucideIcon, Tone]>;
 
 export type StickerName = keyof typeof ICONS;
