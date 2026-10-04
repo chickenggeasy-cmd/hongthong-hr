@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist_Mono, Sarabun } from "next/font/google";
 import "./globals.css";
 
@@ -18,7 +18,14 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: { default: "หงส์ทอง · ระบบพนักงาน", template: "%s · หงส์ทอง" },
   description: "ระบบลงเวลา ลา OT และเงินเดือนพนักงาน บริษัท หงส์ทอง จำกัด",
+  applicationName: "หงส์ทอง",
+  appleWebApp: { capable: true, title: "หงส์ทอง", statusBarStyle: "default" },
+  // ระบบภายในบริษัท ไม่ให้เครื่องมือค้นหาเก็บไปแสดง
+  robots: { index: false, follow: false },
 };
+
+// สีแถบด้านบนของเบราว์เซอร์มือถือ / แอปที่ติดตั้ง
+export const viewport: Viewport = { themeColor: "#0F2D52" };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (

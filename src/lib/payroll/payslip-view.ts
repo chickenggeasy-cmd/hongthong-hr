@@ -22,6 +22,7 @@ export type PayslipRecord = {
   late_deduction: number;
   leave_penalty: number;
   social_security: number;
+  withholding_tax?: number | null;
   net_pay: number;
   details: unknown;
 };
@@ -39,6 +40,8 @@ export function payslipLines(p: PayslipRecord): { earnings: PayslipLine[]; deduc
       { label: `หักมาสาย ${p.late_minutes} นาที (${p.late_days} ครั้ง)`, amount: Number(p.late_deduction) },
       { label: `หักลาเกินโควตา ${p.over_quota_days} วัน`, amount: Number(p.leave_penalty) },
       { label: "ประกันสังคม", amount: Number(p.social_security) },
+      // แสดงเฉพาะงวดที่มีการหักภาษี (ค่าเริ่มต้นไม่หัก)
+      ...(Number(p.withholding_tax ?? 0) > 0 ? [{ label: "ภาษีหัก ณ ที่จ่าย", amount: Number(p.withholding_tax) }] : []),
     ],
   };
 }

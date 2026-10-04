@@ -29,3 +29,10 @@ export function groupLogsByDay(logs: readonly AttendanceLogEntry[]): AttendanceD
     .sort(([a], [b]) => b.localeCompare(a))
     .map(([date, entries]) => ({ date, entries: entries.sort((a, b) => a.recorded_at.localeCompare(b.recorded_at)) }));
 }
+
+/** ขนาดใหม่ของรูปเช็คอินก่อนอัปโหลด: ด้านยาวไม่เกิน maxSide (ไม่ขยายรูปเล็ก) คงสัดส่วนเดิม */
+export function fitWithin(width: number, height: number, maxSide: number): { width: number; height: number } {
+  if (width <= 0 || height <= 0) return { width: 0, height: 0 };
+  const scale = Math.min(1, maxSide / Math.max(width, height));
+  return { width: Math.round(width * scale), height: Math.round(height * scale) };
+}

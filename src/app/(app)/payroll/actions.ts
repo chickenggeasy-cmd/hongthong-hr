@@ -16,6 +16,7 @@ import {
   payrollCycle,
   readPayrollSettings,
 } from "@/lib/payroll/logic";
+import { recordAudit } from "@/lib/audit/record";
 
 export type PayrollActionState = { error: string | null; success: boolean; message?: string };
 
@@ -139,6 +140,7 @@ export async function computePayroll(_prev: PayrollActionState, formData: FormDa
       late_deduction: result.lateDeduction,
       leave_penalty: result.leavePenalty,
       social_security: result.socialSecurity,
+      withholding_tax: result.withholdingTax,
       net_pay: result.netPay,
       details: result.days,
     };
@@ -158,6 +160,7 @@ export async function computePayroll(_prev: PayrollActionState, formData: FormDa
     };
   }
 
+  await recordAudit(manager.id, "payroll.compute", period, { employees: payslips.length });
   revalidatePath("/payroll");
   return { error: null, success: true, message: `คำนวณเงินเดือน ${payslips.length} คนแล้ว` };
 }
@@ -188,6 +191,7 @@ export async function finalizePayroll(_prev: PayrollActionState, formData: FormD
   const { error } = await supabase.rpc("finalize_payroll_run", { p_run_id: run.id, p_finalized_by: manager.id });
   if (error) return { error: GENERIC_ERROR, success: false };
 
+  await recordAudit(manager.id, "payroll.finalize", period);
   revalidatePath("/payroll");
   revalidatePath("/payslip");
   return { error: null, success: true, message: "ปิดงวดแล้ว พนักงานเห็นสลิปของตัวเองได้แล้ว" };

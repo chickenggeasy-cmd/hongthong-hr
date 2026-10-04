@@ -37,7 +37,7 @@
    (ดู `src/lib/leave/logic.ts` + `tests/leave-logic.test.ts` เป็นตัวอย่าง)
    ไฟล์ใน `src/lib/` ที่เทสต์เรียกใช้ ให้ import กันเองแบบ relative (`../date`) เพราะ Vitest ไม่รู้จัก `@/`
 9. ตัวเลขกติกาธุรกิจที่อาจเปลี่ยน เก็บในตาราง `app_settings` ไม่ hardcode ในโค้ด
-10. ก่อนส่งงานทุกครั้ง: `npx tsc --noEmit` ผ่าน + `npx vitest run` ผ่านทั้งหมด (ปัจจุบัน 141 ข้อ)
+10. ก่อนส่งงานทุกครั้ง: `npx tsc --noEmit` ผ่าน + `npx vitest run` ผ่านทั้งหมด (ปัจจุบัน 152 ข้อ)
     (ถ้า tsc ฟ้อง `LayoutProps` ไม่รู้จัก ให้รัน `npx next typegen` ก่อน)
 
 ## โครงสร้างที่ตั้งไว้แล้ว ห้ามสร้างซ้ำซ้อน
@@ -97,7 +97,13 @@
 (ต่อรหัส 5 ครั้ง / ต่อ IP 20 ครั้ง / 15 นาที ค่าอยู่ใน `app_settings` key `login.*`)
 ล็อกอินใช้ service role โดยไม่มี `getCurrentEmployee()` ได้ เพราะยังไม่มีผู้ใช้ — ใช้กับตาราง `login_failures` เท่านั้น
 
-**ค้างอยู่:** ภาษีหัก ณ ที่จ่าย, deploy ขึ้น HTTPS
+**พร้อมใช้งานจริง (2 ต.ค. 2569):** ยกเลิกคำขอลา/OT เอง (`cancel_*_request`, สถานะ `cancelled`),
+ภาษีหัก ณ ที่จ่ายแบบ % คงที่ (`tax.withholding_percent` ค่าเริ่มต้น 0, คอลัมน์ `payslips.withholding_tax`),
+audit log (`audit_logs` + `src/lib/audit/record.ts` เรียก `recordAudit()` หลังงานสำเร็จทุก action ที่แก้ข้อมูลสำคัญ),
+security headers (`next.config.ts`), หน้า error/404/loading, PWA (`src/app/manifest.ts`), ย่อรูปเช็คอินก่อนส่ง (`compress-photo.ts`)
+คู่มือขึ้นระบบจริง: `docs/DEPLOY.md` (Vercel + Supabase ชุดใหม่)
+
+**ค้างอยู่:** เจ้าของโปรเจกต์ต้องทำตาม `docs/DEPLOY.md` เอง (บัญชี Vercel/Supabase), ภาษีแบบขั้นบันได (ยังไม่ทำ)
 
 ## ประเด็นที่ยังไม่ยืนยัน (ห้ามเดาเติมเอง ถ้าไม่ชัวร์ให้ถามหรือทำเป็นค่าตั้งต้นที่แก้ง่าย)
 

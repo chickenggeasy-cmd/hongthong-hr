@@ -9,6 +9,8 @@ import {
   validateLeaveInput,
   LEAVE_GENERIC_ERROR,
   type LeaveSettings,
+  canCancelRequest,
+  leaveStatusLabel,
 } from "../src/lib/leave/logic";
 
 // มี.ค. 2027: วันที่ 1 เป็นวันจันทร์ วันอาทิตย์คือ 7, 14, 21, 28
@@ -143,5 +145,18 @@ describe("leaveErrorMessage", () => {
   it("error ที่ไม่รู้จัก ไม่โชว์รายละเอียดภายใน", () => {
     expect(leaveErrorMessage('relation "x" does not exist')).toBe(LEAVE_GENERIC_ERROR);
     expect(leaveErrorMessage(undefined)).toBe(LEAVE_GENERIC_ERROR);
+  });
+});
+
+describe("ยกเลิกคำขอของตัวเอง", () => {
+  it("ยกเลิกได้เฉพาะคำขอที่ยังรออนุมัติ", () => {
+    expect(canCancelRequest("pending")).toBe(true);
+    expect(canCancelRequest("approved")).toBe(false);
+    expect(canCancelRequest("rejected")).toBe(false);
+    expect(canCancelRequest("cancelled")).toBe(false);
+  });
+
+  it("แสดงสถานะยกเลิกเป็นภาษาไทย", () => {
+    expect(leaveStatusLabel("cancelled")).toBe("ยกเลิกแล้ว");
   });
 });

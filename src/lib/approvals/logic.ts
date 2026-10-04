@@ -37,6 +37,8 @@ export const APPROVAL_ERROR_MESSAGES: Record<string, string> = {
   "approval.self_approval": "อนุมัติคำขอของตัวเองไม่ได้",
   "approval.executive_required": "คำขอนี้ต้องให้ผู้บริหารอนุมัติ",
   "approval.note_too_long": `หมายเหตุยาวเกิน ${MAX_NOTE_LENGTH} ตัวอักษร`,
+  // ยกเลิกคำขอของตัวเอง: ไม่พบ/ไม่ใช่ของตัวเอง/พิจารณาไปแล้ว ใช้ข้อความเดียวกัน
+  "request.not_cancellable": "ยกเลิกไม่ได้ คำขอนี้ถูกพิจารณาไปแล้ว หรือไม่ใช่คำขอของคุณ",
 };
 
 /** แปลง error message จากฐานข้อมูลเป็นภาษาไทย error ที่ไม่รู้จักใช้ข้อความกลาง (ไม่โชว์รายละเอียดภายใน) */

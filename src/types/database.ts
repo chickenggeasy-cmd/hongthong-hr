@@ -82,6 +82,41 @@ export type Database = {
           },
         ]
       }
+      audit_logs: {
+        Row: {
+          action: string
+          actor_id: string | null
+          created_at: string
+          details: Json
+          id: number
+          target: string | null
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          created_at?: string
+          details?: Json
+          id?: number
+          target?: string | null
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          created_at?: string
+          details?: Json
+          id?: number
+          target?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "audit_logs_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       departments: {
         Row: {
           code: string
@@ -442,6 +477,7 @@ export type Database = {
           paid_holiday_days: number
           run_id: string
           social_security: number
+          withholding_tax: number
           worked_days: number
           working_days: number
         }
@@ -468,6 +504,7 @@ export type Database = {
           paid_holiday_days?: number
           run_id: string
           social_security?: number
+          withholding_tax?: number
           worked_days?: number
           working_days?: number
         }
@@ -494,6 +531,7 @@ export type Database = {
           paid_holiday_days?: number
           run_id?: string
           social_security?: number
+          withholding_tax?: number
           worked_days?: number
           working_days?: number
         }
@@ -579,6 +617,8 @@ export type Database = {
       auth_employee_id: { Args: never; Returns: string }
       auth_role: { Args: never; Returns: string }
       can_manage_employees: { Args: never; Returns: boolean }
+      cancel_leave_request: { Args: { p_request_id: string }; Returns: undefined }
+      cancel_ot_request: { Args: { p_request_id: string }; Returns: undefined }
       decide_leave_request: {
         Args: { p_approve: boolean; p_note?: string; p_request_id: string }
         Returns: undefined

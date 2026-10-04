@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { groupLogsByDay, nextAttendanceType } from "../src/lib/attendance/logic";
+import { fitWithin, groupLogsByDay, nextAttendanceType } from "../src/lib/attendance/logic";
 
 describe("nextAttendanceType", () => {
   it("ไม่มีประวัติมาก่อน → เช็คอิน", () => {
@@ -27,5 +27,17 @@ describe("groupLogsByDay", () => {
     ]);
     expect(days.map((d) => d.date)).toEqual(["2026-10-02", "2026-10-01"]);
     expect(days[0].entries.map((e) => `${e.id}@${e.time}`)).toEqual(["late-night@00:30", "in@08:50", "out@17:05"]);
+  });
+});
+
+describe("fitWithin (ย่อรูปเช็คอินก่อนอัปโหลด)", () => {
+  it("ย่อด้านยาวให้ไม่เกินที่กำหนด คงสัดส่วน", () => {
+    expect(fitWithin(4032, 3024, 1280)).toEqual({ width: 1280, height: 960 });
+    expect(fitWithin(3024, 4032, 1280)).toEqual({ width: 960, height: 1280 });
+  });
+
+  it("รูปเล็กกว่าเดิมไม่ขยาย และขนาดผิดปกติได้ 0", () => {
+    expect(fitWithin(800, 600, 1280)).toEqual({ width: 800, height: 600 });
+    expect(fitWithin(0, 600, 1280)).toEqual({ width: 0, height: 0 });
   });
 });

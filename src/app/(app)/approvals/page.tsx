@@ -45,7 +45,7 @@ export default async function ApprovalsPage({ searchParams }: PageProps<"/approv
         .select(
           "id, leave_type, start_date, end_date, days_count, status, exceeds_quota, decision_note, decided_at, requester:employees!leave_requests_employee_id_fkey(full_name), approver:employees!leave_requests_approver_id_fkey(full_name)",
         )
-        .neq("status", "pending")
+        .in("status", ["approved", "rejected"])
         .order("decided_at", { ascending: false })
         .limit(15),
       supabase
@@ -53,7 +53,7 @@ export default async function ApprovalsPage({ searchParams }: PageProps<"/approv
         .select(
           "id, work_date, hours, status, decision_note, decided_at, requester:employees!ot_requests_employee_id_fkey(full_name), approver:employees!ot_requests_approver_id_fkey(full_name)",
         )
-        .neq("status", "pending")
+        .in("status", ["approved", "rejected"])
         .order("decided_at", { ascending: false })
         .limit(15),
       supabase.rpc("public_settings"),

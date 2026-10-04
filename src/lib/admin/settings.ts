@@ -32,6 +32,7 @@ export const SETTING_DEFINITIONS: readonly SettingDefinition[] = [
   { key: "leave.sick_backdate_days", label: "ลาป่วยยื่นย้อนหลังได้", group: "การลา", kind: "integer", unit: "วัน", min: 0, max: 60 },
   { key: "payroll.cutoff_day", label: "วันตัดรอบเงินเดือน", group: "เงินเดือน", kind: "integer", unit: "ของเดือน", min: 1, max: 28, help: "เช่น 25 = นับวันที่ 26 เดือนก่อน ถึง 25 เดือนนี้" },
   { key: "social_security.rate_percent", label: "เงินสมทบประกันสังคม", group: "เงินเดือน", kind: "decimal", unit: "%", min: 0, max: 100 },
+  { key: "tax.withholding_percent", label: "ภาษีหัก ณ ที่จ่าย", group: "เงินเดือน", kind: "decimal", unit: "%", min: 0, max: 35, help: "หักจาก (ค่าจ้าง + OT − หักมาสาย) อัตราเดียวทุกคน 0 = ไม่หัก" },
   { key: "social_security.max_amount", label: "ประกันสังคมสูงสุด", group: "เงินเดือน", kind: "decimal", unit: "บาท/เดือน", min: 0, max: 100000 },
   { key: "warning.late_count_threshold", label: "ออกใบเตือนเมื่อมาสาย", group: "ใบเตือน", kind: "integer", unit: "ครั้ง/รอบเงินเดือน", min: 1, max: 31 },
   { key: "warning.absent_days_threshold", label: "ออกใบเตือนเมื่อขาดงาน", group: "ใบเตือน", kind: "integer", unit: "วัน/รอบเงินเดือน", min: 1, max: 31 },

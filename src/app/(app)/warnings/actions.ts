@@ -8,6 +8,7 @@ import { createServiceClient } from "@/lib/supabase/service";
 import { numberSetting, toSettingsRecord } from "@/lib/settings";
 import { isValidPeriod, periodLabel } from "@/lib/payroll/logic";
 import { autoWarnings, validateManualWarning } from "@/lib/warnings/logic";
+import { recordAudit } from "@/lib/audit/record";
 
 export type WarningActionState = { error: string | null; success: boolean; message?: string };
 
@@ -21,7 +22,8 @@ async function warningIssuer() {
 }
 
 export async function generateWarnings(_prev: WarningActionState, formData: FormData): Promise<WarningActionState> {
-  if (!(await warningIssuer())) return FORBIDDEN;
+  const issuer = await warningIssuer();
+  if (!issuer) return FORBIDDEN;
 
   const period = String(formData.get("period") ?? "");
   if (!isValidPeriod(period)) return { error: "กรุณาเลือกงวด", success: false };
@@ -59,6 +61,7 @@ export async function generateWarnings(_prev: WarningActionState, formData: Form
   revalidatePath("/warnings");
   revalidatePath("/");
   const count = inserted?.length ?? 0;
+  if (count > 0) await recordAudit(issuer.id, "warning.generate", period, { issued: count });
   return {
     error: null,
     success: true,
@@ -88,6 +91,7 @@ export async function issueWarning(_prev: WarningActionState, formData: FormData
   });
   if (error) return { error: GENERIC_ERROR, success: false };
 
+  await recordAudit(issuer.id, "warning.issue", employeeId, { reason: reason.trim().slice(0, 100) });
   revalidatePath("/warnings");
   return { error: null, success: true, message: "ออกใบเตือนแล้ว" };
 }

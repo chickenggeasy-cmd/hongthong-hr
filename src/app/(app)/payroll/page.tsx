@@ -35,14 +35,14 @@ export default async function PayrollPage({ searchParams }: PageProps<"/payroll"
     ? await supabase
         .from("payslips")
         .select(
-          "id, employee_code, full_name, dept_name, worked_days, leave_days, absent_days, late_minutes, ot_hours, over_quota_days, base_pay, ot_pay, late_deduction, leave_penalty, social_security, net_pay",
+          "id, employee_code, full_name, dept_name, worked_days, leave_days, absent_days, late_minutes, ot_hours, over_quota_days, base_pay, ot_pay, late_deduction, leave_penalty, social_security, withholding_tax, net_pay",
         )
         .eq("run_id", run.id)
         .order("employee_code")
     : { data: null };
 
   const cycle = run ? { start: run.cycle_start, end: run.cycle_end } : payrollCycle(period, cutoffDay);
-  const total = (key: "base_pay" | "ot_pay" | "late_deduction" | "leave_penalty" | "social_security" | "net_pay") =>
+  const total = (key: "base_pay" | "ot_pay" | "late_deduction" | "leave_penalty" | "social_security" | "withholding_tax" | "net_pay") =>
     (payslips ?? []).reduce((sum, p) => sum + Number(p[key]), 0);
 
   // งวดที่เลือกได้: 3 งวดล่าสุด + งวดที่เคยคำนวณ
@@ -103,7 +103,7 @@ export default async function PayrollPage({ searchParams }: PageProps<"/payroll"
             {[
               { label: "พนักงาน", value: `${payslips.length} คน` },
               { label: "ค่าจ้าง + OT", value: `${formatBaht(total("base_pay") + total("ot_pay"))} ฿` },
-              { label: "รายการหัก", value: `${formatBaht(total("late_deduction") + total("leave_penalty") + total("social_security"))} ฿` },
+              { label: "รายการหัก", value: `${formatBaht(total("late_deduction") + total("leave_penalty") + total("social_security") + total("withholding_tax"))} ฿` },
               { label: "จ่ายสุทธิ", value: `${formatBaht(total("net_pay"))} ฿`, accent: true },
             ].map((card) => (
               <div key={card.label} className={`rounded-2xl p-4 shadow-sm ${card.accent ? "bg-[#1E5FA8] text-white" : "bg-white"}`}>
@@ -147,7 +147,7 @@ export default async function PayrollPage({ searchParams }: PageProps<"/payroll"
                     <td className={`px-2 py-2 text-right ${p.late_minutes > 0 ? "text-[#E8890C]" : ""}`}>{p.late_minutes}</td>
                     <td className="px-2 py-2 text-right">{p.ot_hours}</td>
                     <td className="px-2 py-2 text-right text-[#D64545]">
-                      {formatBaht(Number(p.late_deduction) + Number(p.leave_penalty) + Number(p.social_security))}
+                      {formatBaht(Number(p.late_deduction) + Number(p.leave_penalty) + Number(p.social_security) + Number(p.withholding_tax))}
                     </td>
                     <td className="px-4 py-2 text-right font-semibold text-[#1A1A1A]">{formatBaht(Number(p.net_pay))}</td>
                   </tr>

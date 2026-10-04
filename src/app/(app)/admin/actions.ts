@@ -10,6 +10,7 @@ import {
   validateSettingCombination,
   validateSettingValue,
 } from "@/lib/admin/settings";
+import { recordAudit } from "@/lib/audit/record";
 
 export type AdminFormState = { error: string | null; success: boolean; message?: string };
 
@@ -17,9 +18,9 @@ const FORBIDDEN: AdminFormState = { error: "คุณไม่มีสิทธ
 const GENERIC_ERROR = "บันทึกไม่สำเร็จ กรุณาลองใหม่";
 
 /** ทุก action ในไฟล์นี้ใช้ service role จึงต้องตรวจตัวตน + สิทธิ์ด้วย client ปกติก่อนเสมอ */
-async function canAdmin() {
+async function adminActor() {
   const employee = await getCurrentEmployee();
-  return employee !== null && can(employee.role, "admin.view");
+  return employee !== null && can(employee.role, "admin.view") ? employee : null;
 }
 
 function revalidateAll() {
@@ -28,7 +29,8 @@ function revalidateAll() {
 }
 
 export async function updateSettings(_prev: AdminFormState, formData: FormData): Promise<AdminFormState> {
-  if (!(await canAdmin())) return FORBIDDEN;
+  const actor = await adminActor();
+  if (!actor) return FORBIDDEN;
 
   // รับเฉพาะ key ที่อยู่ในรายการที่อนุญาต ไม่เชื่อชื่อช่องอื่นที่ส่งมาจากฟอร์ม
   const values: Record<string, string> = {};
@@ -50,18 +52,23 @@ export async function updateSettings(_prev: AdminFormState, formData: FormData):
   // แก้เฉพาะ key ที่มีอยู่แล้วในฐานข้อมูล (ไม่สร้าง key ใหม่จากหน้าเว็บ)
   const existingKeys = new Set((current ?? []).map((row) => row.key));
   const now = new Date().toISOString();
+  const before = Object.fromEntries((current ?? []).map((row) => [row.key, row.value]));
+  const changed: Record<string, string> = {};
   for (const [key, value] of Object.entries(values)) {
     if (!existingKeys.has(key)) continue;
     const { error } = await supabase.from("app_settings").update({ value, updated_at: now }).eq("key", key);
     if (error) return { error: GENERIC_ERROR, success: false };
+    if (before[key] !== value) changed[key] = `${before[key]} → ${value}`;
   }
 
+  if (Object.keys(changed).length > 0) await recordAudit(actor.id, "settings.update", null, changed);
   revalidateAll();
   return { error: null, success: true, message: "บันทึกการตั้งค่าแล้ว" };
 }
 
 export async function addHoliday(_prev: AdminFormState, formData: FormData): Promise<AdminFormState> {
-  if (!(await canAdmin())) return FORBIDDEN;
+  const actor = await adminActor();
+  if (!actor) return FORBIDDEN;
 
   const date = String(formData.get("holidayDate") ?? "");
   const name = String(formData.get("holidayName") ?? "");
@@ -75,18 +82,21 @@ export async function addHoliday(_prev: AdminFormState, formData: FormData): Pro
     return { error: error.code === "23505" ? "มีวันหยุดวันนี้อยู่แล้ว" : GENERIC_ERROR, success: false };
   }
 
+  await recordAudit(actor.id, "holiday.add", date, { name: name.trim() });
   revalidateAll();
   return { error: null, success: true, message: "เพิ่มวันหยุดแล้ว" };
 }
 
 export async function deleteHoliday(_prev: AdminFormState, formData: FormData): Promise<AdminFormState> {
-  if (!(await canAdmin())) return FORBIDDEN;
+  const actor = await adminActor();
+  if (!actor) return FORBIDDEN;
 
   const date = String(formData.get("holidayDate") ?? "");
   const supabase = createServiceClient();
   const { error } = await supabase.from("holidays").delete().eq("holiday_date", date);
   if (error) return { error: GENERIC_ERROR, success: false };
 
+  await recordAudit(actor.id, "holiday.delete", date);
   revalidateAll();
   return { error: null, success: true, message: "ลบวันหยุดแล้ว" };
 }
