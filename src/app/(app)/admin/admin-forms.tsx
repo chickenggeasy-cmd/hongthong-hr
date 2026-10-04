@@ -5,6 +5,7 @@ import { addHoliday, deleteHoliday, updateSettings, type AdminFormState } from "
 import type { SettingDefinition } from "@/lib/admin/settings";
 import { CardHeading } from "@/components/features/card-heading";
 import type { StickerName } from "@/components/brand/sticker";
+import { DateField } from "@/components/ui/date-field";
 
 // ภาพประจำหัวข้อการตั้งค่าแต่ละกลุ่ม
 const GROUP_STICKER: Record<string, StickerName> = {
@@ -99,7 +100,7 @@ export function AddHolidayForm() {
   return (
     <form action={formAction} className="space-y-3">
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-[10rem_1fr_auto]">
-        <input name="holidayDate" type="date" required aria-label="วันที่" className={inputClass} />
+        <DateField name="holidayDate" required ariaLabel="วันที่" />
         <input name="holidayName" type="text" required maxLength={100} placeholder="ชื่อวันหยุด" aria-label="ชื่อวันหยุด" className={inputClass} />
         <button
           type="submit"

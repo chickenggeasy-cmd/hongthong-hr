@@ -4,6 +4,9 @@ import { useActionState, useMemo, useState } from "react";
 import { Pencil, Search, UserCheck, UserX } from "lucide-react";
 import { setEmployeeStatus, updateEmployee, type EmployeeActionState } from "./actions";
 import { filterEmployees, type EmployeeFilter } from "@/lib/employees/logic";
+import { SelectField } from "@/components/ui/select-field";
+import { departmentOptions } from "./department-options";
+import { DateField } from "@/components/ui/date-field";
 
 export type DirectoryEmployee = {
   id: string;
@@ -49,13 +52,7 @@ function EditPanel({
         <p className="text-sm font-semibold text-[#1A1A1A]">แก้ไขข้อมูล</p>
         <input type="hidden" name="employeeId" value={employee.id} />
         <input name="fullName" defaultValue={employee.full_name} required aria-label="ชื่อ-นามสกุล" className={inputClass} />
-        <select name="deptCode" defaultValue={employee.dept_code} aria-label="แผนก" className={inputClass}>
-          {departments.map((d) => (
-            <option key={d.code} value={d.code}>
-              {d.code} — {d.name}
-            </option>
-          ))}
-        </select>
+        <SelectField name="deptCode" defaultValue={employee.dept_code} ariaLabel="แผนก" options={departmentOptions(departments)} />
         <p className="text-xs text-[#5B6B7B]">ย้ายแผนกแล้วรหัสพนักงานยังเป็นเลขเดิม (ใช้ล็อกอิน)</p>
         <button
           type="submit"
@@ -91,7 +88,7 @@ function EditPanel({
             <label className="block text-xs text-[#5B6B7B]" htmlFor={`resign-${employee.id}`}>
               วันทำงานวันสุดท้าย (เงินเดือนงวดนั้นคิดถึงวันนี้)
             </label>
-            <input id={`resign-${employee.id}`} type="date" name="resignedOn" defaultValue={today} required className={inputClass} />
+            <DateField id={`resign-${employee.id}`} name="resignedOn" defaultValue={today} required ariaLabel="วันทำงานวันสุดท้าย" />
             <button
               type="submit"
               name="action"
@@ -146,19 +143,14 @@ export function EmployeeDirectory({
             className={`${inputClass} pl-9`}
           />
         </div>
-        <select
-          value={filter.deptCode}
-          onChange={(e) => setFilter((f) => ({ ...f, deptCode: e.target.value }))}
-          aria-label="กรองแผนก"
-          className={`${inputClass} w-auto`}
-        >
-          <option value="">ทุกแผนก</option>
-          {departments.map((d) => (
-            <option key={d.code} value={d.code}>
-              {d.code} — {d.name}
-            </option>
-          ))}
-        </select>
+        <div className="w-full sm:w-72">
+          <SelectField
+            value={filter.deptCode}
+            onChange={(deptCode) => setFilter((f) => ({ ...f, deptCode }))}
+            ariaLabel="กรองแผนก"
+            options={[{ value: "", label: "ทุกแผนก" }, ...departmentOptions(departments)]}
+          />
+        </div>
       </div>
 
       <div className="mt-3 flex gap-1" role="tablist" aria-label="สถานะ">

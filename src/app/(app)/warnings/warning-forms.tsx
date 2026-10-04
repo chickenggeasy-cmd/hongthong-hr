@@ -8,6 +8,7 @@ import {
   type WarningActionState,
 } from "./actions";
 import { MAX_WARNING_REASON_LENGTH } from "@/lib/warnings/logic";
+import { SelectField } from "@/components/ui/select-field";
 
 const initialState: WarningActionState = { error: null, success: false };
 
@@ -37,13 +38,9 @@ export function GenerateWarningsForm({ periods }: { periods: { value: string; la
   return (
     <form action={formAction} className="space-y-3">
       <div className="flex flex-wrap gap-2">
-        <select name="period" aria-label="งวด" className={`${inputClass} w-auto`} defaultValue={periods[0]?.value}>
-          {periods.map((p) => (
-            <option key={p.value} value={p.value}>
-              งวด {p.label}
-            </option>
-          ))}
-        </select>
+        <div className="w-56">
+          <SelectField name="period" ariaLabel="งวด" defaultValue={periods[0]?.value} options={periods.map((p) => ({ value: p.value, label: `งวด ${p.label}` }))} />
+        </div>
         <button
           type="submit"
           disabled={pending || periods.length === 0}
@@ -74,21 +71,15 @@ export function IssueWarningForm({ employees }: { employees: { id: string; label
 
   return (
     <form action={formAction} className="space-y-3">
-      <select
+      <SelectField
         name="employeeId"
-        aria-label="พนักงาน"
+        ariaLabel="พนักงาน"
         required
+        placeholder="เลือกพนักงาน"
         value={employeeId}
-        onChange={(event) => setEmployeeId(event.target.value)}
-        className={inputClass}
-      >
-        <option value="">— เลือกพนักงาน —</option>
-        {employees.map((e) => (
-          <option key={e.id} value={e.id}>
-            {e.label}
-          </option>
-        ))}
-      </select>
+        onChange={setEmployeeId}
+        options={employees.map((e) => ({ value: e.id, label: e.label }))}
+      />
       <textarea
         name="reason"
         aria-label="เหตุผล"

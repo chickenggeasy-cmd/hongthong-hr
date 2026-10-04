@@ -144,6 +144,36 @@
   from { opacity: 0; transform: translate3d(0, 16px, 0); }
   to { opacity: 1; transform: translate3d(0, 0, 0); }
 }
+/* กล่องลอยของช่องเลือก/ปฏิทิน: ขยายออกจากช่องกรอก + รายการค่อยๆ ไล่ขึ้นมา + เลื่อนเดือน */
+@keyframes ht-float-panel {
+  from { opacity: 0; transform: translate3d(0, -6px, 0) scale(0.96); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+@keyframes ht-option {
+  from { opacity: 0; transform: translate3d(0, 4px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+@keyframes ht-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes ht-slide-next {
+  from { opacity: 0; transform: translate3d(18px, 0, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+@keyframes ht-slide-prev {
+  from { opacity: 0; transform: translate3d(-18px, 0, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+/* หน้าต่างรูปโปรไฟล์: มือถือเลื่อนขึ้นจากล่าง / จอใหญ่ขยายจากกลางจอ */
+@keyframes ht-sheet {
+  from { opacity: 0; transform: translate3d(0, 40px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+@keyframes ht-dialog {
+  from { opacity: 0; transform: translate3d(0, 12px, 0) scale(0.94); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
 /* กระดิ่งสั่นตอนมีแจ้งเตือนใหม่ / กล่องแจ้งเตือนเลื่อนเข้า */
 @keyframes ht-ring {
   0%, 100% { transform: rotate(0); }
@@ -188,6 +218,27 @@
 /* ใส่ style={{ animationDelay }} เพื่อให้ไล่กันขึ้นมาทีละใบ */
 @utility ht-rise {
   animation: ht-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+@utility ht-float-panel {
+  animation: ht-float-panel 0.26s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@utility ht-option {
+  animation: ht-option 0.32s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+@utility ht-fade {
+  animation: ht-fade 0.3s ease both;
+}
+@utility ht-slide-next {
+  animation: ht-slide-next 0.32s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@utility ht-slide-prev {
+  animation: ht-slide-prev 0.32s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@utility ht-sheet {
+  animation: ht-sheet 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
+  @media (min-width: 640px) {
+    animation-name: ht-dialog;
+  }
 }
 @utility ht-ring {
   animation: ht-ring 0.9s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;

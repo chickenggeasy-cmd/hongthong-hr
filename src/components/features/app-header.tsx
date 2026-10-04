@@ -4,6 +4,7 @@ import { MobileNav } from "./mobile-nav";
 import { SidebarPanel, type ShellUser } from "./sidebar-panel";
 import { NotificationBell, NotificationProvider } from "./notification-center";
 import type { NotificationItem } from "@/lib/notifications/logic";
+import { avatarUrl } from "@/lib/profile/photo";
 
 /**
  * โครงเมนูของทุกหน้าหลังล็อกอิน
@@ -19,6 +20,7 @@ export function AppHeader({ employee, notifications }: { employee: CurrentEmploy
     deptName: employee.deptName,
     roleName: roleLabel(employee.role),
     portal: portalLabel(employee.role),
+    photoUrl: avatarUrl(employee.id, employee.photoPath),
   };
 
   return (

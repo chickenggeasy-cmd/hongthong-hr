@@ -1,6 +1,7 @@
 "use client";
 
-import { useActionState, useMemo, useState } from "react";
+import { useActionState, useMemo, useState, type ReactNode } from "react";
+import { Briefcase, Thermometer, TreePalm } from "lucide-react";
 import { requestLeave, type LeaveRequestState } from "./actions";
 import {
   countLeaveDays,
@@ -13,8 +14,17 @@ import {
 } from "@/lib/leave/logic";
 import { formatThaiDate, isValidDateOnly, type DateOnly } from "@/lib/date";
 import { CardHeading } from "@/components/features/card-heading";
+import { SelectField } from "@/components/ui/select-field";
+import { DateField } from "@/components/ui/date-field";
 
 const initialState: LeaveRequestState = { error: null, success: false };
+
+// ไอคอน + คำอธิบายสั้นในรายการประเภทการลา
+const LEAVE_TYPE_OPTION: Record<LeaveType, { icon: ReactNode; description: string }> = {
+  sick: { icon: <Thermometer className="h-4 w-4" aria-hidden />, description: "ไม่สบาย ยื่นย้อนหลังได้" },
+  personal: { icon: <Briefcase className="h-4 w-4" aria-hidden />, description: "ธุระส่วนตัว ต้องยื่นล่วงหน้า" },
+  vacation: { icon: <TreePalm className="h-4 w-4" aria-hidden />, description: "พักผ่อนประจำปี ต้องยื่นล่วงหน้า" },
+};
 
 const inputClass =
   "w-full ht-input";
@@ -61,19 +71,13 @@ export function LeaveRequestForm({
         <label htmlFor="leaveType" className="mb-1.5 block text-sm font-medium text-[#1A1A1A]">
           ประเภทการลา
         </label>
-        <select
+        <SelectField
           id="leaveType"
           name="leaveType"
           value={leaveType}
-          onChange={(event) => setLeaveType(event.target.value as LeaveType)}
-          className={inputClass}
-        >
-          {LEAVE_TYPES.map((type) => (
-            <option key={type} value={type}>
-              {LEAVE_TYPE_LABEL_TH[type]}
-            </option>
-          ))}
-        </select>
+          onChange={(value) => setLeaveType(value as LeaveType)}
+          options={LEAVE_TYPES.map((type) => ({ value: type, label: LEAVE_TYPE_LABEL_TH[type], ...LEAVE_TYPE_OPTION[type] }))}
+        />
         <p className="mt-1 text-xs text-[#5B6B7B]">
           {leaveType === "sick"
             ? `ลาป่วยยื่นย้อนหลังได้ไม่เกิน ${settings.sickBackdateDays} วัน`
@@ -86,30 +90,33 @@ export function LeaveRequestForm({
           <label htmlFor="startDate" className="mb-1.5 block text-sm font-medium text-[#1A1A1A]">
             วันแรกที่ลา
           </label>
-          <input
+          <DateField
             id="startDate"
             name="startDate"
-            type="date"
             required
             min={minStart}
             value={startDate}
-            onChange={(event) => setStartDate(event.target.value)}
-            className={inputClass}
+            holidays={holidaySet}
+            ariaLabel="วันแรกที่ลา"
+            onChange={(value) => {
+              setStartDate(value);
+              if (endDate && value > endDate) setEndDate(value); // เลือกวันเริ่มเลยวันสุดท้าย: เลื่อนวันสุดท้ายตามให้
+            }}
           />
         </div>
         <div>
           <label htmlFor="endDate" className="mb-1.5 block text-sm font-medium text-[#1A1A1A]">
             วันสุดท้ายที่ลา
           </label>
-          <input
+          <DateField
             id="endDate"
             name="endDate"
-            type="date"
             required
             min={startDate || minStart}
             value={endDate}
-            onChange={(event) => setEndDate(event.target.value)}
-            className={inputClass}
+            holidays={holidaySet}
+            ariaLabel="วันสุดท้ายที่ลา"
+            onChange={setEndDate}
           />
         </div>
       </div>

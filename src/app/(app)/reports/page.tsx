@@ -6,9 +6,9 @@ import { addDays, bangkokToday, startOfMonth } from "@/lib/date";
 import { periodLabel } from "@/lib/payroll/logic";
 import { MAX_REPORT_DAYS } from "@/lib/reports/logic";
 import { CardHeading } from "@/components/features/card-heading";
+import { SelectField } from "@/components/ui/select-field";
+import { DateField } from "@/components/ui/date-field";
 
-const inputClass =
-  "ht-input";
 const buttonClass =
   "rounded-lg bg-[#1E5FA8] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#1E5FA8]/90";
 
@@ -32,14 +32,18 @@ export default async function ReportsPage() {
           <p className="text-sm text-[#5B6B7B]">ยังไม่มีงวดที่คำนวณแล้ว</p>
         ) : (
           <form method="get" action="/reports/payroll" className="flex flex-wrap gap-2">
-            <select name="period" aria-label="งวด" className={inputClass}>
-              {runs.map((r) => (
-                <option key={r.period} value={r.period}>
-                  {periodLabel(r.period)}
-                  {r.status === "finalized" ? "" : " (ร่าง)"}
-                </option>
-              ))}
-            </select>
+            <div className="w-60">
+              <SelectField
+                name="period"
+                ariaLabel="งวด"
+                defaultValue={runs[0].period}
+                options={runs.map((r) => ({
+                  value: r.period,
+                  label: periodLabel(r.period),
+                  description: r.status === "finalized" ? "ปิดงวดแล้ว" : "ร่าง ยังไม่ปิดงวด",
+                }))}
+              />
+            </div>
             <button type="submit" className={buttonClass}>
               ดาวน์โหลด
             </button>
@@ -57,9 +61,13 @@ export default async function ReportsPage() {
             {report.help} · เลือกได้ไม่เกิน {MAX_REPORT_DAYS} วัน
           </p>
           <form method="get" action={report.action} className="flex flex-wrap items-center gap-2">
-            <input type="date" name="from" required defaultValue={monthStart} aria-label="ตั้งแต่วันที่" className={inputClass} />
+            <div className="w-48">
+              <DateField name="from" required defaultValue={monthStart} ariaLabel="ตั้งแต่วันที่" />
+            </div>
             <span className="text-[#5B6B7B]">ถึง</span>
-            <input type="date" name="to" required defaultValue={today} max={addDays(today, 366)} aria-label="ถึงวันที่" className={inputClass} />
+            <div className="w-48">
+              <DateField name="to" required defaultValue={today} max={addDays(today, 366)} ariaLabel="ถึงวันที่" />
+            </div>
             <button type="submit" className={buttonClass}>
               ดาวน์โหลด
             </button>

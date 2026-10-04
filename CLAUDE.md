@@ -37,7 +37,7 @@
    (ดู `src/lib/leave/logic.ts` + `tests/leave-logic.test.ts` เป็นตัวอย่าง)
    ไฟล์ใน `src/lib/` ที่เทสต์เรียกใช้ ให้ import กันเองแบบ relative (`../date`) เพราะ Vitest ไม่รู้จัก `@/`
 9. ตัวเลขกติกาธุรกิจที่อาจเปลี่ยน เก็บในตาราง `app_settings` ไม่ hardcode ในโค้ด
-10. ก่อนส่งงานทุกครั้ง: `npx tsc --noEmit` ผ่าน + `npx vitest run` ผ่านทั้งหมด (ปัจจุบัน 164 ข้อ)
+10. ก่อนส่งงานทุกครั้ง: `npx tsc --noEmit` ผ่าน + `npx vitest run` ผ่านทั้งหมด (ปัจจุบัน 177 ข้อ)
     (ถ้า tsc ฟ้อง `LayoutProps` ไม่รู้จัก ให้รัน `npx next typegen` ก่อน)
 
 ## โครงสร้างที่ตั้งไว้แล้ว ห้ามสร้างซ้ำซ้อน
@@ -66,6 +66,11 @@
   ใช้บนพื้นน้ำเงินเท่านั้น (ปรับเป็นโทนน้ำเงินอัตโนมัติ) `PageHeader` รับ `photo` ได้ หน้าแรก/ล็อกอินมีการ์ดข้อมูลลอยบนรูป, หัวข้อการ์ด: `card-heading.tsx`
   คลาสกลางใน `globals.css`: `ht-card` (การ์ด), `ht-input` (ช่องกรอก), `ht-btn-primary` (ปุ่มหลัก), `ht-stat` (ตัวเลขบนแบนเนอร์), `ht-canvas` (พื้นหลัง)
   หน้าใหม่ใช้คลาสเหล่านี้ อย่าเขียนสไตล์การ์ด/ปุ่มเองใหม่
+- ช่องเลือกในฟอร์ม: `src/components/ui/select-field.tsx` (`SelectField`) และ `date-field.tsx` (`DateField` ปฏิทินไทย พ.ศ.)
+  **ห้ามใช้ `<select>` / `<input type="date">` ของเบราว์เซอร์** (หน้าตาธรรมดา และวันที่ขึ้น mm/dd/yyyy) ส่งค่าในฟอร์มด้วยชื่อเดิม รองรับ `required`
+  กล่องลอยใช้ `floating.tsx` (portal + พลิกขึ้นเมื่อที่ด้านล่างไม่พอ) logic ปฏิทินอยู่ `src/lib/ui/calendar.ts`
+- รูปโปรไฟล์: `employees.photo_path` + bucket ส่วนตัว `avatars` อัปโหลดผ่าน `profile-actions.ts` (service role หลังตรวจตัวตน)
+  แสดงผ่าน route `/avatar/[employeeId]?v=` (ต้องล็อกอิน แคชได้นาน) ใช้ `<AvatarImage>` / `<AvatarButton>` จาก `profile-photo.tsx`, `avatarUrl()` ใน `src/lib/profile/photo.ts`
 - ดาวน์โหลดไฟล์ (PDF/Excel) ใช้ Route Handler (`route.ts`) และต้องเช็กสิทธิ์เองในนั้น (ดู `src/lib/reports/guard.ts`)
 - `scripts/create-first-user.ts` — อ้างอิงถ้าต้องเขียนสคริปต์รันครั้งเดียวอีก
 - error จาก SQL function ใช้ message เป็นรหัสภาษาอังกฤษ (เช่น `leave.overlap`) แล้วแปลเป็นไทยฝั่งเว็บ
@@ -110,6 +115,8 @@ security headers (`next.config.ts`), หน้า error/404/loading, PWA (`src/a
 หน้าเว็บฟังผ่าน Supabase Realtime (`notification-center.tsx`: `NotificationProvider` + `NotificationBell`) เด้ง + เสียง (`sound.ts`) + `router.refresh()`
 Web Push ตอนปิดเว็บ: `push_subscriptions` + `public/sw.js` + `src/lib/notifications/push.ts` (เรียก `schedulePushDelivery()` หลัง action ที่ทำให้เกิดแจ้งเตือน)
 เพิ่มเหตุการณ์แจ้งเตือนใหม่ = เพิ่ม trigger ใน migration + ไอคอนใน `notificationIcon()` + เรียก `schedulePushDelivery()` ใน action
+
+**ปรับหน้าตาฟอร์ม + รูปโปรไฟล์ (5 ต.ค. 2569):** ช่องเลือก/ปฏิทินแบบใหม่ทุกหน้า ทุกคนตั้งรูปโปรไฟล์เองได้ (กดรูปที่การ์ดผู้ใช้ล่างซ้าย/แถบบนมือถือ)
 
 **ค้างอยู่:** ภาษีแบบขั้นบันได (ยังไม่ทำ), เจ้าของต้องใส่กุญแจ VAPID ใน Vercel เพื่อเปิดแจ้งเตือนตอนปิดเว็บ
 

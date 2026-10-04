@@ -3,6 +3,8 @@
 import { useActionState, useRef } from "react";
 import { registerEmployee, type RegisterEmployeeState } from "./actions";
 import { CardHeading } from "@/components/features/card-heading";
+import { SelectField } from "@/components/ui/select-field";
+import { departmentOptions } from "./department-options";
 
 const initialState: RegisterEmployeeState = { error: null, success: false };
 
@@ -38,22 +40,7 @@ export function RegisterForm({ departments }: { departments: { code: string; nam
         <label htmlFor="deptCode" className="mb-1.5 block text-sm font-medium text-[#1A1A1A]">
           แผนก
         </label>
-        <select
-          id="deptCode"
-          name="deptCode"
-          required
-          defaultValue=""
-          className="w-full rounded-lg border border-[#5B6B7B]/30 bg-white px-4 py-2.5 text-[#1A1A1A] outline-none focus:border-[#1E5FA8] focus:ring-2 focus:ring-[#1E5FA8]/20"
-        >
-          <option value="" disabled>
-            เลือกแผนก
-          </option>
-          {departments.map((dept) => (
-            <option key={dept.code} value={dept.code}>
-              {dept.code} — {dept.name}
-            </option>
-          ))}
-        </select>
+        <SelectField id="deptCode" name="deptCode" required placeholder="เลือกแผนก" ariaLabel="แผนก" options={departmentOptions(departments)} />
       </div>
 
       <div>

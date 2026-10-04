@@ -8,6 +8,7 @@ import { logout } from "@/lib/auth/actions";
 import type { NavItem } from "@/lib/permissions";
 import { NavLinks } from "./nav-links";
 import { useNotifications } from "./notification-center";
+import { AvatarButton } from "./profile-photo";
 
 export type ShellUser = {
   fullName: string;
@@ -15,19 +16,8 @@ export type ShellUser = {
   deptName: string;
   roleName: string;
   portal: string;
+  photoUrl: string | null;
 };
-
-export function Avatar({ name, size = "md" }: { name: string; size?: "sm" | "md" }) {
-  const box = size === "sm" ? "h-9 w-9 text-sm" : "h-10 w-10";
-  return (
-    <span
-      className={`flex shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#F0C75E] to-[#D4A017] font-bold text-[#0F2D52] ring-2 ring-white/20 ${box}`}
-      aria-hidden
-    >
-      {name.trim().slice(0, 1)}
-    </span>
-  );
-}
 
 /** เนื้อหาแถบเมนูสีน้ำเงินเข้ม: โลโก้ → เมนู → การ์ดผู้ใช้ + ออกจากระบบ */
 export function SidebarPanel({
@@ -75,7 +65,7 @@ export function SidebarPanel({
 
       <div className="relative border-t border-white/10 p-3">
         <div className="flex items-center gap-3 rounded-2xl bg-white/[0.06] p-3">
-          <Avatar name={user.fullName} />
+          <AvatarButton name={user.fullName} photoUrl={user.photoUrl} />
           <div className="min-w-0 flex-1 leading-tight">
             <p className="truncate text-sm font-semibold">{user.fullName}</p>
             <p className="truncate text-xs text-white/55">

@@ -1,10 +1,13 @@
 "use client";
 
 import { useActionState, useState } from "react";
+import { Timer } from "lucide-react";
 import { requestOt, type OtRequestState } from "./actions";
 import { MAX_OT_REASON_LENGTH } from "@/lib/ot/logic";
 import type { DateOnly } from "@/lib/date";
 import { CardHeading } from "@/components/features/card-heading";
+import { SelectField } from "@/components/ui/select-field";
+import { DateField } from "@/components/ui/date-field";
 
 const initialState: OtRequestState = { error: null, success: false };
 
@@ -53,34 +56,24 @@ export function OtRequestForm({
           <label htmlFor="workDate" className="mb-1.5 block text-sm font-medium text-[#1A1A1A]">
             วันที่ทำ OT
           </label>
-          <input
-            id="workDate"
-            name="workDate"
-            type="date"
-            required
-            min={today}
-            value={workDate}
-            onChange={(event) => setWorkDate(event.target.value)}
-            className={inputClass}
-          />
+          <DateField id="workDate" name="workDate" required min={today} value={workDate} ariaLabel="วันที่ทำ OT" onChange={setWorkDate} />
         </div>
         <div>
           <label htmlFor="hours" className="mb-1.5 block text-sm font-medium text-[#1A1A1A]">
             จำนวนชั่วโมง
           </label>
-          <select
+          <SelectField
             id="hours"
             name="hours"
             value={hours}
-            onChange={(event) => setHours(event.target.value)}
-            className={inputClass}
-          >
-            {Array.from({ length: maxHoursPerDay }, (_, i) => i + 1).map((h) => (
-              <option key={h} value={h}>
-                {h} ชั่วโมง
-              </option>
-            ))}
-          </select>
+            onChange={setHours}
+            options={Array.from({ length: maxHoursPerDay }, (_, i) => i + 1).map((h) => ({
+              value: String(h),
+              label: `${h} ชั่วโมง`,
+              description: hourlyRate !== null ? `ประมาณ ${(h * hourlyRate).toLocaleString("th-TH")} บาท` : undefined,
+              icon: <Timer className="h-4 w-4" aria-hidden />,
+            }))}
+          />
         </div>
       </div>
 

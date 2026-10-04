@@ -8,6 +8,8 @@ export type CurrentEmployee = {
   deptCode: string;
   deptName: string;
   role: string;
+  /** รูปโปรไฟล์ใน bucket "avatars" (null = ยังไม่ได้ตั้ง) */
+  photoPath: string | null;
 };
 
 /**
@@ -25,7 +27,7 @@ export const getCurrentEmployee = cache(async (): Promise<CurrentEmployee | null
 
   const { data: employee } = await supabase
     .from("employees")
-    .select("id, employee_code, full_name, dept_code")
+    .select("id, employee_code, full_name, dept_code, photo_path")
     .eq("auth_user_id", user.id)
     .eq("status", "active")
     .single();
@@ -45,5 +47,6 @@ export const getCurrentEmployee = cache(async (): Promise<CurrentEmployee | null
     deptCode: employee.dept_code,
     deptName: department.name,
     role: department.role,
+    photoPath: employee.photo_path,
   };
 });
